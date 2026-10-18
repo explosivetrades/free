@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pivot Ladder Calculator · Explosive Trades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root, :root[data-theme="dark"]{ --bg:#1a1510; --panel:#231d15; --panel2:#2a231a; --line:#3a3023; --text:#f3ead8; --muted:#b3a68c; --gold:#d9a93a; --orange:#e8843a; --green:#6cc58a; --red:#e5484d; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#1a1510; } }
+:root[data-theme="light"]{ --bg:#f6efe1; --panel:#fffaf0; --panel2:#f3e9d6; --line:#e0d1b4; --text:#2a2117; --muted:#7a6a4f; --gold:#a8790f; --orange:#c1621c; --green:#2d8a50; --red:#c43338; }
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+body{ margin:0; background:var(--bg); color:var(--text); font-family:'Poppins', system-ui, 'Segoe UI', sans-serif; font-size:15px; line-height:1.5; }
+button, input, select{ font:inherit; color:inherit; }
+:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+.top{ position:sticky; top:env(safe-area-inset-top,0px); z-index:10; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 20px; background:var(--panel); border-bottom:1px solid var(--line); }
+.brand{ font-family:'Bebas Neue', Impact, sans-serif; font-size:24px; letter-spacing:.06em; color:var(--gold); line-height:1; }
+.top-right{ display:flex; align-items:center; gap:10px; color:var(--muted); font-size:13px; }
+.btn{ background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:6px 12px; cursor:pointer; font-size:13px; }
+.btn:hover{ border-color:var(--gold); }
+.wrap{ max-width:1180px; margin:0 auto; padding:24px 20px 60px; }
+h1{ font-family:'Bebas Neue', Impact, sans-serif; font-weight:400; font-size:40px; line-height:1; margin:0 0 4px; color:var(--gold); }
+.sub{ color:var(--muted); margin:0 0 22px; font-size:14px; }
+.grid2{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px; }
+.card{ background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-bottom:18px; }
+.card h2{ font-family:'Bebas Neue', Impact, sans-serif; font-weight:400; font-size:24px; margin:0 0 12px; }
+.row{ display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; }
+label.f{ display:flex; flex-direction:column; gap:4px; font-size:12px; color:var(--muted); }
+input[type=number], select{ background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:7px 10px; width:130px; }
+.seg{ display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.seg button{ border:0; background:transparent; padding:7px 14px; cursor:pointer; font-size:13px; }
+.seg button.act{ background:var(--gold); color:#15120d; font-weight:600; }
+.lv{ display:grid; grid-template-columns:110px 1fr 90px; gap:8px; align-items:center; padding:6px 0; border-bottom:1px solid var(--line); font-size:13px; }
+.lv:last-child{ border-bottom:none; }
+.lv input[type=number]{ width:100%; }
+.tag{ font-size:11px; font-weight:600; padding:2px 8px; border-radius:999px; text-align:center; }
+.tag.sl{ background:rgba(229,72,77,.15); color:var(--red); } .tag.en{ background:rgba(217,169,58,.15); color:var(--gold); } .tag.tp{ background:rgba(108,197,138,.15); color:var(--green); } .tag.off{ color:var(--muted); }
+.big{ font-family:'Bebas Neue', Impact, sans-serif; font-size:34px; line-height:1.05; }
+input[type=range]{ width:100%; accent-color:var(--gold); }
+.tbl{ overflow-x:auto; border:1px solid var(--line); border-radius:12px; margin-bottom:12px; }
+table{ border-collapse:collapse; width:100%; min-width:820px; font-size:13px; }
+th{ text-align:left; color:var(--gold); font-weight:600; padding:10px 12px; border-bottom:2px solid var(--gold); white-space:nowrap; }
+td{ padding:9px 12px; border-bottom:1px solid var(--line); white-space:nowrap; }
+tr:last-child td{ border-bottom:none; }
+tfoot td{ font-weight:600; border-top:2px solid var(--line); }
+.pos{ color:var(--green); font-weight:600; } .neg{ color:var(--red); font-weight:600; } .mut{ color:var(--muted); }
+.stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-bottom:18px; }
+.stat{ background:var(--panel); border:1px solid var(--line); border-top:4px solid var(--gold); border-radius:12px; padding:14px 16px; }
+.stat .k{ font-size:12px; color:var(--muted); }
+.stat .v{ font-family:'Bebas Neue', Impact, sans-serif; font-size:30px; line-height:1.1; }
+.stat.g{ border-top-color:var(--green); } .stat.r{ border-top-color:var(--red); }
+.hint{ font-size:12px; color:var(--muted); margin-top:8px; }
+.note{ background:var(--panel2); border-left:4px solid var(--orange); border-radius:0 10px 10px 0; padding:10px 14px; font-size:13px; margin-top:10px; }
+.good{ border-left-color:var(--green); }
+footer{ color:var(--muted); font-size:12px; text-align:center; margin-top:26px; }
+@media (max-width:860px){ .grid2{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">Explosive Trades</div>
+  <div class="top-right"><span>Pivot Ladder Calculator</span><button class="btn" id="themeBtn" type="button">Light</button></div>
+</div>
+
+<div class="wrap">
+  <h1>Pivot Ladder Calculator</h1>
+  <p class="sub" id="subline"></p>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>1. Pivot points</h2>
+      <div class="row">
+        <label class="f">Trend / Direction <span class="seg" id="dirSeg"><button type="button" data-d="-1">Down (Sell)</button><button type="button" data-d="1">Up (Buy)</button></span></label>
+        <label class="f">Fib kaise draw hai <span class="seg" id="fibSeg"><button type="button" data-f="fromHigh">0.236 High ke paas</button><button type="button" data-f="fromLow">0.236 Low ke paas</button></span></label>
+        <label class="f">Instrument <select id="inst"><option value="AUDUSD">AUDUSD / NZDUSD</option><option value="XAUUSD">XAUUSD</option><option value="CUSTOM">Custom</option></select></label>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <label class="f">Pivot High <input type="number" id="hi" step="0.00001"></label>
+        <label class="f">Pivot Low <input type="number" id="lo" step="0.00001"></label>
+        <label class="f">Pip size <input type="number" id="pipSize" step="0.00001"></label>
+        <label class="f">$ per pip (1 lot) <input type="number" id="pipVal" step="0.01"></label>
+      </div>
+      <div class="row" style="margin-top:12px"><button class="btn" data-preset="AUDUSD" type="button">Preset: AUDUSD chart</button><button class="btn" data-preset="XAUUSD" type="button">Preset: XAUUSD chart</button></div>
+      <p class="hint">Pivot High/Low daalte hi saare fib levels apne aap ban jaate hain. Kisi level ko chart ke hisaab se thoda badalna ho to right side me badal sakte ho.</p>
+    </div>
+
+    <div class="card">
+      <h2>2. Levels</h2>
+      <div id="levels"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Risk aur target</h2>
+    <div class="row">
+      <label class="f">Lot ka tareeka <span class="seg" id="lotSeg"><button type="button" data-l="lot">Har trade ka lot barabar</button><button type="button" data-l="risk">Har trade ka risk barabar</button></span></label>
+      <label class="f">Max risk per trade ($) <input type="number" id="risk" step="50"></label>
+      <label class="f">Target profit ($) <input type="number" id="target" step="100"></label>
+      <label class="f">Max lot per entry (khaali = no limit) <input type="number" id="maxLot" step="0.01"></label>
+      <button class="btn" id="resetEdits" type="button">SL / Lot edits reset</button>
+    </div>
+    <div style="margin-top:14px">
+      <label class="f">Risk badal ke dekho: <b id="riskLbl" style="color:var(--gold)"></b></label>
+      <input type="range" id="riskSlider" min="100" max="10000" step="50" aria-label="Risk per trade">
+    </div>
+    <div id="targetBox"></div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="card">
+    <h2>4. Har trade ki detail</h2>
+    <p class="hint" style="margin-top:-6px">SL aur Lot column editable hain. Apna asli 15m pivot high SL daalo; Lot khaali chhodoge to auto calculate hoga.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Trade</th><th>Entry level</th><th>Entry price</th><th>Shuru ka SL</th><th>SL distance</th><th>Lot</th><th>Shuru ka risk</th><th>TP pe profit</th></tr></thead>
+      <tbody id="trades"></tbody><tfoot id="tradesFoot"></tfoot>
+    </table></div>
+
+    <h2 style="margin-top:18px">5. Har stage pe SL kahan, aur palte to kya</h2>
+    <div class="tbl"><table>
+      <thead id="stageHead"></thead><tbody id="stages"></tbody>
+    </table></div>
+    <div id="warn"></div>
+  </div>
+
+  <footer>Educational tool. Commission, spread, swap aur slippage shaamil nahi hain. © Explosive Trades · Kavi Sharma</footer>
+</div>
+
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+  var KEY='et-pivot-ladder-v5';
+  var FIB=[{k:'0.236',r:0.236},{k:'0.382',r:0.382},{k:'0.5',r:0.5},{k:'0.618',r:0.618},{k:'0.786',r:0.786}];
+  var ENTRY_KEYS, TP_KEY;
+  function setKeys(){ var normal = (st.dir<0 && st.fib!=='fromLow') || (st.dir>0 && st.fib==='fromLow'); if(normal){ ENTRY_KEYS=['0.236','0.382','0.5','0.618']; TP_KEY='0.786'; } else { ENTRY_KEYS=['0.786','0.618','0.5','0.382']; TP_KEY='0.236'; } }
+  var PRESETS={ AUDUSD:{inst:'AUDUSD',hi:0.71404,lo:0.68334,pipSize:0.0001,pipVal:10,fib:'fromHigh',dir:-1}, XAUUSD:{inst:'XAUUSD',hi:4697.105,lo:4110.87,pipSize:0.1,pipVal:10,fib:'fromLow',dir:-1} };
+  var def={dir:-1, fib:'fromLow', inst:'XAUUSD', hi:4697.105, lo:4110.87, pipSize:0.1, pipVal:10, lotMode:'lot', risk:2000, target:20000, over:{}, slOver:{}, lotOver:{}, maxLot:NaN};
+  var st; try{ st=JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  if(!st || !isFinite(st.hi)){ st=JSON.parse(JSON.stringify(def)); }
+  if(!st.fib) st.fib='fromHigh'; if(!st.over) st.over={}; if(!st.slOver) st.slOver={}; if(!st.lotOver) st.lotOver={};
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+  function num(v){ var n=parseFloat(v); return isFinite(n)?n:NaN; }
+  function dec(){ return st.pipSize<0.001?5:(st.pipSize<0.01?3:2); }
+  function fp(x){ return isFinite(x)?x.toFixed(dec()):'-'; }
+  function money(x){ if(!isFinite(x)) return '-'; var s=Math.round(Math.abs(x)).toLocaleString('en-US'); return (x<-0.5?'−$':(x>0.5?'+$':'$'))+s; }
+  function cls(x){ return x>0.5?'pos':(x<-0.5?'neg':''); }
+  function pips(a,b){ return Math.abs(a-b)/st.pipSize; }
+  function pnl(e,x,l){ return (x-e)*st.dir/st.pipSize*l*st.pipVal; }
+
+  // levels (auto from pivots, with manual override)
+  function levelPrice(k){
+    if(isFinite(st.over[k])) return st.over[k];
+    var r=st.hi-st.lo, f=FIB.filter(function(x){ return x.k===k; })[0];
+    if(!f || !isFinite(r)) return NaN;
+    return st.fib==='fromHigh' ? +(st.hi - f.r*r).toFixed(5) : +(st.lo + f.r*r).toFixed(5);
+  }
+  function startSL(){ return st.dir<0 ? st.hi : st.lo; }
+
+  function buildLevels(){
+    setKeys();
+    var box=$('levels'); box.innerHTML='';
+    var list=[{k:'HI', n:'Pivot High', p:st.hi, edit:false}, {k:'LO', n:'Pivot Low', p:st.lo, edit:false}];
+    FIB.forEach(function(f){ list.push({k:f.k, n:f.k, p:levelPrice(f.k), edit:true}); });
+    list.sort(function(a,b){ return b.p-a.p; });
+    var slName = st.dir<0 ? 'HI' : 'LO';
+    list.forEach(function(L){
+      var tag = L.k===slName ? '<span class="tag sl">Main SL</span>' : (L.k===TP_KEY ? '<span class="tag tp">TP</span>' : (ENTRY_KEYS.indexOf(L.k)>=0 ? '<span class="tag en">Entry '+(ENTRY_KEYS.indexOf(L.k)+1)+'</span>' : '<span class="tag off">—</span>'));
+      var d=document.createElement('div'); d.className='lv';
+      var n=document.createElement('span'); n.textContent=L.n; n.style.color='var(--muted)';
+      var p=document.createElement('input'); p.type='number'; p.step='any'; p.value=isFinite(L.p)?L.p:'';
+      if(!L.edit){ p.disabled=true; } else { p.oninput=function(){ var v=num(p.value); if(isFinite(v)) st.over[L.k]=v; else delete st.over[L.k]; save(); render(); }; }
+      var t=document.createElement('span'); t.innerHTML=tag;
+      d.appendChild(n); d.appendChild(p); d.appendChild(t); box.appendChild(d);
+    });
+  }
+
+  // core calc for a given per-trade risk R
+  function calc(R){
+    setKeys();
+    var entries=ENTRY_KEYS.map(function(k){ return {k:k, e:levelPrice(k)}; });
+    var tp=levelPrice(TP_KEY), sl0=startSL();
+    var trades=entries.map(function(t,i){
+      var defSL = i===0 ? sl0 : entries[i-1].e;
+      var sl = isFinite(st.slOver[t.k]) ? st.slOver[t.k] : defSL;
+      return {k:t.k, e:t.e, sl:sl, defSL:defSL, edited:isFinite(st.slOver[t.k]), dist:pips(t.e,sl)};
+    });
+    var maxDist=Math.max.apply(null, trades.map(function(t){ return t.dist; }));
+    trades.forEach(function(t){
+      var auto = st.lotMode==='risk' ? R/(t.dist*st.pipVal) : R/(maxDist*st.pipVal);
+      if(isFinite(st.maxLot) && st.maxLot>0) auto=Math.min(auto, st.maxLot);
+      t.autoLot = Math.floor(auto*100)/100;
+      t.lotEdited = isFinite(st.lotOver[t.k]);
+      t.lot = t.lotEdited ? st.lotOver[t.k] : t.autoLot;
+      t.risk = pnl(t.e, t.sl, t.lot);
+      t.tpP = pnl(t.e, tp, t.lot);
+    });
+    // stage i: purane trades ka SL = pichhli entry, naye trade ka SL = uska apna SL
+    var stages=trades.map(function(t,i){
+      var oldSL = i===0 ? NaN : trades[i-1].e;
+      var rows=trades.slice(0,i+1).map(function(x,j){ var sl = j<i ? oldSL : x.sl; return {k:x.k, sl:sl, r:pnl(x.e, sl, x.lot)}; });
+      var tot=rows.reduce(function(s,x){ return s+x.r; },0);
+      return {oldSL:oldSL, newSL:t.sl, rows:rows, tot:tot};
+    });
+    var totTP=trades.reduce(function(s,t){ return s+t.tpP; },0);
+    return {trades:trades, stages:stages, tp:tp, totTP:totTP};
+  }
+
+  function render(){
+    var R=st.risk, C=calc(R);
+    $('subline').textContent='Entries: '+ENTRY_KEYS.join(' → ')+' · TP: '+TP_KEY+' · Har nayi entry pe saare purane trades ka SL pichhli entry pe.';
+    $('riskSlider').value=R; $('riskLbl').textContent=money(R).replace('+','')+' per trade';
+
+    // trade table
+    var tb=$('trades'); tb.innerHTML='';
+    C.trades.forEach(function(t,i){
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td><b>'+(i+1)+'</b></td><td>'+t.k+'</td><td>'+fp(t.e)+'</td><td class="slc"></td><td>'+(st.inst==='XAUUSD' ? '$'+(t.dist*st.pipSize).toFixed(2) : t.dist.toFixed(1)+' pips')+'</td><td class="lotc"></td><td class="neg">'+money(t.risk)+'</td><td class="pos">'+money(t.tpP)+'</td>';
+      var si=document.createElement('input'); si.type='number'; si.step='any'; si.style.width='110px'; si.value=fp(t.sl); si.title='Default: '+fp(t.defSL);
+      if(t.edited) si.style.borderColor='var(--gold)';
+      si.addEventListener('change', function(){ var v=num(si.value); if(isFinite(v) && Math.abs(v-t.defSL)>1e-9) st.slOver[t.k]=v; else delete st.slOver[t.k]; save(); render(); });
+      tr.querySelector('.slc').appendChild(si);
+      var li=document.createElement('input'); li.type='number'; li.step='0.01'; li.style.width='90px'; li.placeholder=t.autoLot.toFixed(2); li.value=t.lotEdited?t.lot:''; li.title='Khaali = auto ('+t.autoLot.toFixed(2)+')';
+      if(t.lotEdited) li.style.borderColor='var(--gold)';
+      li.addEventListener('change', function(){ var v=num(li.value); if(isFinite(v) && v>0) st.lotOver[t.k]=v; else delete st.lotOver[t.k]; save(); render(); });
+      tr.querySelector('.lotc').appendChild(li);
+      tb.appendChild(tr);
+    });
+    var totLot=C.trades.reduce(function(s,t){ return s+t.lot; },0);
+    $('tradesFoot').innerHTML='<tr><td colspan="5">Total (TP '+fp(C.tp)+')</td><td>'+totLot.toFixed(2)+'</td><td></td><td class="pos">'+money(C.totTP)+'</td></tr>';
+
+    // stage table
+    var head='<tr><th>Stage</th><th>Purane trades ka SL</th><th>Naye trade ka SL</th>';
+    C.trades.forEach(function(t,i){ head+='<th>Trade '+(i+1)+' ('+t.k+')</th>'; });
+    head+='<th>Palte to total</th></tr>'; $('stageHead').innerHTML=head;
+    var sb=$('stages'); sb.innerHTML='';
+    C.stages.forEach(function(s,i){
+      var tr='<tr><td><b>'+ENTRY_KEYS[i]+' entry ke baad</b></td><td>'+(isFinite(s.oldSL)?fp(s.oldSL):'—')+'</td><td>'+fp(s.newSL)+'</td>';
+      C.trades.forEach(function(t,j){ var r=s.rows[j]; tr+= r ? '<td class="'+cls(r.r)+'">'+(Math.abs(r.r)<0.5?'$0 (zero)':money(r.r))+'</td>' : '<td class="mut">—</td>'; });
+      tr+='<td class="'+cls(s.tot)+'"><b>'+money(s.tot)+'</b></td></tr>';
+      sb.insertAdjacentHTML('beforeend', tr);
+    });
+
+    var worst=Math.min.apply(null, C.stages.map(function(s){ return s.tot; }));
+    var locked=C.stages[C.stages.length-1].tot;
+    $('stats').innerHTML=
+      '<div class="stat"><div class="k">'+(st.lotMode==='lot'?'Max risk per trade':'Risk per trade')+'</div><div class="v">'+money(R).replace('+','')+'</div></div>'+
+      '<div class="stat"><div class="k">'+(st.lotMode==='lot'?'Lot har entry':'Total lot (4 entries)')+'</div><div class="v">'+(st.lotMode==='lot'?C.trades[0].lot.toFixed(2):totLot.toFixed(2))+'</div></div><div class="stat"><div class="k">Total lot (4 entries)</div><div class="v">'+totLot.toFixed(2)+'</div></div>'+
+      '<div class="stat g"><div class="k">TP ('+TP_KEY+') pe profit</div><div class="v pos">'+money(C.totTP)+'</div></div>'+
+      '<div class="stat"><div class="k">Reward : Risk</div><div class="v">'+(R>0?(C.totTP/R).toFixed(1):'-')+'R</div></div>'+
+      '<div class="stat '+(worst<0?'r':'g')+'"><div class="k">Sabse bura stage</div><div class="v '+cls(worst)+'">'+money(worst)+'</div></div>'+
+      '<div class="stat '+(locked<0?'r':'g')+'"><div class="k">'+ENTRY_KEYS[3]+' ke baad locked</div><div class="v '+cls(locked)+'">'+money(locked)+'</div></div>';
+
+    // target (linear in R)
+    var unit=calc(1000).totTP/1000; // profit per $1 of risk
+    var need = unit>0 ? st.target/unit : NaN;
+    var html='<div class="note '+(need<=R?'good':'')+'" style="margin-top:14px">';
+    if(isFinite(need)){
+      var Cn=calc(need);
+      html+='Target <b>'+money(st.target)+'</b> ke liye har trade me risk chahiye: <b>'+money(need).replace('+','')+'</b> (lots: '+Cn.trades.map(function(t){ return t.k+' → '+t.lot.toFixed(2); }).join(', ')+').<br>';
+      html+= need<=R ? 'Ye aapke max risk '+money(R).replace('+','')+' ke andar hai. ✅' : 'Ye aapke max risk '+money(R).replace('+','')+' se <b>zyada</b> hai. Is range me aapke max risk pe maximum profit '+money(C.totTP)+' banega.';
+    } else { html+='Target calculate nahi ho paya. Levels check karein.'; }
+    html+='</div>'; $('targetBox').innerHTML=html;
+
+    var msgs=['Ye maan ke hai ki price har level tak pahunchta hai. Beech me palat gaya to "Palte to total" wala result aayega.'];
+    if(worst<0) msgs.push('Sabse bura stage '+money(worst)+' hai. Ye apni daily drawdown limit ke andar hona chahiye.');
+    $('warn').innerHTML=msgs.map(function(m){ return '<div class="note">'+m+'</div>'; }).join('');
+  }
+
+  // inputs
+  function seg(id,attr,val){ [].forEach.call($(id).children, function(b){ b.classList.toggle('act', b.getAttribute(attr)===String(val)); }); }
+  function fill(){ seg('fibSeg','data-f',st.fib); seg('dirSeg','data-d',st.dir); seg('lotSeg','data-l',st.lotMode); $('inst').value=st.inst; ['hi','lo','pipSize','pipVal','risk','target','maxLot'].forEach(function(k){ $(k).value=isFinite(st[k])?st[k]:''; }); buildLevels(); }
+  $('dirSeg').onclick=function(e){ var d=e.target.getAttribute('data-d'); if(d){ st.dir=parseInt(d,10); st.over={}; st.slOver={}; st.lotOver={}; save(); fill(); render(); } };
+  $('fibSeg').onclick=function(e){ var f=e.target.getAttribute('data-f'); if(f){ st.fib=f; st.over={}; st.slOver={}; st.lotOver={}; save(); fill(); render(); } };
+  [].forEach.call(document.querySelectorAll('[data-preset]'), function(b){ b.onclick=function(){ var P=PRESETS[b.getAttribute('data-preset')]; for(var k in P) st[k]=P[k]; st.over={}; st.slOver={}; st.lotOver={}; save(); fill(); render(); }; });
+  $('lotSeg').onclick=function(e){ var l=e.target.getAttribute('data-l'); if(l){ st.lotMode=l; save(); fill(); render(); } };
+  $('inst').onchange=function(){ st.inst=this.value; if(st.inst==='AUDUSD'){ st.pipSize=0.0001; st.pipVal=10; } else if(st.inst==='XAUUSD'){ st.pipSize=0.1; st.pipVal=10; } save(); fill(); render(); };
+  ['hi','lo'].forEach(function(k){ $(k).addEventListener('input', function(){ st[k]=num(this.value); st.over={}; st.slOver={}; save(); buildLevels(); render(); }); });
+  ['pipSize','pipVal','risk','target','maxLot'].forEach(function(k){ $(k).addEventListener('input', function(){ st[k]=num(this.value); if(k==='pipSize'||k==='pipVal'){ st.inst='CUSTOM'; $('inst').value='CUSTOM'; } save(); render(); }); });
+  $('resetEdits').onclick=function(){ st.slOver={}; st.lotOver={}; save(); render(); };
+  $('riskSlider').addEventListener('input', function(){ st.risk=num(this.value); $('risk').value=st.risk; save(); render(); });
+
+  try{ var th=localStorage.getItem(KEY+'-theme'); if(th) document.documentElement.setAttribute('data-theme', th); }catch(e){}
+  function syncTheme(){ $('themeBtn').textContent=document.documentElement.getAttribute('data-theme')==='light'?'Dark':'Light'; }
+  $('themeBtn').onclick=function(){ var cur=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light'; document.documentElement.setAttribute('data-theme',cur); try{ localStorage.setItem(KEY+'-theme',cur); }catch(e){} syncTheme(); };
+  syncTheme();
+  fill(); render();
+})();
+</script>
+</body>
+</html>
