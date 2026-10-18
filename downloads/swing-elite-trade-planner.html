@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Swing Elite Trade Planner · Explosive Trades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root, :root[data-theme="dark"]{
+  --bg:#1a1510; --panel:#231d15; --panel2:#2a231a; --line:#3a3023; --text:#f3ead8; --muted:#b3a68c;
+  --gold:#d9a93a; --orange:#e8843a; --green:#6cc58a; --red:#e5484d;
+}
+:root[data-theme="light"]{
+  --bg:#f6efe1; --panel:#fffaf0; --panel2:#f3e9d6; --line:#e0d1b4; --text:#2a2117; --muted:#7a6a4f;
+  --gold:#a8790f; --orange:#c1621c; --green:#2d8a50; --red:#c43338;
+}
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+body{ margin:0; background:var(--bg); color:var(--text); font-family:'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size:15px; line-height:1.5; }
+button, input, select{ font:inherit; color:inherit; }
+:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+
+.top{ position:sticky; top:env(safe-area-inset-top,0px); z-index:10; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:10px 20px; background:var(--panel); border-bottom:1px solid var(--line); }
+.brand{ font-family:'Bebas Neue', Impact, sans-serif; font-size:24px; letter-spacing:.06em; color:var(--gold); line-height:1; }
+.top-right{ display:flex; align-items:center; gap:10px; color:var(--muted); font-size:13px; }
+.icon-btn{ background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:6px 10px; cursor:pointer; font-size:13px; }
+.icon-btn:hover{ border-color:var(--gold); }
+
+.wrap{ max-width:1200px; margin:0 auto; padding:24px 20px 40px; }
+h1{ font-family:'Bebas Neue', Impact, sans-serif; font-weight:400; font-size:clamp(40px,6vw,64px); line-height:.95; margin:0 0 6px; letter-spacing:.02em; }
+.lead{ color:var(--muted); margin:0 0 22px; max-width:62ch; }
+
+.grid{ display:grid; grid-template-columns:330px minmax(0,1fr); gap:20px; align-items:start; }
+@media (max-width:900px){ .grid{ grid-template-columns:1fr; } }
+
+.panel{ background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; }
+.panel h2{ font-family:'Bebas Neue', Impact, sans-serif; font-weight:400; font-size:24px; letter-spacing:.04em; margin:0 0 12px; color:var(--gold); }
+
+.side-toggle{ display:grid; grid-template-columns:1fr 1fr; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:4px; margin-bottom:14px; }
+.side-toggle button{ border:0; background:transparent; padding:9px; border-radius:7px; cursor:pointer; font-weight:600; color:var(--muted); }
+.side-toggle button[aria-pressed="true"].buy{ background:var(--green); color:#10150f; }
+.side-toggle button[aria-pressed="true"].sell{ background:var(--red); color:#fff; }
+
+.field{ margin-bottom:12px; }
+.field label{ display:block; font-size:13px; color:var(--muted); margin-bottom:4px; }
+.field input, .field select{ width:100%; padding:10px 12px; background:var(--bg); border:1px solid var(--line); border-radius:9px; font-size:16px; }
+.field input:focus, .field select:focus{ border-color:var(--gold); outline:none; }
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.hint{ font-size:12px; color:var(--muted); margin-top:4px; }
+.check{ display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--muted); margin:6px 0 4px; cursor:pointer; }
+.check input{ margin-top:3px; accent-color:var(--gold); width:16px; height:16px; }
+.custom{ display:none; }
+.custom.show{ display:grid; }
+.reset{ width:100%; margin-top:8px; background:transparent; border:1px dashed var(--line); border-radius:9px; padding:9px; color:var(--muted); cursor:pointer; }
+.reset:hover{ border-color:var(--orange); color:var(--orange); }
+
+/* Result strip */
+.strip{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:20px; }
+@media (max-width:620px){ .strip{ grid-template-columns:1fr 1fr; } }
+.stat{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+.stat .k{ font-size:12px; color:var(--muted); }
+.stat .v{ font-family:'Bebas Neue', Impact, sans-serif; font-size:30px; line-height:1.1; letter-spacing:.02em; }
+.stat.tp{ border-color:var(--gold); background:linear-gradient(180deg, color-mix(in srgb, var(--gold) 14%, var(--panel)), var(--panel)); }
+
+.main2{ display:grid; grid-template-columns:280px minmax(0,1fr); gap:20px; align-items:start; }
+@media (max-width:1100px){ .main2{ grid-template-columns:1fr; } }
+
+/* Ladder */
+.ladder{ position:relative; height:470px; margin:6px 0 4px; }
+.ladder .axis{ position:absolute; left:50%; top:0; bottom:0; width:2px; background:var(--line); transform:translateX(-50%); }
+.lvl{ position:absolute; left:0; right:0; transform:translateY(-50%); display:flex; align-items:center; gap:8px; font-size:12px; }
+.lvl .tag{ flex:1; text-align:right; padding-right:14px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lvl .dot{ width:12px; height:12px; border-radius:50%; border:2px solid var(--bg); flex:0 0 12px; position:relative; z-index:1; }
+.lvl .px{ flex:1; padding-left:14px; font-weight:600; font-variant-numeric:tabular-nums; }
+.zone{ position:absolute; left:50%; width:8px; transform:translateX(-50%); border-radius:4px; opacity:.55; }
+
+/* Stages */
+.stages{ display:grid; gap:12px; }
+.stage{ background:var(--panel2); border:1px solid var(--line); border-left:4px solid var(--line); border-radius:12px; padding:12px 14px; }
+.stage-h{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; }
+.stage-h b{ font-size:15px; }
+.stage .when{ font-size:12px; color:var(--muted); }
+.stage ul{ margin:8px 0 8px; padding-left:18px; font-size:13px; }
+.stage li{ margin:2px 0; }
+.stage .res{ display:flex; justify-content:space-between; border-top:1px solid var(--line); padding-top:8px; font-size:13px; }
+.stage .res strong{ font-variant-numeric:tabular-nums; }
+
+.neg{ color:var(--red); } .zero{ color:var(--gold); } .pos{ color:var(--green); }
+
+table{ width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums; }
+.tbl-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+th, td{ padding:9px 10px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap; }
+th:first-child, td:first-child{ text-align:left; }
+thead th{ background:var(--panel2); color:var(--muted); font-weight:500; }
+tbody tr:last-child td{ border-bottom:0; }
+tfoot td{ background:var(--panel2); font-weight:600; border-bottom:0; border-top:1px solid var(--line); }
+.section{ margin-top:20px; }
+.warn{ margin-top:10px; padding:10px 12px; border:1px solid var(--orange); border-radius:9px; color:var(--orange); font-size:13px; display:none; }
+.warn.show{ display:block; }
+
+.guide{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin:0 0 22px; padding:12px 16px;
+  background:var(--panel); border:1px solid var(--gold); border-radius:12px; }
+.guide p{ margin:0; font-size:14px; max-width:70ch; }
+.guide p b{ color:var(--gold); font-weight:600; }
+.guide a{ flex:0 0 auto; background:var(--gold); color:#1a1510; text-decoration:none; font-weight:600; font-size:14px; padding:9px 16px; border-radius:9px; }
+.guide a:hover{ filter:brightness(1.08); }
+.target-grid{ display:grid; grid-template-columns:minmax(0,260px) minmax(0,1fr); gap:18px; align-items:start; }
+@media (max-width:700px){ .target-grid{ grid-template-columns:1fr; } }
+.answer{ background:var(--panel2); border:1px solid var(--gold); border-radius:12px; padding:14px 16px; }
+.answer .k{ font-size:12px; color:var(--muted); }
+.answer .big{ font-family:'Bebas Neue', Impact, sans-serif; font-size:44px; line-height:1; color:var(--gold); letter-spacing:.02em; margin:2px 0 6px; font-variant-numeric:tabular-nums; }
+.answer .meta{ font-size:13px; }
+.apply{ margin-top:10px; background:var(--gold); color:#1a1510; border:0; border-radius:9px; padding:9px 14px; font-weight:600; cursor:pointer; }
+.apply:hover{ filter:brightness(1.08); }
+.applied{ font-size:12px; color:var(--green); margin-left:8px; }
+.plan-inputs{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px 12px; }
+@media (max-width:800px){ .plan-inputs{ grid-template-columns:1fr 1fr; } }
+.plan-inputs .field{ margin-bottom:4px; }
+.plan-stats{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:14px 0 6px; }
+@media (max-width:800px){ .plan-stats{ grid-template-columns:1fr 1fr; } }
+.plan-stats .stat .v{ font-size:28px; }
+.plan-stats .stat .s{ font-size:12px; color:var(--muted); }
+.sub-h{ font-size:15px; font-weight:600; margin:18px 0 8px; }
+.sub-h span{ font-weight:400; color:var(--muted); font-size:13px; }
+tr.mine td{ background:color-mix(in srgb, var(--gold) 12%, transparent); }
+.badge{ display:inline-block; font-size:11px; padding:2px 8px; border-radius:20px; border:1px solid currentColor; }
+.note{ font-size:12px; color:var(--muted); margin-top:10px; }
+.trk-btns{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.trk-btns button{ border:1px solid var(--line); background:var(--panel2); border-radius:9px; padding:9px 14px; cursor:pointer; font-weight:600; font-size:14px; }
+.trk-btns .w{ background:var(--green); color:#10150f; border-color:var(--green); }
+.trk-btns .l{ background:var(--red); color:#fff; border-color:var(--red); }
+.trk-btns .ghost{ font-weight:500; color:var(--muted); }
+.trk-btns input{ width:120px; padding:9px 10px; background:var(--bg); border:1px solid var(--line); border-radius:9px; }
+.chips{ display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 4px; min-height:26px; }
+.chip{ font-size:12px; padding:3px 9px; border-radius:20px; border:1px solid var(--line); background:var(--panel2); font-variant-numeric:tabular-nums; }
+.chip.day{ border-style:dashed; color:var(--muted); background:transparent; }
+.verdicts{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+@media (max-width:700px){ .verdicts{ grid-template-columns:1fr; } }
+.verdict{ border:1px solid var(--line); border-left:5px solid var(--line); border-radius:12px; padding:14px 16px; background:var(--panel2); }
+.verdict.ok{ border-left-color:var(--green); } .verdict.bad{ border-left-color:var(--red); } .verdict.run{ border-left-color:var(--gold); } .verdict.lock{ opacity:.6; }
+.verdict .t{ font-size:13px; color:var(--muted); }
+.verdict .big2{ font-size:20px; font-weight:600; margin:2px 0 4px; }
+.verdict .d{ font-size:13px; }
+.bar{ height:8px; background:var(--bg); border-radius:6px; overflow:hidden; margin-top:10px; border:1px solid var(--line); }
+.bar i{ display:block; height:100%; background:var(--gold); }
+.funded{ margin-top:12px; padding:12px 16px; border-radius:12px; background:color-mix(in srgb, var(--green) 18%, var(--panel)); border:1px solid var(--green); font-weight:600; display:none; }
+.funded.show{ display:block; }
+.kicker{ margin:0 0 6px; font-size:13px; font-weight:500; color:var(--gold); letter-spacing:.02em; }
+.members{ margin-top:22px; padding:20px; border:1px solid var(--gold); border-radius:14px;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--gold) 10%, var(--panel)), var(--panel)); }
+.members h2{ font-family:'Bebas Neue', Impact, sans-serif; font-weight:400; font-size:28px; letter-spacing:.04em; color:var(--gold); margin:0 0 4px; }
+.members p{ margin:0 0 14px; color:var(--muted); font-size:14px; max-width:64ch; }
+.wa-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width:640px){ .wa-row{ grid-template-columns:1fr; } }
+.wa{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text); background:var(--panel2);
+  border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+.wa:hover{ border-color:#25D366; }
+.wa svg{ flex:0 0 34px; width:34px; height:34px; }
+.wa b{ display:block; font-size:15px; }
+.wa span{ display:block; font-size:12px; color:var(--muted); }
+footer{ margin-top:28px; padding-top:14px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Explosive Trades</div>
+  <div class="top-right">
+    <span>Prepared by Kavi Sharma</span>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="kicker">XAUUSD Swing Traders Elite · Members tool</p>
+  <h1>Swing Elite Trade Planner</h1>
+  <p class="lead">Aapka pyramid swing plan, prop challenge rules aur results, sab ek jagah. Entry 1, lot aur SL daliye. Har step par nayi entry, SL kahan shift hoga, har stage ka worst case aur TP par final profit, sab apne aap calculate hoga.</p>
+
+  <div class="guide">
+    <p>Is calculator ka poora usage guide <b>XAUUSD Swing Traders Elite</b> group ke members ke liye Explosive Trades app mein available hai. Group join karke step-by-step guide dekhein.</p>
+    <a href="https://www.explosivetrades.com/courses/894443" target="_blank" rel="noopener">Group join karein</a>
+  </div>
+  <div class="grid">
+    <!-- Inputs -->
+    <section class="panel" aria-label="Trade inputs">
+      <h2>Trade plan</h2>
+      <div class="side-toggle" role="group" aria-label="Trade side">
+        <button type="button" class="buy" id="buyBtn" aria-pressed="true">Buy</button>
+        <button type="button" class="sell" id="sellBtn" aria-pressed="false">Sell</button>
+      </div>
+
+      <div class="field">
+        <label for="inst">Instrument</label>
+        <select id="inst">
+          <option value="XAUUSD">XAUUSD (Gold)</option>
+          <option value="AUDUSD">AUDUSD</option>
+          <option value="CUSTOM">Custom</option>
+        </select>
+        <div class="hint" id="instHint"></div>
+      </div>
+
+      <div class="row2 custom" id="customBox">
+        <div class="field">
+          <label for="ptSize">1 point = price</label>
+          <input id="ptSize" type="number" step="any" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="ptVal">$ per point (1 lot)</label>
+          <input id="ptVal" type="number" step="any" inputmode="decimal">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="e1">Entry 1 price</label>
+        <input id="e1" type="number" step="any" inputmode="decimal">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="lot">Lot per entry</label>
+          <input id="lot" type="number" step="0.01" min="0" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="sl" id="slLabel">SL (points)</label>
+          <input id="sl" type="number" step="any" min="0" inputmode="decimal">
+        </div>
+      </div>
+      <div class="field">
+        <label for="step" id="stepLabel">Nayi entry har kitne points par</label>
+        <input id="step" type="number" step="any" min="0" inputmode="decimal">
+        <div class="hint">Aapke plan mein yeh SL ke barabar hai (jaise 50).</div>
+      </div>
+      <div class="field">
+        <label for="tp">TP price (manual)</label>
+        <input id="tp" type="number" step="any" inputmode="decimal">
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="lockAll">
+        <span>Stage 4 par Trade 1 aur 2 ka SL bhi Entry 3 par shift karein (zyada profit lock)</span>
+      </label>
+
+      <button class="reset" type="button" id="resetBtn">Example values wapas laayein</button>
+    </section>
+
+    <!-- Results -->
+    <section aria-label="Results">
+      <div class="strip">
+        <div class="stat"><div class="k">Pehla risk (Stage 1)</div><div class="v neg" id="sRisk">–</div></div>
+        <div class="stat"><div class="k">Max total lot</div><div class="v" id="sLot">–</div></div>
+        <div class="stat"><div class="k">Worst case, 3 entries ke baad</div><div class="v" id="sWorst">–</div></div>
+        <div class="stat tp"><div class="k">TP par final profit</div><div class="v" id="sTP">–</div><div class="k" id="sR"></div></div>
+      </div>
+
+      <div class="main2">
+        <div class="panel">
+          <h2>Price ladder</h2>
+          <div class="ladder" id="ladder" aria-label="Price levels"></div>
+        </div>
+        <div class="panel">
+          <h2>Stage by stage</h2>
+          <div class="stages" id="stages"></div>
+        </div>
+      </div>
+
+      <div class="panel section">
+        <h2>SL har stage par</h2>
+        <div class="tbl-wrap"><table id="slTable"></table></div>
+      </div>
+
+      <div class="panel section">
+        <h2>TP breakdown</h2>
+        <div class="tbl-wrap"><table id="tpTable"></table></div>
+        <div class="warn" id="tpWarn"></div>
+      </div>
+
+      <div class="panel section">
+        <h2>Target profit se TP nikaalein</h2>
+        <div class="target-grid">
+          <div>
+            <div class="field">
+              <label for="target">Mujhe kitna profit chahiye ($)</label>
+              <input id="target" type="number" step="any" min="0" inputmode="decimal">
+              <div class="hint">Entry, lot, SL aur step upar wale plan se liye jaayenge.</div>
+            </div>
+          </div>
+          <div class="answer" id="targetOut"></div>
+        </div>
+        <div class="tbl-wrap section" id="targetTblWrap"><table id="targetTable"></table></div>
+      </div>
+
+      <div class="panel section" id="planner">
+        <h2>Prop challenge planner</h2>
+        <p class="note" style="margin:-4px 0 12px">Account ke rules daliye. Ek din mein kitne try, total kitne SL, aur TP tak rukne par phase clear karne ke liye kitne TP chahiye, sab yahan dikhega.</p>
+        <div class="plan-inputs">
+          <div class="field"><label for="acct">Account size ($)</label><input id="acct" type="number" step="any" min="0" inputmode="decimal"></div>
+          <div class="field"><label for="p1">Phase 1 target (%)</label><input id="p1" type="number" step="any" min="0" inputmode="decimal"></div>
+          <div class="field"><label for="p2">Phase 2 target (%)</label><input id="p2" type="number" step="any" min="0" inputmode="decimal"></div>
+          <div class="field"><label for="maxdd">Max loss allowed (%)</label><input id="maxdd" type="number" step="any" min="0" inputmode="decimal"></div>
+          <div class="field"><label for="daydd">Max daily loss (%)</label><input id="daydd" type="number" step="any" min="0" inputmode="decimal"></div>
+          <div class="field"><label for="risk">Risk per trade ($)</label><input id="risk" type="number" step="any" min="0" inputmode="decimal"></div>
+          <div class="field"><label for="winAmt">Ek TP hit par profit ($)</label><input id="winAmt" type="number" step="any" min="0" inputmode="decimal"><div class="hint" id="winHint"></div></div>
+          <div class="field" style="align-self:end">
+            <label class="check" style="margin:0 0 6px"><input type="checkbox" id="usePlan"><span>Risk aur TP profit upar wale plan se lein</span></label>
+          </div>
+        </div>
+
+        <div class="plan-stats" id="planStats"></div>
+
+        <p class="note" id="planNote"></p>
+      </div>
+
+      <div class="panel section" id="tracker">
+        <h2>Challenge result</h2>
+        <p class="note" style="margin:-4px 0 12px">Har trade ke baad TP hit ya SL dabaiye. Phase clear hua ya fail, aur kitne trades mein, yahan seedha dikhega. Rules upar wale planner se liye jaate hain.</p>
+        <div class="trk-btns">
+          <button type="button" class="w" id="addWin">TP hit</button>
+          <button type="button" class="l" id="addLoss">SL</button>
+          <input id="customPL" type="number" step="any" inputmode="decimal" placeholder="P/L $" aria-label="Custom profit ya loss">
+          <button type="button" id="addCustom">Add</button>
+          <button type="button" class="ghost" id="newDay">Naya din</button>
+          <button type="button" class="ghost" id="undoTrade">Undo</button>
+          <button type="button" class="ghost" id="resetTrades">Reset</button>
+        </div>
+        <div class="chips" id="chips"></div>
+        <div class="verdicts" id="verdicts"></div>
+        <div class="funded" id="funded"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="members" aria-label="Premium members support">
+    <h2>Premium members ke liye</h2>
+    <p>Swing Elite members seedha WhatsApp par sawal pooch sakte hain aur apne daily trade results share kar sakte hain.</p>
+    <div class="wa-row">
+      <a class="wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20main%20Swing%20Elite%20member%20hoon.%20Mera%20sawal%20hai%3A%20" target="_blank" rel="noopener"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#25D366"/><path fill="#fff" d="M16 7.5a8.4 8.4 0 0 0-7.2 12.8L7.6 24.5l4.3-1.1A8.4 8.4 0 1 0 16 7.5zm0 15.3c-1.3 0-2.6-.35-3.7-1l-.27-.16-2.55.67.68-2.48-.18-.28A6.9 6.9 0 1 1 16 22.8zm3.8-5.2c-.2-.1-1.24-.6-1.43-.68-.19-.07-.33-.1-.47.1-.14.2-.54.68-.66.82-.12.14-.24.16-.45.05-.2-.1-.87-.32-1.66-1.02a6.2 6.2 0 0 1-1.15-1.43c-.12-.2 0-.32.09-.42l.31-.37c.1-.12.14-.2.2-.34.07-.14.04-.26-.01-.37-.05-.1-.47-1.13-.64-1.55-.17-.4-.34-.35-.47-.36h-.4c-.14 0-.37.05-.56.26-.19.2-.73.72-.73 1.75s.75 2.03.85 2.17c.1.14 1.47 2.25 3.57 3.15.5.22.89.35 1.19.44.5.16.96.14 1.32.08.4-.06 1.24-.5 1.41-1 .18-.49.18-.9.12-1-.05-.09-.19-.14-.4-.24z"/></svg><div><b>Sawal poochein</b><span>WhatsApp par message karein</span></div></a>
+      <a class="wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20aaj%20ke%20mere%20trade%20results%3A%0APair%3A%0AEntries%3A%0AResult%20%28TP/SL%29%3A%0AP/L%3A" target="_blank" rel="noopener"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#25D366"/><path fill="#fff" d="M16 7.5a8.4 8.4 0 0 0-7.2 12.8L7.6 24.5l4.3-1.1A8.4 8.4 0 1 0 16 7.5zm0 15.3c-1.3 0-2.6-.35-3.7-1l-.27-.16-2.55.67.68-2.48-.18-.28A6.9 6.9 0 1 1 16 22.8zm3.8-5.2c-.2-.1-1.24-.6-1.43-.68-.19-.07-.33-.1-.47.1-.14.2-.54.68-.66.82-.12.14-.24.16-.45.05-.2-.1-.87-.32-1.66-1.02a6.2 6.2 0 0 1-1.15-1.43c-.12-.2 0-.32.09-.42l.31-.37c.1-.12.14-.2.2-.34.07-.14.04-.26-.01-.37-.05-.1-.47-1.13-.64-1.55-.17-.4-.34-.35-.47-.36h-.4c-.14 0-.37.05-.56.26-.19.2-.73.72-.73 1.75s.75 2.03.85 2.17c.1.14 1.47 2.25 3.57 3.15.5.22.89.35 1.19.44.5.16.96.14 1.32.08.4-.06 1.24-.5 1.41-1 .18-.49.18-.9.12-1-.05-.09-.19-.14-.4-.24z"/></svg><div><b>Daily trade results share karein</b><span>Aaj ke trades yahan bhejein</span></div></a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© Explosive Trades · Kavi Sharma · <a href="https://www.explosivetrades.com" target="_blank" rel="noopener" style="color:inherit">www.explosivetrades.com</a></span>
+    <span>Spread, commission, swap aur slippage shamil nahi hain. Sirf planning tool.</span>
+  </footer>
+</main>
+
+<script>
+(function(){
+  const PRESETS = {
+    XAUUSD:{ pt:1, val:100, dec:2, unit:'points', hint:'1 point = $1.00 price move · 1 lot par $100 per point' },
+    AUDUSD:{ pt:0.0001, val:10, dec:5, unit:'pips', hint:'1 pip = 0.0001 · 1 lot par $10 per pip' },
+    CUSTOM:{ pt:null, val:null, dec:5, unit:'points', hint:'Point size aur $ value khud daliye' }
+  };
+  const DEFAULTS = { side:'buy', inst:'XAUUSD', e1:4400, lot:0.2, sl:50, step:50, tp:4700, ptSize:1, ptVal:100, lockAll:false, target:12000, acct:200000, p1:8, p2:5, maxdd:10, daydd:3, risk:1000, winAmt:15000, usePlan:true, trades:[], day:1 };
+  const KEY = 'et-pyramid-calc-v1';
+  const $ = id => document.getElementById(id);
+  let state = Object.assign({}, DEFAULTS);
+
+  try { const saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved) state = Object.assign({}, DEFAULTS, saved); } catch(e) {}
+  try { const t = localStorage.getItem(KEY + '-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch(e) {}
+
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {} }
+
+  function fillInputs(){
+    $('inst').value = state.inst;
+    $('e1').value = state.e1; $('lot').value = state.lot; $('sl').value = state.sl;
+    $('step').value = state.step; $('tp').value = state.tp; $('target').value = state.target; ['acct','p1','p2','maxdd','daydd','risk','winAmt'].forEach(k => $(k).value = state[k]); $('usePlan').checked = !!state.usePlan;
+    $('ptSize').value = state.ptSize; $('ptVal').value = state.ptVal;
+    $('lockAll').checked = !!state.lockAll;
+    setSide(state.side, false);
+    syncPreset();
+  }
+
+  function syncPreset(){
+    const p = PRESETS[state.inst];
+    $('customBox').classList.toggle('show', state.inst === 'CUSTOM');
+    $('instHint').textContent = p.hint;
+    $('slLabel').textContent = 'SL (' + p.unit + ')';
+    $('stepLabel').textContent = 'Nayi entry har kitne ' + p.unit + ' par';
+  }
+
+  function setSide(side, recalc = true){
+    state.side = side;
+    $('buyBtn').setAttribute('aria-pressed', side === 'buy');
+    $('sellBtn').setAttribute('aria-pressed', side === 'sell');
+    if (recalc){ save(); render(); }
+  }
+
+  function num(v){ const n = parseFloat(v); return isFinite(n) ? n : NaN; }
+  function money(v){
+    if (!isFinite(v)) return '–';
+    const s = Math.abs(v).toLocaleString('en-US', { maximumFractionDigits:2, minimumFractionDigits: Math.abs(v) % 1 ? 2 : 0 });
+    return (v < 0 ? '−$' : v > 0 ? '+$' : '$') + s;
+  }
+  function cls(v){ return v < -0.005 ? 'neg' : v > 0.005 ? 'pos' : 'zero'; }
+
+  function render(){
+    const p = PRESETS[state.inst];
+    const pt = state.inst === 'CUSTOM' ? num(state.ptSize) : p.pt;
+    const val = state.inst === 'CUSTOM' ? num(state.ptVal) : p.val;
+    const dec = state.inst === 'CUSTOM' ? Math.min(6, Math.max(2, ((String(state.ptSize).split('.')[1] || '').length))) : p.dec;
+    const unit = p.unit;
+    const e1 = num(state.e1), lot = num(state.lot), sl = num(state.sl), step = num(state.step), tp = num(state.tp);
+    const dir = state.side === 'buy' ? 1 : -1;
+    const fx = v => isFinite(v) ? v.toFixed(dec) : '–';
+
+    const ok = [pt, val, e1, lot, sl, step].every(v => isFinite(v) && v > 0);
+    if (!ok){
+      ['sRisk','sLot','sWorst','sTP'].forEach(id => $(id).textContent = '–');
+      $('sR').textContent = 'Saari fields mein positive number daliye';
+      $('ladder').innerHTML = ''; $('stages').innerHTML = ''; $('slTable').innerHTML = ''; $('tpTable').innerHTML = '';
+      $('tpWarn').classList.remove('show');
+      $('targetOut').innerHTML = ''; $('targetTable').innerHTML = '';
+      renderPlanner(NaN, NaN);
+      return;
+    }
+
+    const E = [e1, e1 + dir * step * pt, e1 + dir * 2 * step * pt];
+    const lockAt = E[2] + dir * step * pt;
+    const pnl = (exit, entry) => dir * (exit - entry) / pt * val * lot;   // $ for one position
+
+    const stages = [
+      { title:'Stage 1', when:'Entry 1 lete hi', sls:[E[0] - dir*sl*pt, null, null] },
+      { title:'Stage 2', when:'Price ' + fx(E[1]) + ' par pahunche', sls:[E[0], E[1] - dir*sl*pt, null] },
+      { title:'Stage 3', when:'Price ' + fx(E[2]) + ' par pahunche', sls:[E[1], E[1], E[2] - dir*sl*pt] },
+      { title:'Stage 4', when:'Price ' + fx(lockAt) + ' par pahunche (Entry 3 + ' + step + ' ' + unit + ')',
+        sls: state.lockAll ? [E[2], E[2], E[2]] : [E[1], E[1], E[2]] }
+    ];
+    stages.forEach(s => {
+      s.open = s.sls.filter(x => x !== null).length;
+      s.worst = s.sls.reduce((a, slp, i) => slp === null ? a : a + pnl(slp, E[i]), 0);
+    });
+
+    // Strip
+    const risk = stages[0].worst;
+    $('sRisk').textContent = money(risk);
+    $('sLot').textContent = (lot * 3).toFixed(2);
+    $('sWorst').textContent = money(stages[2].worst);
+    $('sWorst').className = 'v ' + cls(stages[2].worst);
+
+    // TP
+    const tpValid = isFinite(tp) && dir * (tp - E[0]) > 0;
+    let total = 0; const tpRows = [];
+    if (tpValid){
+      E.forEach((en, i) => {
+        const hit = dir * (tp - en) > 0;
+        const pts = hit ? dir * (tp - en) / pt : 0;
+        const pr = hit ? pnl(tp, en) : 0;
+        total += pr;
+        tpRows.push({ i, en, hit, pts, pr });
+      });
+    }
+    $('sTP').textContent = tpValid ? money(total) : '–';
+    $('sTP').className = 'v ' + (tpValid ? cls(total) : '');
+    $('sR').textContent = tpValid ? (Math.abs(total / risk)).toFixed(1) + 'R · pehle risk ke mukable' : 'TP entry ke ' + (dir > 0 ? 'upar' : 'neeche') + ' daliye';
+
+    // Stages
+    $('stages').innerHTML = stages.map((s, si) => {
+      const color = si === 0 ? 'var(--red)' : s.worst > 0.005 ? 'var(--green)' : s.worst < -0.005 ? 'var(--orange)' : 'var(--gold)';
+      const items = s.sls.map((slp, i) => {
+        if (slp === null) return '';
+        const r = pnl(slp, E[i]);
+        const isNew = (si === i) || (si === 3 && false);
+        return '<li>Trade ' + (i+1) + ' @ ' + fx(E[i]) + (isNew ? ' <span class="zero">(nayi entry)</span>' : '') +
+               ' · SL <b>' + fx(slp) + '</b> <span class="' + cls(r) + '">' + money(r) + '</span></li>';
+      }).join('');
+      const label = s.worst < -0.005 ? 'Max loss' : s.worst > 0.005 ? 'Locked profit' : 'Loss zero';
+      return '<div class="stage" style="border-left-color:' + color + '">' +
+        '<div class="stage-h"><b>' + s.title + ' · ' + s.open + ' trade' + (s.open > 1 ? 's' : '') + ' · ' + (lot * s.open).toFixed(2) + ' lot</b>' +
+        '<span class="when">' + s.when + '</span></div>' +
+        '<ul>' + items + '</ul>' +
+        '<div class="res"><span>' + label + ' agar sab SL hit ho</span><strong class="' + cls(s.worst) + '">' + money(s.worst) + '</strong></div></div>';
+    }).join('');
+
+    // SL table
+    let t = '<thead><tr><th>Trade</th><th>Entry</th>' + stages.map(s => '<th>' + s.title + '</th>').join('') + '</tr></thead><tbody>';
+    for (let i = 0; i < 3; i++){
+      t += '<tr><td>Trade ' + (i+1) + '</td><td>' + fx(E[i]) + '</td>' +
+        stages.map(s => '<td>' + (s.sls[i] === null ? '<span style="color:var(--muted)">–</span>' : fx(s.sls[i])) + '</td>').join('') + '</tr>';
+    }
+    t += '</tbody><tfoot><tr><td colspan="2">Worst case</td>' + stages.map(s => '<td class="' + cls(s.worst) + '">' + money(s.worst) + '</td>').join('') + '</tr></tfoot>';
+    $('slTable').innerHTML = t;
+
+    // TP table
+    const warn = $('tpWarn');
+    if (!tpValid){
+      $('tpTable').innerHTML = '';
+      warn.textContent = state.side === 'buy' ? 'Buy trade mein TP Entry 1 se upar hona chahiye.' : 'Sell trade mein TP Entry 1 se neeche hona chahiye.';
+      warn.classList.add('show');
+    } else {
+      let h = '<thead><tr><th>Trade</th><th>Entry</th><th>Lot</th><th>' + (unit === 'pips' ? 'Pips' : 'Points') + ' tak TP</th><th>Profit</th></tr></thead><tbody>';
+      tpRows.forEach(r => {
+        h += '<tr><td>Trade ' + (r.i+1) + '</td><td>' + fx(r.en) + '</td><td>' + (r.hit ? lot.toFixed(2) : '–') + '</td><td>' +
+             (r.hit ? r.pts.toLocaleString('en-US', { maximumFractionDigits:1 }) : 'Entry nahi hui') + '</td><td class="' + cls(r.pr) + '">' + (r.hit ? money(r.pr) : '–') + '</td></tr>';
+      });
+      const lots = tpRows.filter(r => r.hit).length * lot;
+      h += '</tbody><tfoot><tr><td colspan="2">Total</td><td>' + lots.toFixed(2) + '</td><td></td><td class="' + cls(total) + '">' + money(total) + '</td></tr></tfoot>';
+      $('tpTable').innerHTML = h;
+      const missed = tpRows.filter(r => !r.hit).length;
+      if (missed){
+        warn.textContent = 'TP ' + fx(tp) + ' tak sirf ' + (3 - missed) + ' entr' + (3 - missed > 1 ? 'ies' : 'y') + ' trigger hongi. Baaki entry levels TP ke baad aate hain.';
+        warn.classList.add('show');
+      } else warn.classList.remove('show');
+    }
+
+    // Ladder
+    const levels = [
+      { p:E[0] - dir*sl*pt, name:'SL 1', c:'var(--red)' },
+      { p:E[0], name:'Entry 1', c:'var(--text)' },
+      { p:E[1], name:'Entry 2', c:'var(--text)' },
+      { p:E[2], name:'Entry 3', c:'var(--text)' },
+      { p:lockAt, name:'Lock (SL 3 → zero)', c:'var(--gold)' }
+    ];
+    if (tpValid) levels.push({ p:tp, name:'TP', c:'var(--green)' });
+    const grouped = [];
+    levels.forEach(l => {
+      const g = grouped.find(x => Math.abs(x.p - l.p) < pt / 1000);
+      if (g){ g.names.push(l.name); } else grouped.push({ p:l.p, names:[l.name], c:l.c });
+    });
+    const ps = grouped.map(g => g.p);
+    const max = Math.max(...ps), min = Math.min(...ps), span = (max - min) || 1;
+    const pos = v => 4 + (max - v) / span * 92;
+    const safeTop = Math.min(pos(E[0]), pos(E[1]));
+    let lh = '<div class="axis"></div>';
+    lh += '<div class="zone" style="top:' + Math.min(pos(E[0]), pos(E[0]-dir*sl*pt)) + '%;height:' + Math.abs(pos(E[0]) - pos(E[0]-dir*sl*pt)) + '%;background:var(--red)"></div>';
+    if (tpValid) lh += '<div class="zone" style="top:' + Math.min(pos(E[1]), pos(tp)) + '%;height:' + Math.abs(pos(E[1]) - pos(tp)) + '%;background:var(--green)"></div>';
+    grouped.forEach(g => {
+      lh += '<div class="lvl" style="top:' + pos(g.p) + '%"><span class="tag">' + g.names.join(' / ') + '</span>' +
+            '<span class="dot" style="background:' + g.c + '"></span><span class="px">' + fx(g.p) + '</span></div>';
+    });
+    $('ladder').innerHTML = lh;
+    // Target profit -> required TP
+    renderTarget(E, dir, pt, val, lot, risk, fx, unit);
+    renderPlanner(Math.abs(risk), tpValid ? total : NaN);
+  }
+
+  let TR = null;
+  function renderTracker(cfg){
+    TR = cfg;
+    const chips = $('chips'), ver = $('verdicts'), fund = $('funded');
+    const winV = cfg ? cfg.win : NaN, lossV = cfg ? -cfg.risk : NaN;
+    $('addWin').textContent = cfg ? 'TP hit (' + money(winV) + ')' : 'TP hit';
+    $('addLoss').textContent = cfg ? 'SL (' + money(lossV) + ')' : 'SL';
+    ['addWin','addLoss','addCustom'].forEach(id => $(id).disabled = !cfg);
+    if (!cfg){ ver.innerHTML = '<p class="note">Upar planner ki saari fields bhariye.</p>'; fund.classList.remove('show'); return; }
+
+    const trades = Array.isArray(state.trades) ? state.trades : [];
+    // chips
+    let lastDay = null, ch = '';
+    trades.forEach((t, i) => {
+      if (t.day !== lastDay){ ch += '<span class="chip day">Din ' + t.day + '</span>'; lastDay = t.day; }
+      ch += '<span class="chip ' + (t.pl >= 0 ? 'pos' : 'neg') + '">T' + (i+1) + ' ' + money(t.pl) + '</span>';
+    });
+    if (!trades.length) ch = '<span class="note" style="margin:0">Abhi koi trade nahi. Pehla trade add kariye.</span>';
+    if (trades.length && lastDay !== state.day) ch += '<span class="chip day">Din ' + state.day + '</span>';
+    chips.innerHTML = ch;
+
+    // simulate
+    const ph = [null, { n:0, w:0, l:0, pl:0, status:'run' }, { n:0, w:0, l:0, pl:0, status:'lock' }];
+    let cur = 1, dayPL = {}, stopped = false;
+    for (const t of trades){
+      if (cur > 2 || stopped) break;
+      const P = ph[cur];
+      P.n++; P.pl += t.pl; if (t.pl >= 0) P.w++; else P.l++;
+      dayPL[t.day] = (dayPL[t.day] || 0) + t.pl;
+      if (P.pl <= -cfg.maxLoss + 1e-9){ P.status = 'bad'; P.reason = 'Max loss (' + money(-cfg.maxLoss) + ') hit hua'; stopped = true; break; }
+      if (dayPL[t.day] <= -cfg.dayLoss + 1e-9){ P.status = 'bad'; P.reason = 'Din ' + t.day + ' mein daily loss limit (' + money(-cfg.dayLoss) + ') hit hui'; stopped = true; break; }
+      const target = cur === 1 ? cfg.t1 : cfg.t2;
+      if (P.pl >= target - 1e-9){
+        P.status = 'ok'; cur++; dayPL = {};
+        if (cur === 2) ph[2].status = 'run';
+      }
+    }
+
+    const card = (i, P) => {
+      const target = i === 1 ? cfg.t1 : cfg.t2, tp = i === 1 ? cfg.p1 : cfg.p2;
+      const tradesTxt = P.n + ' trade' + (P.n === 1 ? '' : 's') + ' (' + P.w + ' TP, ' + P.l + ' SL)';
+      let big, d, cls2 = P.status;
+      if (P.status === 'ok'){ big = '✅ Phase ' + i + ' clear'; d = '<b>' + tradesTxt + '</b> mein · profit <b class="pos">' + money(P.pl) + '</b>'; }
+      else if (P.status === 'bad'){ big = '❌ Phase ' + i + ' fail'; d = P.reason + ' · ' + tradesTxt + ' ke baad · P/L <b class="neg">' + money(P.pl) + '</b>'; }
+      else if (P.status === 'lock'){ big = 'Phase ' + i + ' abhi band'; d = 'Phase 1 clear hone ke baad yahan shuru hoga'; }
+      else {
+        const left = target - P.pl, room = cfg.maxLoss + P.pl;
+        const winsLeft = Math.max(0, Math.ceil(left / cfg.win - 1e-9));
+        big = '⏳ Phase ' + i + ' chal raha hai';
+        d = (P.n ? tradesTxt + ' · P/L <b class="' + cls(P.pl) + '">' + money(P.pl) + '</b><br>' : '') +
+            'Target tak <b>' + money(left).replace('+','') + '</b> baaki (~' + winsLeft + ' TP) · max loss tak room ' + money(room).replace('+','');
+      }
+      const prog = Math.max(0, Math.min(100, P.pl / target * 100));
+      return '<div class="verdict ' + cls2 + '"><div class="t">Phase ' + i + ' · target ' + tp + '% (' + money(target).replace('+','') + ')</div>' +
+             '<div class="big2">' + big + '</div><div class="d">' + d + '</div>' +
+             (P.status === 'lock' ? '' : '<div class="bar"><i style="width:' + prog + '%;background:' + (P.status === 'bad' ? 'var(--red)' : P.status === 'ok' ? 'var(--green)' : 'var(--gold)') + '"></i></div>') + '</div>';
+    };
+    ver.innerHTML = card(1, ph[1]) + card(2, ph[2]);
+    const done = ph[1].status === 'ok' && ph[2].status === 'ok';
+    fund.classList.toggle('show', done);
+    if (done) fund.innerHTML = '🎉 Dono phase clear. Total ' + (ph[1].n + ph[2].n) + ' trades mein challenge pass (Phase 1: ' + ph[1].n + ', Phase 2: ' + ph[2].n + ').';
+    const over = trades.length > ph[1].n + ph[2].n;
+    if (over && (stopped || done)) ver.insertAdjacentHTML('beforeend', '<p class="note" style="grid-column:1/-1">' + (trades.length - ph[1].n - ph[2].n) + ' trade(s) is result ke baad add kiye gaye, woh gine nahi gaye.</p>');
+  }
+
+  function addTrade(pl){
+    if (!isFinite(pl) || pl === 0) return;
+    state.trades = (state.trades || []).concat([{ pl: +pl.toFixed(2), day: state.day || 1 }]);
+    save(); render();
+  }
+
+  function renderPlanner(planRisk, planWin){
+    const acct = num(state.acct), p1 = num(state.p1), p2 = num(state.p2), maxdd = num(state.maxdd), daydd = num(state.daydd);
+    const fromPlanRisk = state.usePlan && isFinite(planRisk) && planRisk > 0;
+    const fromPlanWin = state.usePlan && isFinite(planWin) && planWin > 0;
+    const risk = fromPlanRisk ? planRisk : num(state.risk);
+    const win = fromPlanWin ? planWin : num(state.winAmt);
+    $('risk').disabled = fromPlanRisk; if (fromPlanRisk) $('risk').value = +planRisk.toFixed(2);
+    $('winAmt').disabled = fromPlanWin; if (fromPlanWin) $('winAmt').value = +planWin.toFixed(2);
+    $('winHint').textContent = fromPlanWin ? 'Upar wale TP (' + $('tp').value + ') se, saari entries ke saath' : 'Poore swing ka TP profit';
+    const ok = [acct, p1, p2, maxdd, daydd, risk, win].every(v => isFinite(v) && v > 0);
+    if (!ok){ $('planStats').innerHTML = ''; $('planNote').textContent = 'Saari fields mein positive number daliye.'; renderTracker(null); return; }
+
+    const maxLoss = acct * maxdd / 100, dayLoss = acct * daydd / 100;
+    const t1 = acct * p1 / 100, t2 = acct * p2 / 100;
+    const safe = n => Math.max(Math.ceil(n - 1e-9) - 1, 0);   // SLs that stay inside the limit
+    const totSafe = safe(maxLoss / risk), daySafe = safe(dayLoss / risk);
+    const tp1 = Math.ceil(t1 / win - 1e-9), tp2 = Math.ceil(t2 / win - 1e-9);
+
+    $('planStats').innerHTML =
+      '<div class="stat"><div class="k">Ek din mein kitne try (SL)</div><div class="v ' + (daySafe < 1 ? 'neg' : '') + '">' + daySafe + '</div><div class="s">Daily limit ' + money(-dayLoss) + (daySafe < 1 ? ' · risk daily limit se bada hai!' : '') + '</div></div>' +
+      '<div class="stat"><div class="k">Total SL (poore phase mein)</div><div class="v ' + (totSafe < 3 ? 'neg' : '') + '">' + totSafe + '</div><div class="s">Max loss ' + money(-maxLoss) + ' · ek SL ' + money(-risk) + '</div></div>' +
+      '<div class="stat"><div class="k">Phase 1: kitne TP chahiye</div><div class="v pos">' + tp1 + '</div><div class="s">Target ' + money(t1).replace('+','') + ' · ek TP ' + money(win) + '</div></div>' +
+      '<div class="stat"><div class="k">Phase 2: kitne TP chahiye</div><div class="v pos">' + tp2 + '</div><div class="s">Target ' + money(t2).replace('+','') + '</div></div>';
+    $('planNote').textContent = '';
+    renderTracker({ risk, win, maxLoss, dayLoss, t1, t2, p1, p2 });
+  }
+
+  function renderTarget(E, dir, pt, val, lot, risk, fx, unit){
+    const out = $('targetOut'), tbl = $('targetTable'), wrap = $('targetTblWrap');
+    const target = num(state.target);
+    if (!(isFinite(target) && target > 0)){
+      out.innerHTML = '<div class="k">Target profit daliye, TP yahan dikhega.</div>';
+      tbl.innerHTML = ''; wrap.style.display = 'none'; return;
+    }
+    const perPrice = val * lot / pt;            // $ per 1.0 price move, one position
+    let tpNeed = null, k = 0;
+    for (let n = 1; n <= 3; n++){
+      const sumE = E.slice(0, n).reduce((a, b) => a + b, 0);
+      const cand = (sumE + dir * target / perPrice) / n;
+      const nextE = E[n];
+      if (n === 3 || dir * (cand - nextE) <= 0){ tpNeed = cand; k = n; break; }
+    }
+    const f = Math.pow(10, Math.max(0, (fx(1).split('.')[1] || '').length));
+    const tpR = dir > 0 ? Math.ceil(tpNeed * f - 1e-9) / f : Math.floor(tpNeed * f + 1e-9) / f;
+    const ptsFromE1 = dir * (tpR - E[0]) / pt;
+    let total = 0, rows = '';
+    for (let i = 0; i < 3; i++){
+      const hit = i < k;
+      const pts = hit ? dir * (tpR - E[i]) / pt : 0;
+      const pr = hit ? pts * val * lot : 0;
+      total += pr;
+      rows += '<tr><td>Trade ' + (i+1) + '</td><td>' + fx(E[i]) + '</td><td>' + (hit ? lot.toFixed(2) : '–') + '</td><td>' +
+              (hit ? pts.toLocaleString('en-US', { maximumFractionDigits:1 }) : 'Entry nahi hogi') + '</td><td class="' + cls(pr) + '">' + (hit ? money(pr) : '–') + '</td></tr>';
+    }
+    out.innerHTML = '<div class="k">Is target ke liye TP yahan lagaaein</div>' +
+      '<div class="big">' + fx(tpR) + '</div>' +
+      '<div class="meta">Entry 1 se <b>' + ptsFromE1.toLocaleString('en-US', { maximumFractionDigits:1 }) + ' ' + unit + '</b> ' + (dir > 0 ? 'upar' : 'neeche') +
+      ' · <b>' + k + '</b> entr' + (k > 1 ? 'ies' : 'y') + ' · ' + (lot * k).toFixed(2) + ' lot · profit <b class="pos">' + money(total) + '</b> · ' +
+      Math.abs(total / risk).toFixed(1) + 'R</div>' +
+      '<button class="apply" type="button" id="applyTP">Yeh TP upar plan mein lagaaein</button><span class="applied" id="appliedMsg"></span>';
+    wrap.style.display = '';
+    tbl.innerHTML = '<thead><tr><th>Trade</th><th>Entry</th><th>Lot</th><th>' + (unit === 'pips' ? 'Pips' : 'Points') + ' tak TP</th><th>Profit</th></tr></thead><tbody>' + rows +
+      '</tbody><tfoot><tr><td colspan="2">Total</td><td>' + (lot * k).toFixed(2) + '</td><td></td><td class="pos">' + money(total) + '</td></tr></tfoot>';
+    $('applyTP').addEventListener('click', () => {
+      state.tp = tpR; $('tp').value = tpR; save(); render();
+      const m = $('appliedMsg'); if (m) m.textContent = 'TP ' + fx(tpR) + ' lag gaya';
+    });
+  }
+
+  // Events
+  ['e1','lot','sl','step','tp','ptSize','ptVal','target','acct','p1','p2','maxdd','daydd','risk','winAmt'].forEach(id => {
+    $(id).addEventListener('input', e => { state[id] = e.target.value; save(); render(); });
+  });
+  $('inst').addEventListener('change', e => {
+    state.inst = e.target.value;
+    if (state.inst === 'AUDUSD' && num(state.e1) > 10){ state.e1 = 0.7000; state.sl = 50; state.step = 50; state.tp = 0.7300; state.lot = 0.2; }
+    if (state.inst === 'XAUUSD' && num(state.e1) < 10){ Object.assign(state, { e1:4400, sl:50, step:50, tp:4700, lot:0.2 }); }
+    fillInputs(); save(); render();
+  });
+  $('usePlan').addEventListener('change', e => { state.usePlan = e.target.checked; save(); render(); });
+  $('lockAll').addEventListener('change', e => { state.lockAll = e.target.checked; save(); render(); });
+  $('buyBtn').addEventListener('click', () => flipSide('buy'));
+  $('sellBtn').addEventListener('click', () => flipSide('sell'));
+  function flipSide(side){
+    if (side === state.side) return;
+    const e1 = num(state.e1), tp = num(state.tp);
+    if (isFinite(e1) && isFinite(tp)) state.tp = +(e1 - (tp - e1)).toFixed(6);   // mirror TP to the other side
+    setSide(side); fillInputs(); render();
+  }
+  $('addWin').addEventListener('click', () => { if (TR) addTrade(TR.win); });
+  $('addLoss').addEventListener('click', () => { if (TR) addTrade(-TR.risk); });
+  $('addCustom').addEventListener('click', () => { const v = num($('customPL').value); if (isFinite(v)){ addTrade(v); $('customPL').value = ''; } });
+  $('customPL').addEventListener('keydown', e => { if (e.key === 'Enter') $('addCustom').click(); });
+  $('newDay').addEventListener('click', () => { state.day = (state.day || 1) + 1; save(); render(); });
+  $('undoTrade').addEventListener('click', () => {
+    const t = state.trades || []; if (!t.length) return;
+    t.pop(); state.day = t.length ? Math.max(t[t.length-1].day, 1) : 1; save(); render();
+  });
+  $('resetTrades').addEventListener('click', () => { state.trades = []; state.day = 1; save(); render(); });
+  $('resetBtn').addEventListener('click', () => { state = Object.assign({}, DEFAULTS); fillInputs(); save(); render(); });
+  $('themeBtn').addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', cur);
+    $('themeBtn').textContent = cur === 'light' ? 'Dark' : 'Light';
+    try { localStorage.setItem(KEY + '-theme', cur); } catch(e) {}
+  });
+  if (document.documentElement.getAttribute('data-theme') === 'light') $('themeBtn').textContent = 'Dark';
+
+  fillInputs();
+  render();
+})();
+</script>
+</body>
+</html>
