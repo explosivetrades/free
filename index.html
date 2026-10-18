@@ -115,6 +115,15 @@ h1 span{ color:var(--gold); }
 .crs:not(.main) .btn{ background:transparent; color:var(--text); border:1px solid var(--gold); }
 .crs:not(.main) .btn:hover{ background:color-mix(in srgb, var(--gold) 12%, transparent); }
 
+.proof{ display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:18px; align-items:center; padding:22px; border-radius:16px; background:var(--panel); border:1px solid var(--line); }
+@media (max-width:720px){ .proof{ grid-template-columns:1fr; } }
+.proof .yt-ic{ width:58px; height:58px; border-radius:14px; background:color-mix(in srgb, #e62117 16%, var(--panel2)); display:grid; place-items:center; }
+.proof .lbl{ font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--green); margin:0 0 2px; }
+.proof h2{ margin:0 0 4px; }
+.proof p{ margin:0; color:var(--muted); font-size:14px; max-width:60ch; }
+.btn.yt{ width:auto; background:#d4190f; color:#fff; white-space:nowrap; }
+.btn.yt:hover{ filter:brightness(1.1); }
+
 h2{ font-family:var(--display); font-weight:400; font-size:34px; letter-spacing:.03em; margin:0 0 6px; color:var(--gold); }
 .sec-lead{ color:var(--muted); margin:0 0 18px; max-width:62ch; }
 
@@ -254,6 +263,16 @@ footer .disc{ max-width:90ch; }
     <div class="row">
       <a class="btn wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20mujhe%20courses%20ke%20baare%20mein%20jaankari%20chahiye." target="_blank" rel="noopener">WhatsApp karein</a>
     </div>
+  </section>
+
+  <section class="proof" id="results" aria-label="Client results">
+    <div class="yt-ic" aria-hidden="true"><svg width="30" height="22" viewBox="0 0 30 22"><rect width="30" height="22" rx="6" fill="#d4190f"/><path d="M12 6.5v9l8-4.5z" fill="#fff"/></svg></div>
+    <div>
+      <p class="lbl">Learning group · Client results</p>
+      <h2>Members ka experience sunein</h2>
+      <p>Hamare learning group ke members ke interviews aur strategy feedback YouTube playlist mein dekhein.</p>
+    </div>
+    <a class="btn yt" href="https://www.youtube.com/playlist?list=PLSiD1yxMUOkU" target="_blank" rel="noopener">YouTube par dekhein</a>
   </section>
 
   <footer>
