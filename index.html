@@ -92,6 +92,16 @@ h1 span{ color:var(--gold); }
 .again a{ font-size:13px; }
 .privacy{ font-size:11.5px; color:var(--muted); margin:0; }
 
+.course{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:20px; align-items:center; padding:24px; border-radius:16px; border:1.5px solid var(--gold); background:linear-gradient(135deg, color-mix(in srgb, var(--gold) 14%, var(--panel)), var(--panel) 70%); }
+@media (max-width:680px){ .course{ grid-template-columns:1fr; } }
+.course .lbl{ font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--green); margin:0 0 4px; }
+.course h2{ margin:0 0 6px; }
+.course p{ margin:0; color:var(--muted); font-size:14px; max-width:62ch; }
+.course ul{ margin:10px 0 0; padding-left:18px; font-size:13.5px; color:var(--text); display:grid; gap:2px; }
+.course .btn{ width:auto; white-space:nowrap; }
+.mini-course{ font-size:13px; color:var(--muted); margin:0; }
+.mini-course a{ font-weight:600; }
+
 h2{ font-family:var(--display); font-weight:400; font-size:34px; letter-spacing:.03em; margin:0 0 6px; color:var(--gold); }
 .sec-lead{ color:var(--muted); margin:0 0 18px; max-width:62ch; }
 
@@ -161,6 +171,7 @@ footer .disc{ max-width:90ch; }
             <span id="dlLabel">Free download karein</span>
           </button>
           <p class="status" id="status" role="status" aria-live="polite"></p>
+          <p class="mini-course">Tools kaise use karein? <a href="https://www.explosivetrades.com/courses/728981?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp" target="_blank" rel="noopener">Yeh course join karein</a></p>
           <p class="privacy">Aapka number sirf Explosive Trades ke updates aur tool support ke liye use hoga. Kisi aur ke saath share nahi kiya jayega.</p>
         </div>
       </form>
@@ -180,6 +191,15 @@ footer .disc{ max-width:90ch; }
       <div class="step"><div><b>Browser mein kholein</b><p>File par double-click karein. Phone par Files app se Chrome ya Safari mein kholein.</p></div></div>
       <div class="step"><div><b>Apna plan daliye</b><p>Aapki values usi browser mein save rehti hain, agli baar wahin milengi.</p></div></div>
     </div>
+  </section>
+
+  <section class="course" id="course" aria-label="Tools use karna seekhein">
+    <div>
+      <p class="lbl">Tools ka poora use seekhein</p>
+      <h2>In tools aur indicators ko kaise use karein</h2>
+      <p>Har tool aur indicator ko step-by-step kaise use karna hai, yeh course mein samjhaya gaya hai. Course join karein aur apne trades ki planning sahi tareeke se karein.</p>
+    </div>
+    <a class="btn main-btn" href="https://www.explosivetrades.com/courses/728981?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp" target="_blank" rel="noopener">Course join karein</a>
   </section>
 
   <section class="contact" aria-label="Contact">
