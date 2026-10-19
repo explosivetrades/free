@@ -88,8 +88,24 @@ function memSheet_() {
   return sh;
 }
 function rowFormulas_(sh, r) {
-  sh.getRange(r, 6).setFormula('=IF(E' + r + '="","",E' + r + '-TODAY())');
-  sh.getRange(r, 7).setFormula('=IF(E' + r + '="","",IF(E' + r + '<TODAY(),"Expired",IF(E' + r + '-TODAY()<=7,"Expiring","Active")))');
+  sh.getRange(r, 6).setFormula('=IF(E' + r + '="","",INT(E' + r + ')-TODAY())').setNumberFormat('0');
+  sh.getRange(r, 7).setFormula('=IF(E' + r + '="","",IF(INT(E' + r + ')<TODAY(),"Expired",IF(INT(E' + r + ')-TODAY()<=7,"Expiring","Active")))');
+  sh.getRange(r, 1).setNumberFormat('dd mmm yyyy');
+  sh.getRange(r, 5).setNumberFormat('dd mmm yyyy');
+  sh.getRange(r, 8).setNumberFormat('dd mmm yyyy, h:mm am/pm');
+}
+function dateOnly_(d) {
+  return new Date(Utilities.formatDate(d, 'Asia/Kolkata', 'yyyy-MM-dd') + 'T00:00:00+05:30');
+}
+// Run once to tidy existing rows (formats + formulas)
+function fixFormats() {
+  var sh = memSheet_();
+  for (var r = 2; r <= sh.getLastRow(); r++) {
+    var e = sh.getRange(r, 5).getValue();
+    if (e instanceof Date) sh.getRange(r, 5).setValue(dateOnly_(e));
+    rowFormulas_(sh, r);
+  }
+  sh.autoResizeColumns(1, 9);
 }
 function findRow_(sh, phone) {
   var n = sh.getLastRow();
@@ -125,7 +141,7 @@ function member_(b) {
       if (r) return { ok: false, code: 'exists' };
       var salt = Utilities.getUuid();
       var now = new Date();
-      var exp = new Date(now.getTime() + TRIAL_DAYS * 864e5);
+      var exp = dateOnly_(new Date(now.getTime() + TRIAL_DAYS * 864e5));
       sh.appendRow([now, clean_(name), phone, TRIAL_PLAN, exp, '', '', now, 'Website signup', salt, hash_(pw, salt)]);
       r = sh.getLastRow();
       sh.getRange(r, 3).setNumberFormat('@').setValue(phone);
@@ -170,7 +186,7 @@ function setup() {
   var sh = memSheet_();
   if (!findRow_(sh, '9259595122')) {
     var salt = Utilities.getUuid();
-    var exp = new Date('2026-11-19T12:00:00+05:30');
+    var exp = new Date('2026-11-19T00:00:00+05:30');
     sh.appendRow([new Date(), 'Ananya Choudhary', '9259595122', 'Paid', exp, '', '', '', '1 month - Oct 2026', salt, hash_('9259595122', salt)]);
     var r = sh.getLastRow();
     sh.getRange(r, 3).setNumberFormat('@').setValue('9259595122');
