@@ -136,6 +136,15 @@ h1 span{ color:var(--gold); }
 .cn .go{ display:inline-block; margin-top:6px; font-size:13px; font-weight:600; color:var(--gold); }
 .cn.tg .go{ color:#3aa7dd; }
 
+.mem-link{ display:inline-flex; align-items:center; gap:6px; background:var(--gold); color:var(--on-gold); border-radius:8px; padding:5px 11px; font:600 12px var(--body); text-decoration:none; }
+.mem-link:hover{ filter:brightness(1.07); }
+.members{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:18px; align-items:center; padding:22px; border-radius:16px; border:1px dashed var(--gold); background:var(--panel); }
+@media (max-width:680px){ .members{ grid-template-columns:1fr; } }
+.members .lbl{ font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin:0 0 2px; }
+.members h2{ margin:0 0 4px; }
+.members p{ margin:0; color:var(--muted); font-size:14px; max-width:60ch; }
+.members .btn{ width:auto; white-space:nowrap; }
+
 h2{ font-family:var(--display); font-weight:400; font-size:34px; letter-spacing:.03em; margin:0 0 6px; color:var(--gold); }
 .sec-lead{ color:var(--muted); margin:0 0 18px; max-width:62ch; }
 
@@ -166,6 +175,7 @@ footer .disc{ max-width:90ch; }
     <a class="brand" href="https://www.explosivetrades.com" target="_blank" rel="noopener">Explosive Trades</a>
     <div class="top-r">
       <span class="by">Prepared by Kavi Sharma</span>
+      <a class="mem-link" href="research/">🔒 Members</a>
       <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button>
     </div>
   </div>
@@ -234,6 +244,15 @@ footer .disc{ max-width:90ch; }
       <p>Har tool aur indicator ko step-by-step kaise use karna hai, yeh course mein samjhaya gaya hai. Course join karein aur apne trades ki planning sahi tareeke se karein.</p>
     </div>
     <a class="btn main-btn" href="https://www.explosivetrades.com/courses/728981?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp" target="_blank" rel="noopener">Course join karein</a>
+  </section>
+
+  <section class="members" aria-label="Members Research">
+    <div>
+      <p class="lbl">🔒 Members only</p>
+      <h2>Daily Research</h2>
+      <p>Explosive Trades members ke liye roz subah ka research paper. Apne member password se login karein aur paper padhein ya download karein.</p>
+    </div>
+    <a class="btn main-btn" href="research/">Members login</a>
   </section>
 
   <section aria-label="Strategy courses" id="courses">

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Members Research · Explosive Trades</title>
+<meta name="description" content="Explosive Trades members ke liye daily research papers. Sirf members password se access.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1a1510">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1a1510; --panel:#231d15; --panel2:#2a231a; --line:#3a3023; --text:#f3ead8; --muted:#b3a68c;
+  --gold:#d9a93a; --orange:#e8843a; --green:#6cc58a; --red:#e5484d; --on-gold:#1a1510;
+  --display:'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+  --body:'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f6efe1; --panel:#fffaf0; --panel2:#f3e9d6; --line:#e0d1b4; --text:#2a2117; --muted:#6f604a;
+  --gold:#a8790f; --orange:#c1621c; --green:#2d8a50; --red:#c43338; --on-gold:#fffaf0; color-scheme:light;
+}
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--body); font-size:15px; line-height:1.6; }
+a{ color:var(--gold); }
+:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+.top{ position:sticky; top:0; z-index:9; background:var(--panel); border-bottom:1px solid var(--line); padding-top:env(safe-area-inset-top,0px); }
+.top-in, .wrap{ max-width:900px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); }
+.top-in{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:10px; }
+.brand{ font-family:var(--display); font-size:24px; letter-spacing:.06em; color:var(--gold); line-height:1; text-decoration:none; }
+.top-r{ display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted); }
+.icon-btn{ background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:8px; padding:5px 10px; cursor:pointer; font:500 12px var(--body); }
+.icon-btn:hover{ border-color:var(--gold); }
+.icon-btn[hidden]{ display:none; }
+.wrap{ padding-block:34px calc(40px + env(safe-area-inset-bottom,0px)); display:grid; gap:28px; }
+.back{ font-size:13px; color:var(--muted); text-decoration:none; }
+.back:hover{ color:var(--gold); }
+.kicker{ display:inline-flex; gap:6px; align-items:center; font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold); border-radius:20px; padding:3px 12px; margin:0 0 12px; }
+h1{ font-family:var(--display); font-weight:400; font-size:clamp(44px,8vw,72px); line-height:.92; letter-spacing:.015em; margin:0 0 12px; text-wrap:balance; }
+h1 span{ color:var(--gold); }
+.lead{ color:var(--muted); margin:0; max-width:60ch; }
+
+.lock{ background:var(--panel); border:1px solid var(--gold); border-radius:16px; padding:24px; display:grid; gap:12px; max-width:460px; }
+.lock h2, .head h2{ font-family:var(--display); font-weight:400; font-size:30px; letter-spacing:.03em; margin:0; color:var(--gold); }
+.lock p{ margin:0; font-size:13.5px; color:var(--muted); }
+.field label{ display:block; font-size:13px; color:var(--muted); margin-bottom:4px; }
+.pw-row{ position:relative; }
+.field input{ width:100%; padding:12px 74px 12px 13px; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:10px; font:16px var(--body); letter-spacing:.04em; }
+.field input:focus{ border-color:var(--gold); outline:none; }
+.show{ position:absolute; right:6px; top:50%; transform:translateY(-50%); background:none; border:0; color:var(--muted); font:500 12px var(--body); cursor:pointer; padding:6px 8px; }
+.check{ display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); cursor:pointer; }
+.check input{ accent-color:var(--gold); width:16px; height:16px; }
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:0; border-radius:11px; padding:13px 18px; font:600 15px var(--body); cursor:pointer; text-decoration:none; }
+.btn.main{ background:var(--gold); color:var(--on-gold); width:100%; }
+.btn.main:hover{ filter:brightness(1.07); }
+.btn.main[disabled]{ opacity:.6; cursor:wait; }
+.status{ font-size:13px; min-height:20px; margin:0; color:var(--muted); }
+.status.err{ color:var(--orange); } .status.ok{ color:var(--green); }
+.help{ font-size:12.5px; color:var(--muted); }
+
+.member{ display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; justify-content:space-between; padding:14px 18px; border-radius:12px; background:var(--panel2); border:1px solid var(--line); font-size:13.5px; }
+.member b{ color:var(--text); }
+.pill{ display:inline-block; font-size:12px; font-weight:600; padding:2px 10px; border-radius:20px; }
+.pill.ok{ color:var(--green); border:1px solid var(--green); }
+.pill.warn{ color:var(--orange); border:1px solid var(--orange); }
+.head{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; }
+.updated{ font-size:13px; color:var(--muted); }
+.updated b{ color:var(--gold); font-variant-numeric:tabular-nums; }
+
+.papers{ display:grid; gap:12px; }
+.paper{ display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:14px; align-items:center; padding:16px 18px; background:var(--panel); border:1px solid var(--line); border-radius:14px; }
+.paper.new{ border-color:var(--gold); background:color-mix(in srgb, var(--gold) 7%, var(--panel)); }
+@media (max-width:620px){ .paper{ grid-template-columns:auto minmax(0,1fr); } .paper .acts{ grid-column:1 / -1; } }
+.date{ text-align:center; min-width:56px; padding:6px 8px; border-radius:10px; background:var(--panel2); border:1px solid var(--line); }
+.date .d{ font-family:var(--display); font-size:28px; line-height:1; color:var(--gold); }
+.date .m{ font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+.p-name{ font-weight:600; font-size:15px; margin:0; word-break:break-word; }
+.p-meta{ font-size:12.5px; color:var(--muted); margin:2px 0 0; font-variant-numeric:tabular-nums; }
+.tag-new{ font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--on-gold); background:var(--gold); border-radius:20px; padding:1px 8px; margin-left:6px; vertical-align:2px; }
+.acts{ display:flex; gap:8px; flex-wrap:wrap; }
+.acts .btn{ padding:9px 14px; font-size:13.5px; }
+.acts .read{ background:transparent; color:var(--text); border:1px solid var(--gold); }
+.acts .read:hover{ background:color-mix(in srgb, var(--gold) 12%, transparent); }
+.acts .dl{ background:var(--gold); color:var(--on-gold); }
+.empty{ padding:22px; border:1px dashed var(--line); border-radius:14px; color:var(--muted); text-align:center; }
+.box{ padding:18px; border-radius:14px; border:1px solid var(--line); background:var(--panel); display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; }
+.box p{ margin:0; color:var(--muted); font-size:14px; max-width:56ch; }
+.wa{ background:#1f8f4e; color:#fff; }
+[hidden]{ display:none !important; }
+footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8px; font-size:12px; color:var(--muted); }
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="../">Explosive Trades</a>
+    <div class="top-r">
+      <button class="icon-btn" id="logout" type="button" hidden>Logout</button>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div>
+    <a class="back" href="../">&larr; Free tools page</a>
+  </div>
+  <section>
+    <p class="kicker">🔒 Members only</p>
+    <h1>Daily <span>Research</span></h1>
+    <p class="lead">Explosive Trades members ke liye roz subah ka research paper. Apna member password daliye, phir paper padhein ya download karein.</p>
+  </section>
+
+  <section id="lockView" aria-label="Member login">
+    <form class="lock" id="loginForm" novalidate>
+      <h2>Member login</h2>
+      <p>Password aapko Explosive Trades team ne WhatsApp par diya hai.</p>
+      <div class="field">
+        <label for="pw">Member password</label>
+        <div class="pw-row">
+          <input id="pw" type="password" autocomplete="current-password" autocapitalize="characters" spellcheck="false" required placeholder="ET-XXXX-XXXX-XXXX">
+          <button class="show" id="showPw" type="button">Dikhayein</button>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" id="remember" checked> Is device par login yaad rakhein</label>
+      <button class="btn main" id="loginBtn" type="submit">Research kholein</button>
+      <p class="status" id="loginStatus" role="status" aria-live="polite"></p>
+      <p class="help">Password nahi hai ya expire ho gaya? <a href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20mujhe%20Members%20Research%20ka%20access%20chahiye." target="_blank" rel="noopener">WhatsApp karein</a></p>
+    </form>
+  </section>
+
+  <section id="listView" aria-label="Research papers" hidden>
+    <div style="display:grid;gap:18px">
+      <div class="member" id="memberBar"></div>
+      <div class="head">
+        <h2>Research papers</h2>
+        <span class="updated" id="updated"></span>
+      </div>
+      <div class="papers" id="papers"></div>
+      <p class="status" id="listStatus" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="box" aria-label="Help">
+    <p>Membership renew karni hai ya koi sawal hai? Explosive Trades team se WhatsApp par baat karein: <b>+91 78179 40814</b></p>
+    <a class="btn wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20Members%20Research%20ke%20baare%20mein%20sawal%20hai." target="_blank" rel="noopener">WhatsApp karein</a>
+  </section>
+
+  <footer>
+    <span>© Explosive Trades · Kavi Sharma · <a href="https://www.explosivetrades.com" target="_blank" rel="noopener">www.explosivetrades.com</a></span>
+    <span>Disclaimer: Research sirf education ke liye hai, koi buy/sell call ya profit ki guarantee nahi hai. Trading mein capital ka risk hota hai, apni samajh se trade karein. Password aur papers aage share karna mana hai.</span>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var IDX = null, KEY = null, ME = null;
+  var enc = new TextEncoder();
+  var b64d = function(s){ var bin = atob(s), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
+  var b64e = function(buf){ var u = new Uint8Array(buf), s = ''; for (var i = 0; i < u.length; i++) s += String.fromCharCode(u[i]); return btoa(s); };
+  var hex = function(buf){ return Array.from(new Uint8Array(buf)).map(function(x){ return x.toString(16).padStart(2, '0'); }).join(''); };
+  var esc = function(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
+
+  // Theme
+  var themeBtn = $('themeBtn');
+  function setTheme(t){ document.documentElement.setAttribute('data-theme', t); themeBtn.textContent = t === 'light' ? 'Dark' : 'Light'; }
+  try { var th = localStorage.getItem('et-dl-theme'); if (th) setTheme(th); } catch(e){}
+  themeBtn.addEventListener('click', function(){ var t = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'; setTheme(t); try { localStorage.setItem('et-dl-theme', t); } catch(e){} });
+
+  $('showPw').addEventListener('click', function(){ var i = $('pw'); var show = i.type === 'password'; i.type = show ? 'text' : 'password'; this.textContent = show ? 'Chhupayein' : 'Dikhayein'; });
+
+  function todayIST(){ return new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10); }
+  function fmtDate(iso, opts){ return new Date(iso).toLocaleString('en-IN', Object.assign({ timeZone: 'Asia/Kolkata' }, opts)); }
+  function fmtExp(d){ return new Date(d + 'T00:00:00+05:30').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }); }
+  function size(n){ return n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+  var MIME = { pdf:'application/pdf', html:'text/html', htm:'text/html', png:'image/png', jpg:'image/jpeg', jpeg:'image/jpeg', webp:'image/webp', gif:'image/gif', txt:'text/plain', csv:'text/csv', mp4:'video/mp4', xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document', pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation' };
+  var CAN_VIEW = { pdf:1, html:1, htm:1, png:1, jpg:1, jpeg:1, webp:1, gif:1, txt:1, mp4:1 };
+  var ext = function(n){ return (n.split('.').pop() || '').toLowerCase(); };
+
+  async function loadIndex(){
+    var r = await fetch('data/index.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('index');
+    return r.json();
+  }
+  async function deriveFrom(pw){
+    var base = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveBits']);
+    var bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: b64d(IDX.salt), iterations: IDX.iter }, base, 512);
+    return { raw: bits.slice(0, 32), id: hex(bits.slice(32, 48)) };
+  }
+  async function useKey(raw, id){
+    KEY = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
+    ME = id;
+  }
+
+  function showLogin(msg, cls){
+    $('lockView').hidden = false; $('listView').hidden = true; $('logout').hidden = true;
+    var s = $('loginStatus'); s.textContent = msg || ''; s.className = 'status' + (cls ? ' ' + cls : '');
+  }
+
+  function render(){
+    var c = IDX.clients[ME];
+    var days = Math.round((new Date(c.exp + 'T23:59:59+05:30') - Date.now()) / 864e5);
+    $('memberBar').innerHTML = '<span>Membership valid: <b>' + fmtExp(c.exp) + '</b> tak</span>' +
+      (days <= 7 ? '<span class="pill warn">' + Math.max(days, 0) + ' din baaki · renew karein</span>' : '<span class="pill ok">Active</span>');
+    var mine = IDX.files.filter(function(f){ return f.slots[ME]; });
+    if (mine.length){
+      $('updated').innerHTML = 'Aakhri update: <b>' + fmtDate(mine[0].time, { day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true }) + '</b>';
+    } else $('updated').textContent = '';
+    var today = todayIST();
+    $('papers').innerHTML = mine.length ? mine.map(function(f, i){
+      var isNew = new Date(Date.parse(f.time) + 5.5 * 3600e3).toISOString().slice(0, 10) === today;
+      return '<article class="paper' + (i === 0 ? ' new' : '') + '">' +
+        '<div class="date"><div class="d">' + fmtDate(f.time, { day:'numeric' }) + '</div><div class="m">' + fmtDate(f.time, { month:'short' }) + '</div></div>' +
+        '<div><p class="p-name">' + esc(f.name) + (isNew ? '<span class="tag-new">Aaj</span>' : '') + '</p>' +
+        '<p class="p-meta">Update: ' + fmtDate(f.time, { weekday:'short', day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true }) + ' · ' + size(f.size) + '</p></div>' +
+        '<div class="acts">' + (CAN_VIEW[ext(f.name)] ? '<button class="btn read" type="button" data-act="read" data-id="' + f.id + '">Padhein</button>' : '') +
+        '<button class="btn dl" type="button" data-act="dl" data-id="' + f.id + '">Download</button></div>' +
+        '</article>';
+    }).join('') : '<div class="empty">Abhi koi research paper available nahi hai. Kal subah dobara check karein.</div>';
+    $('lockView').hidden = true; $('listView').hidden = false; $('logout').hidden = false;
+  }
+
+  async function openFile(id, act, btn){
+    var f = IDX.files.find(function(x){ return x.id === id; });
+    var s = $('listStatus');
+    var win = null;
+    if (act === 'read') { try { win = window.open('', '_blank'); if (win) win.document.write('<p style="font-family:sans-serif;padding:20px">Paper khul raha hai…</p>'); } catch(e){} }
+    btn.disabled = true; s.textContent = 'File taiyaar ho rahi hai…'; s.className = 'status';
+    try {
+      var slot = f.slots[ME];
+      var fileKeyRaw = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(slot.iv) }, KEY, b64d(slot.k));
+      var fileKey = await crypto.subtle.importKey('raw', fileKeyRaw, 'AES-GCM', false, ['decrypt']);
+      var r = await fetch('data/f/' + id + '.bin', { cache: 'no-store' });
+      if (!r.ok) throw new Error('fetch');
+      var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(f.iv) }, fileKey, await r.arrayBuffer());
+      var blob = new Blob([plain], { type: MIME[ext(f.name)] || 'application/octet-stream' });
+      var url = URL.createObjectURL(blob);
+      if (act === 'read') {
+        if (win) win.location.href = url; else location.href = url;
+        s.textContent = '';
+      } else {
+        var a = document.createElement('a'); a.href = url; a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
+        s.textContent = 'Download shuru ho gaya: ' + f.name; s.className = 'status ok';
+      }
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+    } catch (e) {
+      if (win) try { win.close(); } catch(_){}
+      s.textContent = 'File nahi khul payi. Page refresh karke dobara try karein.'; s.className = 'status err';
+    } finally { btn.disabled = false; }
+  }
+  $('papers').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-id]'); if (b) openFile(b.getAttribute('data-id'), b.getAttribute('data-act'), b);
+  });
+
+  function forget(){ try { localStorage.removeItem('et-member'); sessionStorage.removeItem('et-member'); } catch(e){} }
+  function check(id){
+    var c = IDX.clients[id];
+    if (!c) return 'Password galat hai, ya aapki membership expire ho chuki hai. Naya password ke liye WhatsApp karein.';
+    if (c.exp < todayIST()) return 'Aapki membership ' + fmtExp(c.exp) + ' ko khatam ho gayi. Renew ke liye WhatsApp karein.';
+    return '';
+  }
+
+  $('loginForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var pw = $('pw').value.trim();
+    if (pw.length < 8){ showLogin('Kripya poora password daliye.', 'err'); return; }
+    $('loginBtn').disabled = true; showLogin('Check ho raha hai…');
+    try {
+      IDX = IDX || await loadIndex();
+      var d = await deriveFrom(pw);
+      var err = check(d.id);
+      if (err){ showLogin(err, 'err'); return; }
+      await useKey(d.raw, d.id);
+      var saved = JSON.stringify({ k: b64e(d.raw), id: d.id });
+      try { forget(); ($('remember').checked ? localStorage : sessionStorage).setItem('et-member', saved); } catch(_){}
+      $('pw').value = '';
+      render();
+    } catch (err2) { showLogin('Abhi research load nahi ho payi. Internet check karke dobara try karein.', 'err'); }
+    finally { $('loginBtn').disabled = false; }
+  });
+
+  $('logout').addEventListener('click', function(){ forget(); KEY = null; ME = null; showLogin('Logout ho gaya.'); });
+
+  // Auto login from saved key
+  (async function(){
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem('et-member') || sessionStorage.getItem('et-member') || 'null'); } catch(e){}
+    if (!saved) return;
+    try {
+      IDX = await loadIndex();
+      var err = check(saved.id);
+      if (err){ forget(); showLogin(err, 'err'); return; }
+      await useKey(b64d(saved.k), saved.id);
+      render();
+    } catch(e){}
+  })();
+})();
+</script>
+</body>
+</html>
