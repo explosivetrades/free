@@ -153,6 +153,15 @@ fs.writeFileSync(idxPath, JSON.stringify(out, null, 1));
 fs.mkdirSync(SYS, { recursive: true });
 fs.writeFileSync(VAULT, JSON.stringify(vault, null, 1));
 
+// ---------- private clients dashboard (Mac only, never published) ----------
+const tpl = path.join(path.dirname(new URL(import.meta.url).pathname), 'clients-dashboard.html');
+if (fs.existsSync(tpl)) {
+  const iNote = header.findIndex(h => h.startsWith('note'));
+  const all = rows.slice(1).map(r => ({ name: r[iName] || '', pw: r[iPw] || '', exp: normDate(r[iExp]) || (r[iExp] || ''), note: iNote >= 0 ? (r[iNote] || '') : '' })).filter(c => c.name || c.pw);
+  const data = JSON.stringify({ built: new Date().toISOString(), papers: list.length, lastPaper: list[0] ? list[0].time : null, clients: all }).replace(/</g, '\\u003c');
+  fs.writeFileSync(path.join(srcDir, '4_Clients Dashboard.html'), fs.readFileSync(tpl, 'utf8').replace('/*__DATA__*/null', data));
+}
+
 console.log(JSON.stringify({
   today: todayIST,
   files: list.map(f => f.name),

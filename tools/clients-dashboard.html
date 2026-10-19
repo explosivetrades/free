@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clients Dashboard · Members Research</title>
+<style>
+:root{
+  --bg:#1a1510; --panel:#231d15; --panel2:#2a231a; --line:#3a3023; --text:#f3ead8; --muted:#b3a68c;
+  --gold:#d9a93a; --orange:#e8843a; --green:#6cc58a; --red:#e5484d; --on-gold:#1a1510;
+  --display:'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+  --body:Poppins, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:dark;
+}
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--body); font-size:14.5px; line-height:1.55; }
+.top{ position:sticky; top:0; z-index:5; background:var(--panel); border-bottom:1px solid var(--line); }
+.top-in, .wrap{ max-width:1100px; margin:0 auto; padding-left:16px; padding-right:16px; }
+.top-in{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding-block:10px; flex-wrap:wrap; }
+.brand{ font-family:var(--display); font-size:24px; letter-spacing:.06em; color:var(--gold); line-height:1; }
+.top-r{ font-size:12.5px; color:var(--muted); }
+.wrap{ padding-block:26px 40px; display:grid; gap:20px; }
+h1{ font-family:var(--display); font-weight:400; font-size:44px; line-height:1; margin:0; }
+h1 span{ color:var(--gold); }
+.sub{ color:var(--muted); margin:6px 0 0; font-size:13.5px; }
+.tiles{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+@media (max-width:760px){ .tiles{ grid-template-columns:1fr 1fr; } }
+.tile{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; cursor:pointer; text-align:left; color:inherit; font:inherit; }
+.tile:hover{ border-color:var(--gold); }
+.tile.on{ border-color:var(--gold); background:color-mix(in srgb, var(--gold) 8%, var(--panel)); }
+.tile .k{ font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+.tile .v{ font-family:var(--display); font-size:38px; line-height:1.05; font-variant-numeric:tabular-nums; }
+.dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+.g{ color:var(--green); } .o{ color:var(--orange); } .r{ color:var(--red); }
+.bar{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+.bar input{ flex:1; min-width:200px; max-width:360px; padding:10px 12px; background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:10px; font:inherit; }
+.bar input:focus{ outline:none; border-color:var(--gold); }
+.btn{ background:transparent; color:var(--text); border:1px solid var(--gold); border-radius:10px; padding:9px 14px; font:600 13px var(--body); cursor:pointer; }
+.btn:hover{ background:color-mix(in srgb, var(--gold) 12%, transparent); }
+.tbl{ overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+table{ width:100%; border-collapse:collapse; min-width:720px; }
+th{ text-align:left; font-size:12px; font-weight:600; color:var(--gold); padding:11px 14px; border-bottom:1px solid var(--line); white-space:nowrap; letter-spacing:.02em; }
+td{ padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:middle; }
+tr:last-child td{ border-bottom:0; }
+tr.row-r td{ opacity:.7; }
+td.num{ font-variant-numeric:tabular-nums; white-space:nowrap; }
+.name{ font-weight:600; }
+.pill{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+.pill.g{ background:color-mix(in srgb, var(--green) 14%, transparent); }
+.pill.o{ background:color-mix(in srgb, var(--orange) 16%, transparent); }
+.pill.r{ background:color-mix(in srgb, var(--red) 14%, transparent); }
+.pw{ font-family:ui-monospace, Menlo, monospace; font-size:13px; letter-spacing:.03em; }
+.mini{ background:none; border:1px solid var(--line); color:var(--muted); border-radius:7px; padding:2px 8px; font:500 11.5px var(--body); cursor:pointer; margin-left:6px; }
+.mini:hover{ border-color:var(--gold); color:var(--text); }
+.note{ color:var(--muted); font-size:13px; }
+.empty{ padding:26px; text-align:center; color:var(--muted); }
+.help{ background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-size:13px; color:var(--muted); }
+.help b{ color:var(--text); }
+.drop{ outline:2px dashed var(--gold); outline-offset:-8px; }
+.toast{ position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--gold); color:var(--on-gold); font-weight:600; padding:8px 16px; border-radius:20px; font-size:13px; opacity:0; transition:opacity .2s; pointer-events:none; }
+.toast.show{ opacity:1; }
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in"><span class="brand">Explosive Trades</span><span class="top-r" id="stamp"></span></div></header>
+<main class="wrap">
+  <section>
+    <h1>Clients <span>Dashboard</span></h1>
+    <p class="sub">Members Research ke saare clients aur unka access. Ye file sirf aapke Mac par hai, kisi ko share na karein.</p>
+  </section>
+
+  <section class="tiles" id="tiles"></section>
+
+  <section class="bar">
+    <input id="q" type="search" placeholder="Naam ya note se dhoondhein…" aria-label="Search clients">
+    <button class="btn" id="reload" type="button">Latest CSV se refresh</button>
+    <input id="file" type="file" accept=".csv,text/csv" hidden>
+  </section>
+
+  <section class="tbl">
+    <table>
+      <thead><tr><th>Client</th><th>Password</th><th>Valid till</th><th>Din baaki</th><th>Status</th><th>Note</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+
+  <section class="help">
+    <b>Ye dashboard kab update hota hai?</b> Har research update ke saath (roz subah 8:45, ya jab aap Claude ko "research update karo" bolein). Turant dekhna ho to "Latest CSV se refresh" dabakar <b>2_Clients.csv</b> chunein, ya CSV file ko is page par drag karke chhod dein.<br>
+    <b>Green</b> = active · <b>Orange</b> = 7 din ya kam bache · <b>Red</b> = expired (login band)
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+  var DATA = /*__DATA__*/null || { built: null, clients: [] };
+  var $ = function(id){ return document.getElementById(id); };
+  var filter = 'all';
+  var esc = function(s){ var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  function todayIST(){ return new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10); }
+  function normDate(s){ s = (s || '').trim(); var m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if (m) return m[1] + '-' + m[2].padStart(2,'0') + '-' + m[3].padStart(2,'0'); m = s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/); if (m) return m[3] + '-' + m[2].padStart(2,'0') + '-' + m[1].padStart(2,'0'); return null; }
+  function nice(d){ return new Date(d + 'T00:00:00+05:30').toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Kolkata' }); }
+  function daysLeft(exp){ return Math.round((Date.parse(exp + 'T00:00:00Z') - Date.parse(todayIST() + 'T00:00:00Z')) / 864e5); }
+  function status(c){ if (!c.expN) return 'x'; var d = daysLeft(c.expN); return d < 0 ? 'r' : d <= 7 ? 'o' : 'g'; }
+
+  function prep(list){ return list.map(function(c){ c.expN = normDate(c.exp); c.st = status(c); c.d = c.expN ? daysLeft(c.expN) : null; return c; }); }
+  var clients = prep(DATA.clients || []);
+
+  function render(){
+    var counts = { all: clients.length, g: 0, o: 0, r: 0 };
+    clients.forEach(function(c){ if (counts[c.st] != null) counts[c.st]++; });
+    var T = [['all','Total clients','',counts.all],['g','Active','g',counts.g],['o','7 din mein expire','o',counts.o],['r','Expired','r',counts.r]];
+    $('tiles').innerHTML = T.map(function(t){ return '<button type="button" class="tile' + (filter === t[0] ? ' on' : '') + '" data-f="' + t[0] + '"><span class="k">' + (t[2] ? '<span class="dot" style="background:var(--' + ({g:'green',o:'orange',r:'red'})[t[2]] + ')"></span>' : '') + t[1] + '</span><span class="v ' + t[2] + '">' + t[3] + '</span></button>'; }).join('');
+    var q = $('q').value.trim().toLowerCase();
+    var order = { o:0, g:1, x:2, r:3 };
+    var list = clients.filter(function(c){ return (filter === 'all' || c.st === filter) && (!q || (c.name + ' ' + c.note).toLowerCase().indexOf(q) >= 0); })
+      .sort(function(a, b){ return (order[a.st] - order[b.st]) || ((a.st === 'r' ? -1 : 1) * ((a.d || 0) - (b.d || 0))); });
+    $('rows').innerHTML = list.length ? list.map(function(c, i){
+      var pill = c.st === 'g' ? '<span class="pill g">● Active</span>' : c.st === 'o' ? '<span class="pill o">● Jaldi expire</span>' : c.st === 'r' ? '<span class="pill r">● Expired</span>' : '<span class="pill o">Date galat</span>';
+      var dl = c.d == null ? '—' : c.d < 0 ? (-c.d) + ' din pehle' : c.d === 0 ? 'Aaj last din' : c.d + ' din';
+      return '<tr class="row-' + c.st + '"><td class="name">' + esc(c.name) + '</td>' +
+        '<td><span class="pw" data-pw="' + esc(c.pw) + '">••••••••</span><button class="mini" data-act="show" type="button">Dikhayein</button><button class="mini" data-act="copy" type="button">Copy</button></td>' +
+        '<td class="num">' + (c.expN ? nice(c.expN) : esc(c.exp)) + '</td><td class="num ' + (c.st === 'x' ? '' : c.st) + '">' + dl + '</td><td>' + pill + '</td><td class="note">' + esc(c.note) + '</td></tr>';
+    }).join('') : '<tr><td colspan="6" class="empty">Is filter mein koi client nahi.</td></tr>';
+    var b = DATA.built ? new Date(DATA.built).toLocaleString('en-IN', { day:'numeric', month:'short', hour:'numeric', minute:'2-digit', hour12:true, timeZone:'Asia/Kolkata' }) : '—';
+    $('stamp').textContent = 'Data: ' + b;
+  }
+
+  function toast(t){ var e = $('toast'); e.textContent = t; e.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(function(){ e.classList.remove('show'); }, 1600); }
+  $('tiles').addEventListener('click', function(e){ var b = e.target.closest('[data-f]'); if (b){ filter = b.getAttribute('data-f'); render(); } });
+  $('q').addEventListener('input', render);
+  $('rows').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-act]'); if (!b) return;
+    var span = b.parentNode.querySelector('.pw'), pw = span.getAttribute('data-pw');
+    if (b.getAttribute('data-act') === 'show'){ var on = span.textContent.indexOf('•') === 0; span.textContent = on ? pw : '••••••••'; b.textContent = on ? 'Chhupayein' : 'Dikhayein'; }
+    else { (navigator.clipboard ? navigator.clipboard.writeText(pw) : Promise.reject()).then(function(){ toast('Password copy ho gaya'); }, function(){ span.textContent = pw; toast('Password select karke Cmd+C dabayein'); }); }
+  });
+
+  // CSV refresh (file picker or drag & drop)
+  function parseCSV(text){
+    var rows = [], row = [], cell = '', q = false;
+    for (var i = 0; i < text.length; i++){ var c = text[i];
+      if (q){ if (c === '"' && text[i+1] === '"'){ cell += '"'; i++; } else if (c === '"') q = false; else cell += c; }
+      else if (c === '"') q = true; else if (c === ',' || c === ';' || c === '\t'){ row.push(cell); cell = ''; }
+      else if (c === '\n' || c === '\r'){ if (c === '\r' && text[i+1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+      else cell += c; }
+    if (cell !== '' || row.length){ row.push(cell); rows.push(row); }
+    rows = rows.map(function(r){ return r.map(function(x){ return x.trim(); }); }).filter(function(r){ return r.some(Boolean); });
+    var h = (rows[0] || []).map(function(x){ return x.toLowerCase(); });
+    var f = function(p){ return h.findIndex(function(x){ return p(x); }); };
+    var iN = f(function(x){ return x.indexOf('name') === 0; }), iP = f(function(x){ return x.indexOf('pass') === 0; }), iE = f(function(x){ return x.indexOf('exp') === 0 || x.indexOf('valid') >= 0; }), iO = f(function(x){ return x.indexOf('note') === 0; });
+    return rows.slice(1).map(function(r){ return { name: r[iN] || '', pw: r[iP] || '', exp: r[iE] || '', note: iO >= 0 ? (r[iO] || '') : '' }; }).filter(function(c){ return c.name || c.pw; });
+  }
+  function loadFile(file){ var rd = new FileReader(); rd.onload = function(){ clients = prep(parseCSV(String(rd.result).replace(/^﻿/, ''))); DATA.built = new Date().toISOString(); render(); toast('CSV se refresh ho gaya'); }; rd.readAsText(file); }
+  $('reload').addEventListener('click', function(){ $('file').click(); });
+  $('file').addEventListener('change', function(){ if (this.files[0]) loadFile(this.files[0]); this.value = ''; });
+  document.addEventListener('dragover', function(e){ e.preventDefault(); document.body.classList.add('drop'); });
+  document.addEventListener('dragleave', function(e){ if (e.target === document.documentElement || e.target === document.body) document.body.classList.remove('drop'); });
+  document.addEventListener('drop', function(e){ e.preventDefault(); document.body.classList.remove('drop'); var f = e.dataTransfer.files[0]; if (f) loadFile(f); });
+
+  render();
+})();
+</script>
+</body>
+</html>
