@@ -43,12 +43,13 @@ h1{ font-family:var(--display); font-weight:400; font-size:clamp(44px,8vw,72px);
 h1 span{ color:var(--gold); }
 .lead{ color:var(--muted); margin:0; max-width:60ch; }
 
-.lock{ background:var(--panel); border:1px solid var(--gold); border-radius:16px; padding:24px; display:grid; gap:12px; max-width:460px; }
+.lock{ background:var(--panel); border:1px solid var(--gold); border-radius:16px; padding:22px; display:grid; gap:14px; max-width:480px; }
 .lock h2, .head h2{ font-family:var(--display); font-weight:400; font-size:30px; letter-spacing:.03em; margin:0; color:var(--gold); }
 .lock p{ margin:0; font-size:13.5px; color:var(--muted); }
 .field label{ display:block; font-size:13px; color:var(--muted); margin-bottom:4px; }
 .pw-row{ position:relative; }
-.field input{ width:100%; padding:12px 74px 12px 13px; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:10px; font:16px var(--body); letter-spacing:.04em; }
+.pw-row input{ padding-right:96px !important; }
+.field input{ width:100%; padding:12px 13px; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:10px; font:16px var(--body); letter-spacing:.04em; }
 .field input:focus{ border-color:var(--gold); outline:none; }
 .show{ position:absolute; right:6px; top:50%; transform:translateY(-50%); background:none; border:0; color:var(--muted); font:500 12px var(--body); cursor:pointer; padding:6px 8px; }
 .check{ display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); cursor:pointer; }
@@ -89,6 +90,18 @@ h1 span{ color:var(--gold); }
 .box{ padding:18px; border-radius:14px; border:1px solid var(--line); background:var(--panel); display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; }
 .box p{ margin:0; color:var(--muted); font-size:14px; max-width:56ch; }
 .wa{ background:#1f8f4e; color:#fff; }
+.tabs{ display:grid; grid-template-columns:1fr 1fr; background:var(--bg); border:1px solid var(--line); border-radius:11px; padding:4px; }
+.tabs button{ border:0; background:transparent; color:var(--muted); padding:10px; border-radius:8px; font:600 14px var(--body); cursor:pointer; }
+.tabs button[aria-selected="true"]{ background:var(--gold); color:var(--on-gold); }
+.formgrid{ display:grid; gap:12px; }
+.offer{ margin:0; font-size:13.5px; color:var(--muted); }
+.offer b{ color:var(--green); }
+.lock.expired{ border-color:var(--orange); }
+.lock.expired h2{ color:var(--orange); }
+.link{ background:none; border:0; color:var(--gold); font:500 13px var(--body); cursor:pointer; text-decoration:underline; text-underline-offset:3px; padding:0; justify-self:start; }
+.member .wa-mini{ font-size:13px; font-weight:600; color:#3fbf73; }
+.btn.wa{ background:#1f8f4e; color:#fff; }
+.btn.wa:hover{ filter:brightness(1.08); }
 [hidden]{ display:none !important; }
 footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8px; font-size:12px; color:var(--muted); }
 @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
@@ -112,25 +125,50 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
   <section>
     <p class="kicker">🔒 Members only</p>
     <h1>Daily <span>Research</span></h1>
-    <p class="lead">Explosive Trades members ke liye roz subah ka research paper. Apna member password daliye, phir paper padhein ya download karein.</p>
+    <p class="lead">Har trading din subah Explosive Trades ka research paper. Naye hain to <b>45 din free</b> try karein, member hain to login karein.</p>
   </section>
 
   <section id="lockView" aria-label="Member login">
-    <form class="lock" id="loginForm" novalidate>
-      <h2>Member login</h2>
-      <p>Password aapko Explosive Trades team ne WhatsApp par diya hai.</p>
-      <div class="field">
-        <label for="pw">Member password</label>
-        <div class="pw-row">
-          <input id="pw" type="password" autocomplete="current-password" autocapitalize="characters" spellcheck="false" required placeholder="ET-XXXX-XXXX-XXXX">
-          <button class="show" id="showPw" type="button">Dikhayein</button>
-        </div>
+    <div class="lock">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tabJoin" aria-selected="true">45 din free trial</button>
+        <button type="button" role="tab" id="tabLogin" aria-selected="false">Login</button>
       </div>
-      <label class="check"><input type="checkbox" id="remember" checked> Is device par login yaad rakhein</label>
-      <button class="btn main" id="loginBtn" type="submit">Research kholein</button>
-      <p class="status" id="loginStatus" role="status" aria-live="polite"></p>
-      <p class="help">Password nahi hai ya expire ho gaya? <a href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20mujhe%20Members%20Research%20ka%20access%20chahiye." target="_blank" rel="noopener">WhatsApp karein</a></p>
-    </form>
+
+      <form id="joinForm" novalidate>
+        <div class="formgrid">
+          <p class="offer"><b>45 din ka free access.</b> Naam, WhatsApp number aur apna password daliye. Account bante hi research turant khul jayega.</p>
+          <div class="field"><label for="jName">Aapka naam</label><input id="jName" type="text" autocomplete="name" maxlength="60" placeholder="Jaise: Rahul Verma"></div>
+          <div class="field"><label for="jPhone">WhatsApp number</label><input id="jPhone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="98765 43210"></div>
+          <div class="field"><label for="jPw">Password banayein (kam se kam 6 characters)</label><div class="pw-row"><input id="jPw" type="password" autocomplete="new-password" placeholder="Apna password"><button class="show" type="button" data-for="jPw">Dikhayein</button></div></div>
+          <div class="field"><label for="jPw2">Password dobara daliye</label><div class="pw-row"><input id="jPw2" type="password" autocomplete="new-password" placeholder="Same password"><button class="show" type="button" data-for="jPw2">Dikhayein</button></div></div>
+          <button class="btn main" id="joinBtn" type="submit">Free trial shuru karein</button>
+          <p class="status" id="joinStatus" role="status" aria-live="polite"></p>
+          <p class="help">Number aur password yaad rakhein, agli baar inhi se login hoga.</p>
+        </div>
+      </form>
+
+      <form id="loginForm" novalidate hidden>
+        <div class="formgrid">
+          <p class="offer">Pehle se account hai? WhatsApp number aur password se login karein.</p>
+          <div class="field"><label for="lPhone">WhatsApp number</label><input id="lPhone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="98765 43210"></div>
+          <div class="field"><label for="lPw">Password</label><div class="pw-row"><input id="lPw" type="password" autocomplete="current-password" placeholder="Aapka password"><button class="show" type="button" data-for="lPw">Dikhayein</button></div></div>
+          <label class="check"><input type="checkbox" id="remember" checked> Is device par login yaad rakhein</label>
+          <button class="btn main" id="loginBtn" type="submit">Login karein</button>
+          <p class="status" id="loginStatus" role="status" aria-live="polite"></p>
+          <p class="help">Password bhool gaye? <a id="forgotLink" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20mujhe%20Members%20Research%20ka%20password%20reset%20karna%20hai." target="_blank" rel="noopener">WhatsApp karein</a></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section id="expiredView" aria-label="Membership expired" hidden>
+    <div class="lock expired">
+      <h2>Aapka access khatam ho gaya</h2>
+      <p id="expiredText"></p>
+      <a class="btn wa" id="expiredWa" href="#" target="_blank" rel="noopener">WhatsApp par subscription continue karein</a>
+      <button class="link" id="expiredBack" type="button">Doosre number se login karein</button>
+    </div>
   </section>
 
   <section id="listView" aria-label="Research papers" hidden>
@@ -145,9 +183,9 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
     </div>
   </section>
 
-  <section class="box" aria-label="Help">
-    <p>Membership renew karni hai ya koi sawal hai? Explosive Trades team se WhatsApp par baat karein: <b>+91 78179 40814</b></p>
-    <a class="btn wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20Members%20Research%20ke%20baare%20mein%20sawal%20hai." target="_blank" rel="noopener">WhatsApp karein</a>
+  <section class="box" aria-label="Subscription">
+    <p><b>Free trial ke baad bhi research chahiye?</b> WhatsApp par message karein, aapka access aage badha diya jayega.</p>
+    <a class="btn wa" id="continueWa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20main%20Members%20Research%20subscription%20continue%20karna%20chahta%20hoon." target="_blank" rel="noopener">WhatsApp: subscription continue karein</a>
   </section>
 
   <footer>
@@ -158,146 +196,171 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
 
 <script>
 (function(){
+  var API = 'https://script.google.com/macros/s/AKfycbxAMCT0OHo6qOcxxX289y_ruMwcv4OyidIx-lSvUdQR-U8Fi0a51C8v6xEcGKZwvtwA/exec';
+  var WA = '917817940814';
   var $ = function(id){ return document.getElementById(id); };
-  var IDX = null, KEY = null, ME = null;
-  var enc = new TextEncoder();
+  var IDX = null, MASTER = null, ME = null;
   var b64d = function(s){ var bin = atob(s), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
-  var b64e = function(buf){ var u = new Uint8Array(buf), s = ''; for (var i = 0; i < u.length; i++) s += String.fromCharCode(u[i]); return btoa(s); };
-  var hex = function(buf){ return Array.from(new Uint8Array(buf)).map(function(x){ return x.toString(16).padStart(2, '0'); }).join(''); };
-  var esc = function(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
+  var esc = function(s){ var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
 
   // Theme
   var themeBtn = $('themeBtn');
   function setTheme(t){ document.documentElement.setAttribute('data-theme', t); themeBtn.textContent = t === 'light' ? 'Dark' : 'Light'; }
   try { var th = localStorage.getItem('et-dl-theme'); if (th) setTheme(th); } catch(e){}
   themeBtn.addEventListener('click', function(){ var t = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'; setTheme(t); try { localStorage.setItem('et-dl-theme', t); } catch(e){} });
+  document.querySelectorAll('.show').forEach(function(b){ b.addEventListener('click', function(){ var i = $(b.getAttribute('data-for')); var sh = i.type === 'password'; i.type = sh ? 'text' : 'password'; b.textContent = sh ? 'Chhupayein' : 'Dikhayein'; }); });
 
-  $('showPw').addEventListener('click', function(){ var i = $('pw'); var show = i.type === 'password'; i.type = show ? 'text' : 'password'; this.textContent = show ? 'Chhupayein' : 'Dikhayein'; });
+  // Tabs
+  function tab(which){
+    var join = which === 'join';
+    $('tabJoin').setAttribute('aria-selected', join); $('tabLogin').setAttribute('aria-selected', !join);
+    $('joinForm').hidden = !join; $('loginForm').hidden = join;
+  }
+  $('tabJoin').addEventListener('click', function(){ tab('join'); });
+  $('tabLogin').addEventListener('click', function(){ tab('login'); });
 
   function todayIST(){ return new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10); }
   function fmtDate(iso, opts){ return new Date(iso).toLocaleString('en-IN', Object.assign({ timeZone: 'Asia/Kolkata' }, opts)); }
-  function fmtExp(d){ return new Date(d + 'T00:00:00+05:30').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }); }
+  function fmtExp(d){ return new Date(d + 'T00:00:00+05:30').toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Kolkata' }); }
   function size(n){ return n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
-  var MIME = { pdf:'application/pdf', html:'text/html', htm:'text/html', png:'image/png', jpg:'image/jpeg', jpeg:'image/jpeg', webp:'image/webp', gif:'image/gif', txt:'text/plain', csv:'text/csv', mp4:'video/mp4', xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document', pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation' };
+  function phoneN(v){ var d = String(v || '').replace(/\D/g, ''); if (d.length === 12 && d.indexOf('91') === 0) d = d.slice(2); if (d.length === 11 && d.charAt(0) === '0') d = d.slice(1); return d; }
+  function waLink(text){ return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(text); }
+  var MIME = { pdf:'application/pdf', html:'text/html', htm:'text/html', png:'image/png', jpg:'image/jpeg', jpeg:'image/jpeg', webp:'image/webp', gif:'image/gif', txt:'text/plain; charset=utf-8', csv:'text/csv', mp4:'video/mp4', xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document', pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation' };
   var CAN_VIEW = { pdf:1, html:1, htm:1, png:1, jpg:1, jpeg:1, webp:1, gif:1, txt:1, mp4:1 };
   var ext = function(n){ return (n.split('.').pop() || '').toLowerCase(); };
 
+  var MSG = {
+    phone: 'Kripya sahi WhatsApp number daliye (10 digit).',
+    name: 'Kripya apna naam daliye.',
+    short: 'Password kam se kam 6 characters ka rakhein.',
+    exists: 'Is number se account pehle se bana hai. "Login" tab se login karein.',
+    nouser: 'Is number se koi account nahi mila. "45 din free trial" tab se account banayein.',
+    wrong: 'Password galat hai. Dobara try karein, ya password reset ke liye WhatsApp karein.',
+    locked: 'Bahut baar galat password daala gaya. 30 minute baad try karein, ya WhatsApp karein.',
+    session: 'Login session khatam ho gaya. Dobara login karein.'
+  };
+
+  async function api(body){
+    var r = await fetch(API, { method: 'POST', body: JSON.stringify(body) });
+    if (!r.ok) throw new Error('api');
+    return r.json();
+  }
   async function loadIndex(){
     var r = await fetch('data/index.json?t=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('index');
     return r.json();
   }
-  async function deriveFrom(pw){
-    var base = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveBits']);
-    var bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: b64d(IDX.salt), iterations: IDX.iter }, base, 512);
-    return { raw: bits.slice(0, 32), id: hex(bits.slice(32, 48)) };
-  }
-  async function useKey(raw, id){
-    KEY = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
-    ME = id;
-  }
+  function save(phone, token, remember){ try { forget(); (remember ? localStorage : sessionStorage).setItem('et-member2', JSON.stringify({ phone: phone, token: token })); } catch(e){} }
+  function forget(){ try { localStorage.removeItem('et-member2'); sessionStorage.removeItem('et-member2'); localStorage.removeItem('et-member'); sessionStorage.removeItem('et-member'); } catch(e){} }
 
-  function showLogin(msg, cls){
-    $('lockView').hidden = false; $('listView').hidden = true; $('logout').hidden = true;
-    var s = $('loginStatus'); s.textContent = msg || ''; s.className = 'status' + (cls ? ' ' + cls : '');
+  function show(view){ ['lockView','expiredView','listView'].forEach(function(v){ $(v).hidden = v !== view; }); $('logout').hidden = view !== 'listView'; }
+  function expired(res, phone){
+    $('expiredText').textContent = (res.name ? res.name + ' ji, ' : '') + 'aapka access ' + (res.exp ? fmtExp(res.exp) : '') + ' ko khatam ho gaya. Research aage padhne ke liye WhatsApp par subscription continue karein.';
+    $('expiredWa').href = waLink('Namaste Kavi Sir, main ' + (res.name || '') + ' (' + phone + '). Mera Members Research access ' + (res.exp ? fmtExp(res.exp) : '') + ' ko khatam ho gaya. Mujhe subscription continue karna hai.');
+    show('expiredView');
+  }
+  $('expiredBack').addEventListener('click', function(){ forget(); tab('login'); show('lockView'); });
+
+  async function grant(res, phone){
+    MASTER = await crypto.subtle.importKey('raw', b64d(res.key), 'AES-GCM', false, ['decrypt']);
+    ME = { name: res.name, plan: res.plan, exp: res.exp, phone: phone };
+    IDX = await loadIndex();
+    render();
   }
 
   function render(){
-    var c = IDX.clients[ME];
-    var days = Math.round((new Date(c.exp + 'T23:59:59+05:30') - Date.now()) / 864e5);
-    $('memberBar').innerHTML = '<span>Membership valid: <b>' + fmtExp(c.exp) + '</b> tak</span>' +
-      (days <= 7 ? '<span class="pill warn">' + Math.max(days, 0) + ' din baaki · renew karein</span>' : '<span class="pill ok">Active</span>');
-    var mine = IDX.files.filter(function(f){ return f.slots[ME]; });
-    if (mine.length){
-      $('updated').innerHTML = 'Aakhri update: <b>' + fmtDate(mine[0].time, { day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true }) + '</b>';
-    } else $('updated').textContent = '';
+    var days = Math.round((Date.parse(ME.exp + 'T00:00:00Z') - Date.parse(todayIST() + 'T00:00:00Z')) / 864e5);
+    var cont = waLink('Namaste Kavi Sir, main ' + ME.name + ' (' + ME.phone + '). Mera Members Research access ' + fmtExp(ME.exp) + ' tak hai. Mujhe subscription continue karna hai.');
+    $('continueWa').href = cont;
+    $('memberBar').innerHTML = '<span>Namaste <b>' + esc(ME.name) + '</b> · ' + esc(ME.plan || 'Member') + ' · valid <b>' + fmtExp(ME.exp) + '</b> tak</span>' +
+      (days <= 7 ? '<span class="pill warn">' + (days <= 0 ? 'Aaj last din' : days + ' din baaki') + '</span> <a class="wa-mini" href="' + cont + '" target="_blank" rel="noopener">Continue karein &rarr;</a>' : '<span class="pill ok">' + days + ' din baaki</span>');
+    var files = IDX.files || [];
+    $('updated').innerHTML = files.length ? 'Aakhri update: <b>' + fmtDate(files[0].time, { day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true }) + '</b>' : '';
     var today = todayIST();
-    $('papers').innerHTML = mine.length ? mine.map(function(f, i){
+    $('papers').innerHTML = files.length ? files.map(function(f, i){
       var isNew = new Date(Date.parse(f.time) + 5.5 * 3600e3).toISOString().slice(0, 10) === today;
       return '<article class="paper' + (i === 0 ? ' new' : '') + '">' +
         '<div class="date"><div class="d">' + fmtDate(f.time, { day:'numeric' }) + '</div><div class="m">' + fmtDate(f.time, { month:'short' }) + '</div></div>' +
         '<div><p class="p-name">' + esc(f.name) + (isNew ? '<span class="tag-new">Aaj</span>' : '') + '</p>' +
         '<p class="p-meta">Update: ' + fmtDate(f.time, { weekday:'short', day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true }) + ' · ' + size(f.size) + '</p></div>' +
         '<div class="acts">' + (CAN_VIEW[ext(f.name)] ? '<button class="btn read" type="button" data-act="read" data-id="' + f.id + '">Padhein</button>' : '') +
-        '<button class="btn dl" type="button" data-act="dl" data-id="' + f.id + '">Download</button></div>' +
-        '</article>';
+        '<button class="btn dl" type="button" data-act="dl" data-id="' + f.id + '">Download</button></div></article>';
     }).join('') : '<div class="empty">Abhi koi research paper available nahi hai. Kal subah dobara check karein.</div>';
-    $('lockView').hidden = true; $('listView').hidden = false; $('logout').hidden = false;
+    show('listView');
   }
 
   async function openFile(id, act, btn){
     var f = IDX.files.find(function(x){ return x.id === id; });
-    var s = $('listStatus');
-    var win = null;
+    var s = $('listStatus'), win = null;
     if (act === 'read') { try { win = window.open('', '_blank'); if (win) win.document.write('<p style="font-family:sans-serif;padding:20px">Paper khul raha hai…</p>'); } catch(e){} }
     btn.disabled = true; s.textContent = 'File taiyaar ho rahi hai…'; s.className = 'status';
     try {
-      var slot = f.slots[ME];
-      var fileKeyRaw = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(slot.iv) }, KEY, b64d(slot.k));
-      var fileKey = await crypto.subtle.importKey('raw', fileKeyRaw, 'AES-GCM', false, ['decrypt']);
+      var fk = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b64d(f.w.iv) }, MASTER, b64d(f.w.k));
+      var key = await crypto.subtle.importKey('raw', fk, 'AES-GCM', false, ['decrypt']);
       var r = await fetch('data/f/' + id + '.bin', { cache: 'no-store' });
       if (!r.ok) throw new Error('fetch');
-      var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(f.iv) }, fileKey, await r.arrayBuffer());
-      var blob = new Blob([plain], { type: MIME[ext(f.name)] || 'application/octet-stream' });
-      var url = URL.createObjectURL(blob);
-      if (act === 'read') {
-        if (win) win.location.href = url; else location.href = url;
-        s.textContent = '';
-      } else {
-        var a = document.createElement('a'); a.href = url; a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
-        s.textContent = 'Download shuru ho gaya: ' + f.name; s.className = 'status ok';
-      }
+      var plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b64d(f.iv) }, key, await r.arrayBuffer());
+      var url = URL.createObjectURL(new Blob([plain], { type: MIME[ext(f.name)] || 'application/octet-stream' }));
+      if (act === 'read') { if (win) win.location.href = url; else location.href = url; s.textContent = ''; }
+      else { var a = document.createElement('a'); a.href = url; a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); s.textContent = 'Download shuru ho gaya: ' + f.name; s.className = 'status ok'; }
       setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
     } catch (e) {
       if (win) try { win.close(); } catch(_){}
       s.textContent = 'File nahi khul payi. Page refresh karke dobara try karein.'; s.className = 'status err';
     } finally { btn.disabled = false; }
   }
-  $('papers').addEventListener('click', function(e){
-    var b = e.target.closest('button[data-id]'); if (b) openFile(b.getAttribute('data-id'), b.getAttribute('data-act'), b);
-  });
+  $('papers').addEventListener('click', function(e){ var b = e.target.closest('button[data-id]'); if (b) openFile(b.getAttribute('data-id'), b.getAttribute('data-act'), b); });
 
-  function forget(){ try { localStorage.removeItem('et-member'); sessionStorage.removeItem('et-member'); } catch(e){} }
-  function check(id){
-    var c = IDX.clients[id];
-    if (!c) return 'Password galat hai, ya aapki membership expire ho chuki hai. Naya password ke liye WhatsApp karein.';
-    if (c.exp < todayIST()) return 'Aapki membership ' + fmtExp(c.exp) + ' ko khatam ho gayi. Renew ke liye WhatsApp karein.';
-    return '';
-  }
+  function say(id, t, c){ var s = $(id); s.textContent = t || ''; s.className = 'status' + (c ? ' ' + c : ''); }
+
+  $('joinForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var name = $('jName').value.trim(), phone = phoneN($('jPhone').value), pw = $('jPw').value, pw2 = $('jPw2').value;
+    if (name.length < 2) return say('joinStatus', MSG.name, 'err');
+    if (!/^\d{10,13}$/.test(phone)) return say('joinStatus', MSG.phone, 'err');
+    if (pw.length < 6) return say('joinStatus', MSG.short, 'err');
+    if (pw !== pw2) return say('joinStatus', 'Dono password same nahi hain.', 'err');
+    $('joinBtn').disabled = true; say('joinStatus', 'Account ban raha hai…');
+    try {
+      var res = await api({ action:'signup', name: name, phone: phone, password: pw });
+      if (!res.ok){ say('joinStatus', MSG[res.code] || 'Account nahi ban paya. Dobara try karein.', 'err'); if (res.code === 'exists'){ $('lPhone').value = phone; } return; }
+      save(phone, res.token, true);
+      await grant(res, phone);
+    } catch (x) { say('joinStatus', 'Abhi connect nahi ho paya. Internet check karke dobara try karein.', 'err'); }
+    finally { $('joinBtn').disabled = false; }
+  });
 
   $('loginForm').addEventListener('submit', async function(e){
     e.preventDefault();
-    var pw = $('pw').value.trim();
-    if (pw.length < 8){ showLogin('Kripya poora password daliye.', 'err'); return; }
-    $('loginBtn').disabled = true; showLogin('Check ho raha hai…');
+    var phone = phoneN($('lPhone').value), pw = $('lPw').value;
+    if (!/^\d{10,13}$/.test(phone)) return say('loginStatus', MSG.phone, 'err');
+    if (!pw) return say('loginStatus', 'Kripya password daliye.', 'err');
+    $('loginBtn').disabled = true; say('loginStatus', 'Check ho raha hai…');
     try {
-      IDX = IDX || await loadIndex();
-      var d = await deriveFrom(pw);
-      var err = check(d.id);
-      if (err){ showLogin(err, 'err'); return; }
-      await useKey(d.raw, d.id);
-      var saved = JSON.stringify({ k: b64e(d.raw), id: d.id });
-      try { forget(); ($('remember').checked ? localStorage : sessionStorage).setItem('et-member', saved); } catch(_){}
-      $('pw').value = '';
-      render();
-    } catch (err2) { showLogin('Abhi research load nahi ho payi. Internet check karke dobara try karein.', 'err'); }
+      var res = await api({ action:'login', phone: phone, password: pw });
+      if (!res.ok){ if (res.code === 'expired') return expired(res, phone); return say('loginStatus', MSG[res.code] || 'Login nahi ho paya. Dobara try karein.', 'err'); }
+      save(phone, res.token, $('remember').checked);
+      $('lPw').value = '';
+      await grant(res, phone);
+    } catch (x) { say('loginStatus', 'Abhi connect nahi ho paya. Internet check karke dobara try karein.', 'err'); }
     finally { $('loginBtn').disabled = false; }
   });
 
-  $('logout').addEventListener('click', function(){ forget(); KEY = null; ME = null; showLogin('Logout ho gaya.'); });
+  $('logout').addEventListener('click', function(){ forget(); MASTER = null; ME = null; tab('login'); show('lockView'); say('loginStatus', 'Logout ho gaya.'); });
 
-  // Auto login from saved key
+  // Saved session
   (async function(){
     var saved = null;
-    try { saved = JSON.parse(localStorage.getItem('et-member') || sessionStorage.getItem('et-member') || 'null'); } catch(e){}
-    if (!saved) return;
+    try { saved = JSON.parse(localStorage.getItem('et-member2') || sessionStorage.getItem('et-member2') || 'null'); } catch(e){}
+    if (!saved || !saved.phone) return;
+    tab('login'); $('lPhone').value = saved.phone;
+    say('loginStatus', 'Aapka login check ho raha hai…');
     try {
-      IDX = await loadIndex();
-      var err = check(saved.id);
-      if (err){ forget(); showLogin(err, 'err'); return; }
-      await useKey(b64d(saved.k), saved.id);
-      render();
-    } catch(e){}
+      var res = await api({ action:'check', phone: saved.phone, token: saved.token });
+      if (!res.ok){ if (res.code === 'expired') return expired(res, saved.phone); forget(); return say('loginStatus', MSG[res.code] || '', 'err'); }
+      say('loginStatus', '');
+      await grant(res, saved.phone);
+    } catch (x) { say('loginStatus', ''); }
   })();
 })();
 </script>
