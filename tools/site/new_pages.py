@@ -151,9 +151,8 @@ def enquiry(default_interest='', page_label=''):
     </div>
     <form id="enqForm" novalidate>
       <div><label for="eName">Aapka naam</label><input id="eName" type="text" autocomplete="name" maxlength="60" placeholder="Jaise: Rahul Verma"></div>
-      <div><label for="ePhone">WhatsApp number</label><input id="ePhone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="98765 43210"></div>
-      <div><label for="eInt">Kis cheez mein interest hai</label><select id="eInt">{first}{opts}</select></div>
       <div><label for="eTime">Call ka best time</label><select id="eTime"><option>Subah (9–12)</option><option>Dopahar (12–4)</option><option selected>Shaam (4–8)</option><option>Raat (8–10)</option></select></div>
+      <div class="full"><label for="eInt">Kis cheez mein interest hai</label><select id="eInt">{first}{opts}</select></div>
       <div class="full"><label for="eQ">Aapka sawal (optional)</label><textarea id="eQ" maxlength="400" placeholder="Jaise: main beginner hoon, kahan se shuru karun?"></textarea></div>
       <div class="hp" aria-hidden="true"><label for="eWeb">Website</label><input id="eWeb" type="text" tabindex="-1" autocomplete="off"></div>
       <div class="full"><button class="btn wa send" type="submit">WhatsApp par bhejein</button></div>
@@ -168,17 +167,15 @@ def enquiry(default_interest='', page_label=''):
     f.addEventListener('submit', function(e){{
       e.preventDefault();
       if ($('eWeb').value) return;
-      var name = $('eName').value.trim(), raw = $('ePhone').value, d = raw.replace(/\\D/g, ''), it = $('eInt').value, tm = $('eTime').value, q = $('eQ').value.trim();
-      if (d.length === 12 && d.indexOf('91') === 0) d = d.slice(2);
-      $('eName').setAttribute('aria-invalid', name.length < 2); $('ePhone').setAttribute('aria-invalid', d.length < 10 || d.length > 13); $('eInt').setAttribute('aria-invalid', !it);
+      var name = $('eName').value.trim(), it = $('eInt').value, tm = $('eTime').value, q = $('eQ').value.trim();
+      $('eName').setAttribute('aria-invalid', name.length < 2); $('eInt').setAttribute('aria-invalid', !it);
       if (name.length < 2) return say('Kripya apna naam daliye.', 'err');
-      if (d.length < 10 || d.length > 13) return say('Kripya sahi WhatsApp number daliye.', 'err');
       if (!it) return say('Kripya interest chuniye.', 'err');
-      var msg = 'Namaste Kavi Sir, I am ' + name + ' (' + d + '). I am interested in ' + it + '. Best time for a call: ' + tm + '.' + (q ? ' My question: ' + q.replace(/[.?!\\s]+$/, '') + '.' : '') + ' Please share your time for a call.';
+      var msg = 'Namaste Kavi Sir, I am ' + name + '. I am interested in ' + it + '. Best time for a call: ' + tm + '.' + (q ? ' My question: ' + q.replace(/[.?!\\s]+$/, '') + '.' : '') + ' Please share your time for a call.';
       var url = 'https://wa.me/917817940814?text=' + encodeURIComponent(msg);
       var w = window.open(url, '_blank');
       try {{
-        fetch('{SHEET_URL}', {{ method:'POST', mode:'no-cors', body: new URLSearchParams({{ name: name, phone: d, tool: 'Query · ' + it + ' · Call: ' + tm + (q ? ' · ' + q : ''), page: location.href }}) }});
+        fetch('{SHEET_URL}', {{ method:'POST', mode:'no-cors', body: new URLSearchParams({{ name: name, phone: '', tool: 'Query · ' + it + ' · Call: ' + tm + (q ? ' · ' + q : ''), page: location.href }}) }});
       }} catch(x){{}}
       if (w) say('WhatsApp khul gaya. Message bhejne ke liye wahan Send dabaiye.', 'ok');
       else {{ say('WhatsApp kholne ke liye yahan dabaiye.', 'ok'); var a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = ' WhatsApp kholein →'; a.style.fontWeight = '600'; $('eStatus').appendChild(a); }}
