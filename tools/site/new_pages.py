@@ -150,7 +150,7 @@ courses_css = '''
 '''
 def WA_ASK(name):
     import urllib.parse
-    return 'https://wa.me/917817940814?text=' + urllib.parse.quote(f'Namaste Kavi Sir, I am interested in the {name} learning program. Please share your time for a call.')
+    return 'https://wa.me/917817940814?text=' + urllib.parse.quote(f'Namaste Kavi Sir, I am interested in the {name}' + ('' if 'Program' in name else ' learning program') + '. Please share your time for a call.')
 
 def course_card(no, cid, name, tagline, points, who, price, price_note, main=False, badge=''):
     pts = ''.join(f'<li>{p}</li>' for p in points)
