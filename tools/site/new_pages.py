@@ -91,7 +91,17 @@ WA_BOX = lambda title, text, msg: f'''  <section class="contact" aria-label="Wha
     <a class="btn wa" href="https://wa.me/917817940814?text={msg}" target="_blank" rel="noopener">WhatsApp karein</a>
   </section>'''
 
-def page(path, title, desc, active, extra_css, body, bar=''):
+SITE = 'https://explosivetrades.github.io/free/'
+def og_extra(img, title, desc, url):
+    if not img: return ''
+    return (f'<meta property="og:type" content="website">\n<meta property="og:site_name" content="Explosive Trades">\n'
+            f'<meta property="og:url" content="{SITE}{url}">\n<meta property="og:image" content="{SITE}{img}">\n'
+            f'<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n'
+            f'<meta property="og:image:alt" content="{title}">\n<meta name="twitter:card" content="summary_large_image">\n'
+            f'<meta name="twitter:title" content="{title}">\n<meta name="twitter:description" content="{desc}">\n'
+            f'<meta name="twitter:image" content="{SITE}{img}">\n<link rel="canonical" href="{SITE}{url}">\n')
+
+def page(path, title, desc, active, extra_css, body, bar='', og_image='', og_title='', og_url=''):
     if bar: extra_css += STICKY_CSS
     out = f'''<!DOCTYPE html>
 <html lang="hi">
@@ -100,9 +110,9 @@ def page(path, title, desc, active, extra_css, body, bar=''):
 {ga_snippet()}<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<meta property="og:title" content="{title}">
+<meta property="og:title" content="{og_title or title}">
 <meta property="og:description" content="{desc}">
-<meta name="theme-color" content="#1a1510">
+{og_extra(og_image, og_title or title, desc, og_url)}<meta name="theme-color" content="#1a1510">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -686,5 +696,6 @@ global_body = '''  <section class="hero" aria-label="Intro">
 '''
 page(f'{ROOT}/global/index.html', 'Explosive Trades Global',
      'Explosive Trades Global: Kavi Sharma ka English YouTube channel. Prop firm challenges, gold swing trading aur real results.',
-     'global', global_css, global_body)
+     'global', global_css, global_body,
+     og_image='global/img/og-global.jpg', og_title='Explosive Trades Global · Kavi Sharma', og_url='global/')
 print('pages written')
