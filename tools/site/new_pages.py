@@ -38,6 +38,8 @@ h2{ font-family:var(--display); font-weight:400; font-size:34px; letter-spacing:
 .btn.wa{ background:#1f8f4e; color:#fff; }
 .btn.green{ background:#1f8f4e; color:#fff; }
 .btn.green:hover{ filter:brightness(1.1); }
+.btn.ask-btn{ background:transparent; color:#3fbf73; border:1.5px solid #1f8f4e; }
+.btn.ask-btn:hover{ background:color-mix(in srgb, #1f8f4e 14%, transparent); }
 .btn.yt{ background:#d4190f; color:#fff; }
 .card{ background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; min-width:0; }
 .pill{ display:inline-block; font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:2px 9px; border-radius:20px; }
@@ -164,6 +166,7 @@ def course_card(no, cid, name, tagline, points, who, price, price_note, main=Fal
         <div class="side">
           <div class="price">{price}<small>{price_note}</small></div>
           <a class="btn {'gold' if main else 'green'}" href="{C(cid)}" target="_blank" rel="noopener">Program details &amp; join</a>
+          <a class="btn ask-btn" href="{WA_ASK(name)}" target="_blank" rel="noopener">Ask now</a>
         </div>
       </article>
 '''
