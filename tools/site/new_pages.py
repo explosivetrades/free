@@ -602,7 +602,6 @@ global_css = '''
 .goal li::before{ content:counter(g); position:absolute; left:12px; top:10px; width:22px; height:22px; border-radius:50%; background:var(--gold); color:var(--on-gold); font-size:12px; font-weight:700; display:grid; place-items:center; }
 .goal li b{ display:block; color:var(--gold); font-size:14.5px; }
 .goal li span{ display:block; font-size:13px; color:var(--muted); line-height:1.45; }
-.goal small{ display:block; margin-top:10px; font-size:11.5px; color:var(--muted); opacity:.85; }
 .stats{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:16px 0 4px; }
 @media (max-width:520px){ .stats{ grid-template-columns:1fr 1fr; } }
 .stats div{ background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
@@ -641,7 +640,6 @@ global_body = '''  <section class="hero" aria-label="Intro">
           <li><b>Reinvest</b><span>Us kamai ko Indian market ke gold products mein lagana</span></li>
           <li><b>Passive income</b><span>Aisa system banana jo lambe samay tak passive income de</span></li>
         </ol>
-        <small>Ye mera personal plan hai, koi investment advice ya profit ki guarantee nahi.</small>
       </div>
       <div class="stats">
         <div><b>5+</b><span>saal trading</span></div>
