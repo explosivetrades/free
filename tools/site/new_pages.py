@@ -613,7 +613,7 @@ global_body = '''  <section class="hero" aria-label="Intro">
   <section class="me" aria-label="About Kavi Sharma">
     <figure>
       <img src="img/kavi-sharma.jpg" alt="Kavi Sharma, founder of Explosive Trades" width="300" height="300" loading="lazy">
-      <figcaption><b>Kavi Sharma</b>Gold Trader &amp; Mentor · Roorkee, India</figcaption>
+      <figcaption><b>Kavi Sharma</b>Gold Trader &amp; Mentor · India</figcaption>
     </figure>
     <div>
       <p class="kicker">Meet your mentor</p>
