@@ -584,7 +584,7 @@ page(f'{ROOT}/prop-firms/index.html', 'Best Prop Firms · Explosive Trades',
 SOCIAL = [
   ('YouTube Global', 'https://www.youtube.com/@ExplosiveTradesGlobal', 'yt'),
   ('YouTube Hindi', 'https://www.youtube.com/@explosivetrades', 'yt'),
-  ('Instagram', 'https://www.instagram.com/kavisharma.trader', 'ig'),
+  ('Instagram', 'https://www.instagram.com/FullPotentialMode', 'ig'),
   ('Facebook', 'https://www.facebook.com/kavisharma.trader', 'fb'),
   ('Telegram', 'https://t.me/Explosivetradeslearning', 'tg'),
 ]
