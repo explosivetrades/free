@@ -2,6 +2,22 @@
 <html lang="hi">
 <head>
 <meta charset="utf-8">
+<!-- ga:start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G7X02GX0MT"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G7X02GX0MT');
+document.addEventListener('click',function(e){
+  var a=e.target&&e.target.closest?e.target.closest('a'):null; if(!a||!a.href) return;
+  var h=a.href, u=h.split('?')[0], t=(a.textContent||'').replace(/\s+/g,' ').trim().slice(0,80), ev=null;
+  if(/wa\.me|whatsapp\.com/i.test(h)) ev='whatsapp_click';
+  else if(/fundingpips|fundedelite|the5ers/i.test(h)) ev='prop_firm_click';
+  else if(/explosivetrades\.com|clplily\.page\.link/i.test(h)) ev='program_click';
+  else if(/youtube\.com|youtu\.be/i.test(h)) ev='youtube_click';
+  else if(/t\.me\//i.test(h)) ev='telegram_click';
+  else if(a.hasAttribute('download')||/\/downloads\//.test(h)) ev='tool_download';
+  if(ev) gtag('event',ev,{link_text:t,link_url:u.slice(0,100),page_name:document.title.slice(0,60)});
+},true);
+</script>
+<!-- ga:end -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Explosive Trades Global</title>
 <meta name="description" content="Explosive Trades Global: Kavi Sharma ka English YouTube channel. Prop firm challenges, gold swing trading aur real results.">
@@ -211,6 +227,7 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
   <footer>
     <span>© Explosive Trades · Kavi Sharma · <a href="https://www.explosivetrades.com" target="_blank" rel="noopener">www.explosivetrades.com</a></span>
     <span>Disclaimer: Explosive Trades ka content sirf education ke liye hai. Hum SEBI registered nahi hain, koi buy/sell call ya profit ki guarantee nahi dete. Trading mein capital ka risk hota hai, apni samajh se trade karein.</span>
+    <span class="ga-note">Site visits ginne ke liye Google Analytics use hota hai. Aapka naam ya number isme nahi jaata.</span>
   </footer>
 </main>
 <script>

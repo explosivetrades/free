@@ -74,10 +74,14 @@ THEME_JS = '''<script>
 })();
 </script>'''
 
-FOOTER = '''  <footer>
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from analytics import snippet as ga_snippet, lead_js as ga_lead, footer_note as ga_note
+
+FOOTER = f'''  <footer>
     <span>© Explosive Trades · Kavi Sharma · <a href="https://www.explosivetrades.com" target="_blank" rel="noopener">www.explosivetrades.com</a></span>
     <span>Disclaimer: Explosive Trades ka content sirf education ke liye hai. Hum SEBI registered nahi hain, koi buy/sell call ya profit ki guarantee nahi dete. Trading mein capital ka risk hota hai, apni samajh se trade karein.</span>
-  </footer>'''
+{ga_note()}  </footer>'''
 
 WA_BOX = lambda title, text, msg: f'''  <section class="contact" aria-label="WhatsApp">
     <div>
@@ -93,7 +97,7 @@ def page(path, title, desc, active, extra_css, body, bar=''):
 <html lang="hi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+{ga_snippet()}<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <meta property="og:title" content="{title}">
@@ -178,6 +182,7 @@ def enquiry(default_interest='', page_label=''):
       var msg = 'Namaste Kavi Sir, I am ' + name + ' (' + d + '). I am interested in ' + it + '. Best time for a call: ' + tm + '.' + (q ? ' My question: ' + q.replace(/[.?!\\s]+$/, '') + '.' : '') + ' Please share your time for a call.';
       var url = 'https://wa.me/917817940814?text=' + encodeURIComponent(msg);
       var w = window.open(url, '_blank');
+      {ga_lead('it')}
       try {{
         fetch('{SHEET_URL}', {{ method:'POST', mode:'no-cors', body: new URLSearchParams({{ name: name, phone: d, tool: 'Query · ' + it + ' · Call: ' + tm + (q ? ' · ' + q : ''), page: location.href }}) }});
       }} catch(x){{}}
