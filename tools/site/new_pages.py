@@ -321,6 +321,7 @@ CHALLENGES = [
 ]
 # ---- EDIT HERE: setup links ----
 BANK_VIDEO = ''
+KYC_VIDEO = ''
 PAYOUTS = [
   dict(name='Rise', desc='Prop firm payouts ke liye sabse common tareeka. Rise account se paisa bank mein le sakte hain.', url='https://www.riseworks.io'),
   dict(name='Crypto (USDT)', desc='Kai firms crypto mein bhi payout deti hain. Apna wallet address dhyan se daalein.', url=''),
@@ -433,7 +434,7 @@ prop_body = f"""  <section aria-label="Intro">
     <div class="setup">
       <div class="card"><span class="k">Bank</span><h3>Best bank account</h3><p>Payout ka paisa India mein lene ke liye kaunsa bank account sahi rahega, is video mein samjhaya gaya hai.</p>{btn('yt', BANK_VIDEO, '▶ Video dekhein', '▶ Video jald')}</div>
 {pay_html}      <div class="card"><span class="k">Platform</span><h3>MT5 trading platform</h3><p>Zyadatar prop firms MT5 deti hain. Login details firm ke dashboard mein milte hain.</p><a class="btn line" href="https://www.metatrader5.com/en/download" target="_blank" rel="noopener">MT5 download karein</a></div>
-      <div class="card"><span class="k">KYC</span><h3>Documents ready rakhein</h3><p>Funded account aur payout ke time ID proof aur address proof ki KYC hoti hai. Naam har jagah same rakhein.</p></div>
+      <div class="card"><span class="k">KYC</span><h3>Documents ready rakhein</h3><p>Funded account aur payout ke time ID proof aur address proof ki KYC hoti hai. Naam har jagah same rakhein.</p>{btn('yt', KYC_VIDEO, '▶ Video dekhein', '▶ Video jald')}</div>
     </div>
   </section>
 
