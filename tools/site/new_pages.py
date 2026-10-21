@@ -150,7 +150,7 @@ courses_css = '''
 '''
 def WA_ASK(name):
     import urllib.parse
-    return 'https://wa.me/917817940814?text=' + urllib.parse.quote(f'Namaste Kavi Sir, I am interested in the {name} learning program. Please share details.')
+    return 'https://wa.me/917817940814?text=' + urllib.parse.quote(f'Namaste Kavi Sir, I am interested in the {name} learning program. Please share your time for a call.')
 
 def course_card(no, cid, name, tagline, points, who, price, price_note, main=False, badge=''):
     pts = ''.join(f'<li>{p}</li>' for p in points)
@@ -222,7 +222,7 @@ courses_body = f'''  <section aria-label="Intro">
     </div>
     <div class="bundle-r">
       <div class="price">₹9,999</div>
-      <a class="btn wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20all%20learning%20programs%3A%20Complete%20Bundle%20%28Indian%20Gold%20Market%20%2B%20Forex/XAUUSD%20%2B%20Funded%20Account%20Mastery%29%20for%20%E2%82%B99%2C999.%20Please%20share%20details." target="_blank" rel="noopener">Ask now</a>
+      <a class="btn wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20all%20learning%20programs%3A%20Complete%20Bundle%20%28Indian%20Gold%20Market%20%2B%20Forex/XAUUSD%20%2B%20Funded%20Account%20Mastery%29%20for%20%E2%82%B99%2C999.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">Ask now</a>
     </div>
   </section>
 
