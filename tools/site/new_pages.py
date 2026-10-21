@@ -662,10 +662,10 @@ global_body = '''  <section class="hero" aria-label="Intro">
     <div>
       <p class="kicker">Our other YouTube channel</p>
       <h1>Explosive Trades <span>Global</span></h1>
-      <p class="lead">An Indian trader going global, learning in public. Kavi Sharma ka English channel, duniya bhar ke traders ke liye: prop firm challenges, gold swing trading aur real results.</p>
+      <p class="lead">An Indian trader going global, learning in public. Kavi Sharma ka Hindi + English channel, India aur duniya bhar ke traders ke liye: prop firm challenges, gold swing trading aur real results.</p>
     </div>
     <div class="card chan">
-      <div class="h"><div class="logo" aria-hidden="true">ET</div><div><b>Explosive Trades Global</b><small>@ExplosiveTradesGlobal · English</small></div></div>
+      <div class="h"><div class="logo" aria-hidden="true">ET</div><div><b>Explosive Trades Global</b><small>@ExplosiveTradesGlobal · Hindi + English</small></div></div>
       <p>Naya channel hai. Abhi subscribe karein aur shuruaat se journey ka hissa banein.</p>
       <a class="btn yt" href="https://www.youtube.com/@ExplosiveTradesGlobal?sub_confirmation=1" target="_blank" rel="noopener">YouTube par subscribe karein</a>
     </div>
@@ -682,7 +682,7 @@ global_body = '''  <section class="hero" aria-label="Intro">
       <p class="tagline">Trade the world. Invest in gold. Build passive income.</p>
       <p>Main ek <strong>full-time Gold &amp; Forex trader</strong> hoon aur pichhle <strong>5 saal</strong> se XAUUSD aur major forex pairs trade kar raha hoon. Mera focus zone-based, multi-timeframe <strong>swing trading</strong> par hai, aur main <strong>FundingPips, FundedElite aur The5ers</strong> ke funded accounts par khud trade karta hoon.</p>
       <p>B.Tech (ECE) ke baad maine UPSC ki taiyari sirf YouTube aur Google se ki. Wahin economics padhte hue markets mein dilchaspi bani, aur yahin se mera financial education ka safar shuru hua.</p>
-      <p>Explosive Trades par main wahi sikhata hoon jo khud follow karta hoon: process, risk management aur discipline. <strong>Explosive Trades Global</strong> par yahi journey ab English mein, duniya bhar ke traders ke saath.</p>
+      <p>Explosive Trades par main wahi sikhata hoon jo khud follow karta hoon: process, risk management aur discipline. <strong>Explosive Trades Global</strong> par yahi journey ab Hindi aur English dono mein, duniya bhar ke traders ke saath.</p>
       <div class="goal" aria-label="Mera goal">
         <p class="goal-h">Mera goal, aur aapke liye raasta</p>
         <ol>
@@ -707,7 +707,7 @@ global_body = '''  <section class="hero" aria-label="Intro">
 
   <section aria-label="Topics">
     <h2>Is channel par kya milega</h2>
-    <p class="sec-lead">English mein, international traders ke liye. Koi buy/sell calls nahi, sirf process aur learning.</p>
+    <p class="sec-lead">Hindi aur English dono mein, India aur international traders ke liye. Koi buy/sell calls nahi, sirf process aur learning.</p>
     <div class="topics">
       <div class="card"><b>Prop firm challenges</b><p>Challenge ki planning se payout tak, step by step aur live.</p></div>
       <div class="card"><b>Gold swing trading</b><p>XAUUSD par zone-based, multi-timeframe swing approach.</p></div>
@@ -725,15 +725,15 @@ global_body = '''  <section class="hero" aria-label="Intro">
       <a class="btn line" href="https://www.youtube.com/@explosivetrades?sub_confirmation=1" target="_blank" rel="noopener">Main channel dekhein</a>
     </div>
     <div class="card">
-      <h3>Explosive Trades Global (English)</h3>
-      <p>International audience ke liye. Prop firm challenges aur gold swing trading, English mein.</p>
+      <h3>Explosive Trades Global (Hindi + English)</h3>
+      <p>India aur international audience ke liye. Prop firm challenges aur gold swing trading, Hindi aur English dono mein.</p>
       <a class="btn yt" href="https://www.youtube.com/@ExplosiveTradesGlobal?sub_confirmation=1" target="_blank" rel="noopener">Global channel dekhein</a>
     </div>
   </section>
 '''
 global_body = global_body.replace('@@SOCIAL@@', social_row())
 page(f'{ROOT}/global/index.html', 'Explosive Trades Global',
-     'Explosive Trades Global: Kavi Sharma ka English YouTube channel. Prop firm challenges, gold swing trading aur real results.',
+     'Explosive Trades Global: Kavi Sharma ka Hindi + English YouTube channel. Prop firm challenges, gold swing trading aur real results.',
      'global', global_css + SOCIAL_CSS, global_body,
-     og_image='global/img/og-global.jpg', og_title='Explosive Trades Global · Kavi Sharma', og_url='global/')
+     og_image='global/img/og-global-2.jpg', og_title='Explosive Trades Global · Kavi Sharma', og_url='global/')
 print('pages written')
