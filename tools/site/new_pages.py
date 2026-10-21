@@ -580,6 +580,34 @@ page(f'{ROOT}/prop-firms/index.html', 'Best Prop Firms · Explosive Trades',
      'prop', prop_css + ENQ_CSS, prop_body,
      sticky_bar('Namaste Kavi Sir, I need help with prop firm challenges. Please share your time for a call.'))
 
+# Social profiles (link khaali = button nahi dikhega)
+SOCIAL = [
+  ('YouTube Global', 'https://www.youtube.com/@ExplosiveTradesGlobal', 'yt'),
+  ('YouTube Hindi', 'https://www.youtube.com/@explosivetrades', 'yt'),
+  ('Instagram', '', 'ig'),
+  ('Facebook', '', 'fb'),
+  ('Telegram', 'https://t.me/Explosivetradeslearning', 'tg'),
+]
+_ICON = {
+  'yt': '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1c.4-1.6.5-3.2.5-4.8s-.1-3.2-.5-4.8ZM9.8 15.1V8.9l5.6 3.1-5.6 3.1Z"/></svg>',
+  'ig': '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 7.3a4.7 4.7 0 1 0 0 9.4 4.7 4.7 0 0 0 0-9.4Zm0 7.7a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm6-7.9a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0ZM21.4 8.2c-.1-1.5-.4-2.8-1.5-3.9s-2.4-1.4-3.9-1.5C14.5 2.7 9.5 2.7 8 2.8c-1.5.1-2.8.4-3.9 1.5S2.7 6.7 2.6 8.2c-.1 1.5-.1 6.5 0 8 .1 1.5.4 2.8 1.5 3.9s2.4 1.4 3.9 1.5c1.5.1 6.5.1 8 0 1.5-.1 2.8-.4 3.9-1.5s1.4-2.4 1.5-3.9c.1-1.5.1-6.5 0-8Zm-2 9.6a3 3 0 0 1-1.7 1.7c-1.2.5-4 .4-5.3.4s-4.1.1-5.3-.4a3 3 0 0 1-1.7-1.7c-.5-1.2-.4-4-.4-5.3s-.1-4.1.4-5.3a3 3 0 0 1 1.7-1.7c1.2-.5 4-.4 5.3-.4s4.1-.1 5.3.4a3 3 0 0 1 1.7 1.7c.5 1.2.4 4 .4 5.3s.1 4.1-.4 5.3Z"/></svg>',
+  'fb': '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z"/></svg>',
+  'tg': '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.9 4.3 18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13 1.4 11.5c-1-.3-1.1-1 .2-1.5L20.5 2.7c.9-.3 1.7.2 1.4 1.6Z"/></svg>',
+}
+def social_row():
+    items = ''.join(f'<a class="soc soc-{k}" href="{u}" target="_blank" rel="noopener">{_ICON[k]}<span>{n}</span></a>' for n, u, k in SOCIAL if u)
+    if not items: return ''
+    return '      <div class="follow"><p class="follow-h">Journey follow karein</p><div class="socs">' + items + '</div></div>\n'
+SOCIAL_CSS = """
+.follow{ margin-top:16px; }
+.follow-h{ margin:0 0 8px !important; font-size:12.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.socs{ display:flex; flex-wrap:wrap; gap:8px; }
+.soc{ display:inline-flex; align-items:center; gap:8px; padding:8px 13px; border-radius:999px; border:1px solid var(--line); background:var(--panel2); color:var(--text); text-decoration:none; font-size:13.5px; font-weight:500; }
+.soc svg{ width:17px; height:17px; flex:none; }
+.soc:hover{ border-color:var(--gold); }
+.soc-yt svg{ color:#ff3b30; } .soc-ig svg{ color:#e1306c; } .soc-fb svg{ color:#1877f2; } .soc-tg svg{ color:#2aabee; }
+"""
+
 # ======================= GLOBAL CHANNEL =======================
 global_css = '''
 .hero{ display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:24px; align-items:center; }
@@ -620,6 +648,10 @@ global_css = '''
 .goal li::before{ content:counter(g); position:absolute; left:12px; top:10px; width:22px; height:22px; border-radius:50%; background:var(--gold); color:var(--on-gold); font-size:12px; font-weight:700; display:grid; place-items:center; }
 .goal li b{ display:block; color:var(--gold); font-size:14.5px; }
 .goal li span{ display:block; font-size:13px; color:var(--muted); line-height:1.45; }
+.goal li em{ display:block; font-style:normal; font-weight:600; color:var(--text); font-size:13.5px; line-height:1.35; margin:2px 0 4px; }
+.goal-q{ margin:14px 0 0 !important; font-size:14.5px; color:var(--text) !important; font-style:italic; }
+.goal-cta{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+.goal-cta .btn{ font-size:14px; }
 .stats{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:16px 0 4px; }
 @media (max-width:520px){ .stats{ grid-template-columns:1fr 1fr; } }
 .stats div{ background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
@@ -652,12 +684,17 @@ global_body = '''  <section class="hero" aria-label="Intro">
       <p>B.Tech (ECE) ke baad maine UPSC ki taiyari sirf YouTube aur Google se ki. Wahin economics padhte hue markets mein dilchaspi bani, aur yahin se mera financial education ka safar shuru hua.</p>
       <p>Explosive Trades par main wahi sikhata hoon jo khud follow karta hoon: process, risk management aur discipline. <strong>Explosive Trades Global</strong> par yahi journey ab English mein, duniya bhar ke traders ke saath.</p>
       <div class="goal" aria-label="Mera goal">
-        <p class="goal-h">Mera goal</p>
+        <p class="goal-h">Mera goal, aur aapke liye raasta</p>
         <ol>
-          <li><b>Earn</b><span>Prop firms ke funded accounts par trading karke kamana</span></li>
-          <li><b>Reinvest</b><span>Us kamai ko Indian market ke gold products mein lagana</span></li>
-          <li><b>Passive income</b><span>Aisa system banana jo lambe samay tak passive income de</span></li>
+          <li><b>Earn</b><em>Prop firm ke capital se trade karo</em><span>Funded accounts par trading, sirf challenge fee lagakar. Apna bada paisa daav par lagaye bina.</span></li>
+          <li><b>Reinvest</b><em>Kamai ko gold mein badlo</em><span>Har payout ka ek hissa Indian market ke gold products mein, taaki paisa bhi aapke liye kaam kare.</span></li>
+          <li><b>Passive income</b><em>Aisa system jo lambe samay tak chale</em><span>Trading, reinvesting aur discipline milkar ek aisa system banaye jo saalon tak income de.</span></li>
         </ol>
+        <p class="goal-q">“Main ye safar public mein kar raha hoon: har step, har result. Aap bhi saath chaliye.”</p>
+        <div class="goal-cta">
+          <a class="btn yt" href="https://www.youtube.com/@ExplosiveTradesGlobal?sub_confirmation=1" target="_blank" rel="noopener">▶ Journey follow karein</a>
+          <a class="btn green" href="../courses/">Ye system seekhein →</a>
+        </div>
       </div>
       <div class="stats">
         <div><b>5+</b><span>saal trading</span></div>
@@ -665,7 +702,7 @@ global_body = '''  <section class="hero" aria-label="Intro">
         <div><b>700+</b><span>community members</span></div>
         <div><b>3</b><span>prop firms</span></div>
       </div>
-    </div>
+@@SOCIAL@@    </div>
   </section>
 
   <section aria-label="Topics">
@@ -694,8 +731,9 @@ global_body = '''  <section class="hero" aria-label="Intro">
     </div>
   </section>
 '''
+global_body = global_body.replace('@@SOCIAL@@', social_row())
 page(f'{ROOT}/global/index.html', 'Explosive Trades Global',
      'Explosive Trades Global: Kavi Sharma ka English YouTube channel. Prop firm challenges, gold swing trading aur real results.',
-     'global', global_css, global_body,
+     'global', global_css + SOCIAL_CSS, global_body,
      og_image='global/img/og-global.jpg', og_title='Explosive Trades Global · Kavi Sharma', og_url='global/')
 print('pages written')
