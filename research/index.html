@@ -27,11 +27,7 @@ html{ -webkit-text-size-adjust:100%; }
 body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--body); font-size:15px; line-height:1.6; }
 a{ color:var(--gold); }
 :focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
-.top{ position:sticky; top:0; z-index:9; background:var(--panel); border-bottom:1px solid var(--line); padding-top:env(safe-area-inset-top,0px); }
-.top-in, .wrap{ max-width:900px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); }
-.top-in{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding-block:10px; }
-.brand{ font-family:var(--display); font-size:24px; letter-spacing:.06em; color:var(--gold); line-height:1; text-decoration:none; }
-.top-r{ display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted); }
+.wrap{ max-width:900px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); }
 .icon-btn{ background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:8px; padding:5px 10px; cursor:pointer; font:500 12px var(--body); }
 .icon-btn:hover{ border-color:var(--gold); }
 .icon-btn[hidden]{ display:none; }
@@ -102,19 +98,35 @@ h1 span{ color:var(--gold); }
 .member .wa-mini{ font-size:13px; font-weight:600; color:#3fbf73; }
 .btn.wa{ background:#1f8f4e; color:#fff; }
 .btn.wa:hover{ filter:brightness(1.08); }
+.today{ background:var(--panel); border:1.5px solid var(--gold); border-radius:14px; padding:16px 18px; }
+.today-h{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:baseline; margin-bottom:8px; }
+.today-h b{ font-family:var(--display); font-weight:400; font-size:26px; letter-spacing:.03em; color:var(--gold); }
+.today-h span{ font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+.today pre{ margin:0; white-space:pre-wrap; word-break:break-word; font-family:ui-monospace, Menlo, monospace; font-size:15px; line-height:1.65; color:var(--text); font-variant-numeric:tabular-nums; }
 [hidden]{ display:none !important; }
 footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8px; font-size:12px; color:var(--muted); }
 @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+
+/* ---- shared site header ---- */
+.top{ position:sticky; top:0; z-index:9; background:var(--panel); border-bottom:1px solid var(--line); padding-top:env(safe-area-inset-top,0px); }
+.top-in{ max-width:1180px; margin:0 auto; display:flex; align-items:center; gap:10px 18px; flex-wrap:wrap; padding:10px max(16px, env(safe-area-inset-right,0px)) 10px max(16px, env(safe-area-inset-left,0px)); }
+.brand{ font-family:var(--display); font-size:24px; letter-spacing:.06em; color:var(--gold); line-height:1; text-decoration:none; white-space:nowrap; }
+.nav{ display:flex; gap:2px; flex:1; min-width:0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.nav::-webkit-scrollbar{ display:none; }
+.nav a{ white-space:nowrap; padding:7px 11px; border-radius:8px; color:var(--muted); font:500 13.5px var(--body); text-decoration:none; }
+.nav a:hover{ color:var(--text); background:var(--panel2); }
+.nav a[aria-current="page"]{ color:var(--gold); background:color-mix(in srgb, var(--gold) 12%, transparent); font-weight:600; }
+.top-r{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); }
+@media (max-width:960px){ .nav{ order:3; flex-basis:100%; margin:0 -6px; flex-wrap:wrap; overflow:visible; } .nav a{ padding:6px 10px; font-size:13px; } .top-r .by{ display:none; } }
 </style>
 </head>
 <body>
 <header class="top">
   <div class="top-in">
     <a class="brand" href="../">Explosive Trades</a>
-    <div class="top-r">
-      <button class="icon-btn" id="logout" type="button" hidden>Logout</button>
-      <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button>
-    </div>
+    <nav class="nav" aria-label="Main menu"><a href="../">Free Tools</a><a href="../research/" aria-current="page">🔒 Members Login</a><a href="../prop-firms/">Best Prop Firm</a><a href="../global/">Global Channel</a><a href="../courses/">Learning Courses</a></nav>
+    <div class="top-r"><button class="icon-btn" id="logout" type="button" hidden>Logout</button>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button></div>
   </div>
 </header>
 
@@ -177,6 +189,10 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
       <div class="head">
         <h2>Research papers</h2>
         <span class="updated" id="updated"></span>
+      </div>
+      <div class="today" id="todayBox" hidden>
+        <div class="today-h"><b>Aaj ka update</b><span id="todayTime"></span></div>
+        <pre id="todayText"></pre>
       </div>
       <div class="papers" id="papers"></div>
       <p class="status" id="listStatus" role="status" aria-live="polite"></p>
@@ -287,6 +303,24 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
         '<button class="btn dl" type="button" data-act="dl" data-id="' + f.id + '">Download</button></div></article>';
     }).join('') : '<div class="empty">Abhi koi research paper available nahi hai. Kal subah dobara check karein.</div>';
     show('listView');
+    showToday();
+  }
+
+  async function decryptFile(f){
+    var fk = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b64d(f.w.iv) }, MASTER, b64d(f.w.k));
+    var key = await crypto.subtle.importKey('raw', fk, 'AES-GCM', false, ['decrypt']);
+    var r = await fetch('data/f/' + f.id + '.bin', { cache: 'no-store' });
+    if (!r.ok) throw new Error('fetch');
+    return crypto.subtle.decrypt({ name:'AES-GCM', iv: b64d(f.iv) }, key, await r.arrayBuffer());
+  }
+  async function showToday(){
+    var box = $('todayBox'), f = (IDX.files || []).find(function(x){ return ext(x.name) === 'txt'; });
+    if (!f){ box.hidden = true; return; }
+    try {
+      $('todayText').textContent = new TextDecoder().decode(await decryptFile(f));
+      $('todayTime').textContent = 'Update: ' + fmtDate(f.time, { weekday:'short', day:'numeric', month:'short', hour:'numeric', minute:'2-digit', hour12:true });
+      box.hidden = false;
+    } catch(e){ box.hidden = true; }
   }
 
   async function openFile(id, act, btn){
@@ -295,11 +329,7 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
     if (act === 'read') { try { win = window.open('', '_blank'); if (win) win.document.write('<p style="font-family:sans-serif;padding:20px">Paper khul raha hai…</p>'); } catch(e){} }
     btn.disabled = true; s.textContent = 'File taiyaar ho rahi hai…'; s.className = 'status';
     try {
-      var fk = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b64d(f.w.iv) }, MASTER, b64d(f.w.k));
-      var key = await crypto.subtle.importKey('raw', fk, 'AES-GCM', false, ['decrypt']);
-      var r = await fetch('data/f/' + id + '.bin', { cache: 'no-store' });
-      if (!r.ok) throw new Error('fetch');
-      var plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b64d(f.iv) }, key, await r.arrayBuffer());
+      var plain = await decryptFile(f);
       var url = URL.createObjectURL(new Blob([plain], { type: MIME[ext(f.name)] || 'application/octet-stream' }));
       if (act === 'read') { if (win) win.location.href = url; else location.href = url; s.textContent = ''; }
       else { var a = document.createElement('a'); a.href = url; a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); s.textContent = 'Download shuru ho gaya: ' + f.name; s.className = 'status ok'; }
