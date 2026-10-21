@@ -188,6 +188,8 @@ def enquiry(default_interest='', page_label=''):
 """
 
 # ======================= COURSES =======================
+# ---- EDIT HERE: intro video per program (kin logon ko join karna chahiye) ----
+INTRO_VIDEOS = {'728981': '', '690245': '', '690264': '', '692783': '', '894443': ''}
 C = lambda cid: f'https://www.explosivetrades.com/courses/{cid}{UTM}'
 courses_css = '''
 .path{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:18px; font-size:13px; }
@@ -212,11 +214,26 @@ courses_css = '''
 @media (max-width:680px){ .bundle{ grid-template-columns:1fr; } }
 .bundle p{ margin:0; color:var(--muted); font-size:14px; }
 .bundle .price{ font-size:44px; color:var(--gold); }
+.intro-v{ display:flex; align-items:center; gap:10px; padding:9px 11px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); text-decoration:none; color:var(--text); }
+a.intro-v:hover{ border-color:#d4190f; }
+.intro-v .iv-ic{ flex:0 0 28px; height:28px; border-radius:7px; background:#d4190f; color:#fff; display:grid; place-items:center; font-size:12px; }
+.intro-v b{ display:block; font-size:13px; line-height:1.2; }
+.intro-v small{ display:block; font-size:11.5px; color:var(--muted); line-height:1.3; }
+.intro-v.soon{ opacity:.75; }
+.intro-v.soon .iv-ic{ background:var(--line); color:var(--muted); }
+.intro-v em{ margin-left:auto; font-style:normal; font-size:11px; color:var(--muted); border:1px solid var(--line); border-radius:20px; padding:1px 8px; }
 .bundle-r{ display:grid; gap:10px; justify-items:end; }
 @media (max-width:680px){ .bundle-r{ justify-items:start; } }
 .price .ask{ font-family:var(--body); font-size:12px; font-weight:600; color:#3fbf73; text-decoration:none; letter-spacing:0; vertical-align:middle; margin-left:4px; white-space:nowrap; }
 .price .ask:hover{ text-decoration:underline; }
 '''
+def intro_box(cid):
+    url = INTRO_VIDEOS.get(cid, '')
+    inner = '<span class="iv-ic" aria-hidden="true">▶</span><span><b>Intro video</b><small>Kin logon ko ye program join karna chahiye</small></span>'
+    if url:
+        return f'<a class="intro-v" href="{url}" target="_blank" rel="noopener">{inner}</a>'
+    return f'<div class="intro-v soon">{inner}<em>Jald</em></div>'
+
 def WA_ASK(name):
     import urllib.parse
     return 'https://wa.me/917817940814?text=' + urllib.parse.quote(f'Namaste Kavi Sir, I am interested in the {name}' + ('' if 'Program' in name else ' learning program') + '. Please share your time for a call.')
@@ -235,6 +252,7 @@ def course_card(no, cid, name, tagline, points, who, price, price_note, main=Fal
         <div class="side">
           <div class="price">{price} <a class="ask" href="{WA_ASK(name)}" target="_blank" rel="noopener">Ask now →</a><small>{price_note}</small></div>
           <a class="btn {'gold' if main else 'green'}" href="{C(cid)}" target="_blank" rel="noopener">Program details &amp; join</a>
+          {intro_box(cid)}
         </div>
       </article>
 '''
