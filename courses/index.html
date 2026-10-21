@@ -97,8 +97,12 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
 .nav a{ white-space:nowrap; padding:7px 11px; border-radius:8px; color:var(--muted); font:500 13.5px var(--body); text-decoration:none; }
 .nav a:hover{ color:var(--text); background:var(--panel2); }
 .nav a[aria-current="page"]{ color:var(--gold); background:color-mix(in srgb, var(--gold) 12%, transparent); font-weight:600; }
+.nav a.nav-login{ margin-left:auto; color:var(--gold); border:1px solid color-mix(in srgb, var(--gold) 60%, transparent); font-weight:600; }
+.nav a.nav-login:hover{ background:color-mix(in srgb, var(--gold) 12%, transparent); color:var(--gold); }
+.nav a.nav-login[aria-current="page"]{ background:var(--gold); color:var(--on-gold); border-color:var(--gold); }
 .top-r{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); }
-@media (max-width:960px){ .nav{ order:3; flex-basis:100%; margin:0 -6px; flex-wrap:wrap; overflow:visible; } .nav a{ padding:6px 10px; font-size:13px; } .top-r .by{ display:none; } }
+@media (max-width:960px){ .nav{ order:3; flex-basis:100%; margin:0 -6px; flex-wrap:wrap; overflow:visible; } .nav a{ padding:6px 10px; font-size:13px; } .nav a.nav-login{ margin-left:0; } .top-r .by{ display:none; } }
+/* ---- end header ---- */
 
 .path{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:18px; font-size:13px; }
 .path span{ padding:5px 12px; border-radius:20px; background:var(--panel2); border:1px solid var(--line); white-space:nowrap; }
@@ -183,7 +187,7 @@ tr.hl td{ background:color-mix(in srgb, var(--gold) 8%, transparent); }
 <header class="top">
   <div class="top-in">
     <a class="brand" href="../">Explosive Trades</a>
-    <nav class="nav" aria-label="Main menu"><a href="../">Free Tools</a><a href="../prop-firms/">Best Prop Firm</a><a href="../courses/" aria-current="page">Learning Programs</a><a href="../research/">🔒 Members Login</a><a href="../global/">Global Channel</a></nav>
+    <nav class="nav" aria-label="Main menu"><a href="../">Free Tools</a><a href="../courses/" aria-current="page">Learning Programs</a><a href="../prop-firms/">Best Prop Firm</a><a href="../global/">Global Channel</a><a href="../research/" class="nav-login">🔒 Members Login</a></nav>
     <div class="top-r"><span class="by">Prepared by Kavi Sharma</span>
       <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button></div>
   </div>

@@ -3,8 +3,8 @@ import re, html, os
 ROOT = '/home/claude/kav'
 UTM = '?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp'
 
-NAV = [('', 'Free Tools', 'tools'), ('prop-firms/', 'Best Prop Firm', 'prop'), ('courses/', 'Learning Programs', 'courses'),
-       ('research/', '🔒 Members Login', 'research'), ('global/', 'Global Channel', 'global')]
+NAV = [('', 'Free Tools', 'tools'), ('courses/', 'Learning Programs', 'courses'), ('prop-firms/', 'Best Prop Firm', 'prop'),
+       ('global/', 'Global Channel', 'global'), ('research/', '🔒 Members Login', 'research')]
 
 NAV_CSS = '''
 /* ---- shared site header ---- */
@@ -16,12 +16,16 @@ NAV_CSS = '''
 .nav a{ white-space:nowrap; padding:7px 11px; border-radius:8px; color:var(--muted); font:500 13.5px var(--body); text-decoration:none; }
 .nav a:hover{ color:var(--text); background:var(--panel2); }
 .nav a[aria-current="page"]{ color:var(--gold); background:color-mix(in srgb, var(--gold) 12%, transparent); font-weight:600; }
+.nav a.nav-login{ margin-left:auto; color:var(--gold); border:1px solid color-mix(in srgb, var(--gold) 60%, transparent); font-weight:600; }
+.nav a.nav-login:hover{ background:color-mix(in srgb, var(--gold) 12%, transparent); color:var(--gold); }
+.nav a.nav-login[aria-current="page"]{ background:var(--gold); color:var(--on-gold); border-color:var(--gold); }
 .top-r{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); }
-@media (max-width:960px){ .nav{ order:3; flex-basis:100%; margin:0 -6px; flex-wrap:wrap; overflow:visible; } .nav a{ padding:6px 10px; font-size:13px; } .top-r .by{ display:none; } }
+@media (max-width:960px){ .nav{ order:3; flex-basis:100%; margin:0 -6px; flex-wrap:wrap; overflow:visible; } .nav a{ padding:6px 10px; font-size:13px; } .nav a.nav-login{ margin-left:0; } .top-r .by{ display:none; } }
+/* ---- end header ---- */
 '''
 
 def header(prefix, active, right_inner):
-    links = ''.join(f'<a href="{(prefix + href) or "./"}"{" aria-current=\"page\"" if key==active else ""}>{label}</a>' for href,label,key in NAV)
+    links = ''.join(f'<a href="{(prefix + href) or "./"}"{" class=\"nav-login\"" if key=="research" else ""}{" aria-current=\"page\"" if key==active else ""}>{label}</a>' for href,label,key in NAV)
     return (f'<header class="top">\n  <div class="top-in">\n    <a class="brand" href="{prefix or "./"}">Explosive Trades</a>\n'
             f'    <nav class="nav" aria-label="Main menu">{links}</nav>\n    <div class="top-r">{right_inner}</div>\n  </div>\n</header>')
 
@@ -33,7 +37,7 @@ def patch_existing(path, prefix, active):
     inner = re.sub(r'\s*<a class="mem-link"[^>]*>.*?</a>', '', inner, flags=re.S)
     s = s[:m.start()] + header(prefix, active, inner) + s[m.end():]
     # replace old header css block with shared one (marker based)
-    s = re.sub(r'/\* ---- shared site header ---- \*/.*?\n(?=\S)', '', s, flags=re.S)
+    s = re.sub(r'/\* ---- shared site header ---- \*/.*?(?:/\* ---- end header ---- \*/\n|@media \(max-width:960px\)\{ \.nav[^\n]*\n)', '', s, flags=re.S)
     s = re.sub(r'\.top\{ position:sticky;[^\n]*\n', '', s)
     s = re.sub(r'\.top-in, \.wrap\{', '.wrap{', s)
     s = re.sub(r'\.top-in\{[^\n]*\n', '', s)
