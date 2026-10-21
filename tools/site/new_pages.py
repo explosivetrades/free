@@ -162,7 +162,7 @@ def course_card(no, cid, name, tagline, points, who, price, price_note, main=Fal
           <p class="who"><b>Kiske liye:</b> {who}</p>
         </div>
         <div class="side">
-          <div class="price">{price} <a class="ask" href="{WA_ASK(name)}" target="_blank" rel="noopener">Ask now →</a><small>{price_note}</small></div>
+          <div class="price">{price}<small>{price_note}</small></div>
           <a class="btn {'gold' if main else 'green'}" href="{C(cid)}" target="_blank" rel="noopener">Program details &amp; join</a>
         </div>
       </article>
