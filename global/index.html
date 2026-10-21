@@ -101,6 +101,21 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
 @media (max-width:720px){ .two{ grid-template-columns:1fr; } }
 .two h3{ margin:0 0 6px; font-size:17px; }
 .two p{ margin:0 0 12px; color:var(--muted); font-size:14px; }
+.me{ display:grid; grid-template-columns:minmax(0,300px) minmax(0,1fr); gap:28px; align-items:center; }
+@media (max-width:760px){ .me{ grid-template-columns:1fr; gap:18px; } }
+.me figure{ margin:0; position:relative; }
+.me img{ display:block; width:100%; max-width:300px; aspect-ratio:1/1; object-fit:cover; border-radius:18px; border:2px solid var(--gold); box-shadow:0 18px 40px rgba(0,0,0,.35); }
+@media (max-width:760px){ .me img{ max-width:220px; } }
+.me figcaption{ margin-top:10px; font-size:13px; color:var(--muted); }
+.me figcaption b{ color:var(--text); display:block; font-size:15px; }
+.me h2{ margin-top:0; }
+.me p{ color:var(--muted); margin:0 0 12px; }
+.me p strong{ color:var(--text); font-weight:600; }
+.stats{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:16px 0 4px; }
+@media (max-width:520px){ .stats{ grid-template-columns:1fr 1fr; } }
+.stats div{ background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
+.stats b{ display:block; font-family:var(--display); color:var(--gold); font-size:26px; line-height:1.1; letter-spacing:.02em; }
+.stats span{ font-size:12.5px; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -124,6 +139,26 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
       <div class="h"><div class="logo" aria-hidden="true">ET</div><div><b>Explosive Trades Global</b><small>@ExplosiveTradesGlobal · English</small></div></div>
       <p>Naya channel hai. Abhi subscribe karein aur shuruaat se journey ka hissa banein.</p>
       <a class="btn yt" href="https://www.youtube.com/@ExplosiveTradesGlobal?sub_confirmation=1" target="_blank" rel="noopener">YouTube par subscribe karein</a>
+    </div>
+  </section>
+
+  <section class="me" aria-label="About Kavi Sharma">
+    <figure>
+      <img src="img/kavi-sharma.jpg" alt="Kavi Sharma, founder of Explosive Trades" width="300" height="300" loading="lazy">
+      <figcaption><b>Kavi Sharma</b>Gold Trader &amp; Mentor · Roorkee, India</figcaption>
+    </figure>
+    <div>
+      <p class="kicker">Meet your mentor</p>
+      <h2>Namaste, main Kavi Sharma hoon</h2>
+      <p>Main ek <strong>full-time gold trader</strong> hoon aur pichhle <strong>5 saal</strong> se XAUUSD trade kar raha hoon. Mera focus zone-based, multi-timeframe <strong>swing trading</strong> par hai, aur main <strong>FundingPips, FundedElite aur The5ers</strong> ke funded accounts par khud trade karta hoon.</p>
+      <p>B.Tech (ECE) ke baad maine UPSC ki taiyari sirf YouTube aur Google se ki. Wahin economics padhte hue markets mein dilchaspi bani, aur yahin se mera financial education ka safar shuru hua.</p>
+      <p>Explosive Trades par main wahi sikhata hoon jo khud follow karta hoon: process, risk management aur discipline. <strong>Explosive Trades Global</strong> par yahi journey ab English mein, duniya bhar ke traders ke saath.</p>
+      <div class="stats">
+        <div><b>5+</b><span>saal trading</span></div>
+        <div><b>90K+</b><span>YouTube traders</span></div>
+        <div><b>700+</b><span>community members</span></div>
+        <div><b>3</b><span>prop firms</span></div>
+      </div>
     </div>
   </section>
 
