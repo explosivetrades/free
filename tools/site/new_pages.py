@@ -155,7 +155,7 @@ def course_card(no, cid, name, tagline, points, who, price, price_note, main=Fal
         </div>
         <div class="side">
           <div class="price">{price}<small>{price_note}</small></div>
-          <a class="btn green" href="{C(cid)}" target="_blank" rel="noopener">Program details &amp; join</a>
+          <a class="btn {'gold' if main else 'green'}" href="{C(cid)}" target="_blank" rel="noopener">Program details &amp; join</a>
         </div>
       </article>
 '''
