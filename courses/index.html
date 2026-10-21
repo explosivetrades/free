@@ -120,6 +120,24 @@ a.intro-v:hover{ border-color:#d4190f; }
 .results p.fine{ margin-top:8px; font-size:12px; }
 .results .btn{ white-space:nowrap; padding:13px 20px; }
 .btn[aria-disabled="true"]{ opacity:.55; pointer-events:none; }
+
+.curr{ margin-top:12px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); }
+.curr summary{ cursor:pointer; padding:9px 12px; font-size:13.5px; font-weight:600; color:var(--gold); list-style:none; }
+.curr summary::-webkit-details-marker{ display:none; }
+.curr summary::after{ content:" +"; } .curr[open] summary::after{ content:" –"; }
+.curr ol{ list-style:none; margin:0; padding:0 12px 10px; display:grid; gap:4px; font-size:13.5px; }
+.curr li{ display:flex; gap:10px; } .curr li span{ color:var(--muted); font-variant-numeric:tabular-nums; }
+.batch{ font-size:12.5px; color:var(--text); background:color-mix(in srgb, var(--orange) 14%, transparent); border:1px solid var(--orange); border-radius:9px; padding:6px 10px; }
+.batch b{ color:var(--orange); }
+tr.hl td{ background:color-mix(in srgb, var(--gold) 8%, transparent); }
+.sticky{ display:none; }
+@media (max-width:760px){
+  .sticky{ display:grid; grid-template-columns:auto 1fr; gap:8px; position:fixed; left:0; right:0; bottom:0; z-index:20; padding:10px max(12px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px, env(safe-area-inset-left,0px)); background:var(--panel); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(0,0,0,.25); }
+  .sticky a{ text-align:center; text-decoration:none; font:600 14px var(--body); border-radius:10px; padding:11px 14px; }
+  .sticky .s-q{ color:var(--text); border:1px solid var(--line); }
+  .sticky .s-wa{ background:#1f8f4e; color:#fff; }
+  body:has(.sticky){ padding-bottom:72px; }
+}
 .bundle-r{ display:grid; gap:10px; justify-items:end; }
 @media (max-width:680px){ .bundle-r{ justify-items:start; } }
 .price .ask{ font-family:var(--body); font-size:12px; font-weight:600; color:#3fbf73; text-decoration:none; letter-spacing:0; vertical-align:middle; margin-left:4px; white-space:nowrap; }
@@ -174,9 +192,11 @@ a.intro-v:hover{ border-color:#d4190f; }
           <p class="tag">Bilkul zero se trading samjhein, simple Hindi-English mein.</p>
           <ul><li>Trading kya hai aur aaj kyon zaroori hai</li><li>Win rate, probability aur basic risk management</li><li>Investing, swing, intraday aur scalping ka farak</li><li>Ek professional trader decision kaise leta hai</li></ul>
           <p class="who"><b>Kiske liye:</b> Jo bilkul naye hain aur aage Gold, Forex, stocks ya funded accounts mein professional trading karna chahte hain.</p>
+          
         </div>
         <div class="side">
           <div class="price">₹49 <a class="ask" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20the%20Trading%20Ka%20ABCD%20%C2%B7%20Complete%20Trading%20Foundation%20learning%20program.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">Ask now →</a><small>5 saal access · live classes + PDFs</small></div>
+          
           <a class="btn green" href="https://www.explosivetrades.com/courses/728981?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp" target="_blank" rel="noopener">Program details &amp; join</a>
           <div class="intro-v soon"><span class="iv-ic" aria-hidden="true">▶</span><span><b>Intro video</b><small>Kin logon ko ye program join karna chahiye</small></span><em>Jald</em></div>
         </div>
@@ -189,9 +209,11 @@ a.intro-v:hover{ border-color:#d4190f; }
           <p class="tag">GoldMini aur GoldPetal mein zone-based trading, Indian exchange par.</p>
           <ul><li>GoldMini aur GoldPetal ki practical strategy</li><li>Zone-based trading system</li><li>Risk management</li><li>Real market analysis</li></ul>
           <p class="who"><b>Kiske liye:</b> Jo sirf Indian gold market (MCX) trade karna chahte hain, beginner se advanced tak.</p>
+          
         </div>
         <div class="side">
           <div class="price">₹4,999 <a class="ask" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20the%20Indian%20Gold%20Market%20Program%20%28MCX%29.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">Ask now →</a><small>3 saal access</small></div>
+          
           <a class="btn green" href="https://www.explosivetrades.com/courses/690245?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp" target="_blank" rel="noopener">Program details &amp; join</a>
           <div class="intro-v soon"><span class="iv-ic" aria-hidden="true">▶</span><span><b>Intro video</b><small>Kin logon ko ye program join karna chahiye</small></span><em>Jald</em></div>
         </div>
@@ -204,9 +226,11 @@ a.intro-v:hover{ border-color:#d4190f; }
           <p class="tag">International market mein Gold (XAUUSD) trading.</p>
           <ul><li>Zone-based, multi-timeframe strategy, news impact ke saath</li><li>Global market timing</li><li>International broker par account setup</li><li>Strict money management</li></ul>
           <p class="who"><b>Kiske liye:</b> Jo international forex brokers ke through XAUUSD trade karna chahte hain.</p>
+          
         </div>
         <div class="side">
           <div class="price">₹4,999 <a class="ask" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20the%20Forex%20/%20XAUUSD%20Program.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">Ask now →</a><small>3 saal access</small></div>
+          
           <a class="btn green" href="https://www.explosivetrades.com/courses/690264?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp" target="_blank" rel="noopener">Program details &amp; join</a>
           <div class="intro-v soon"><span class="iv-ic" aria-hidden="true">▶</span><span><b>Intro video</b><small>Kin logon ko ye program join karna chahiye</small></span><em>Jald</em></div>
         </div>
@@ -219,9 +243,11 @@ a.intro-v:hover{ border-color:#d4190f; }
           <p class="tag">Prop firm challenge pass karna aur funded account scale karna.</p>
           <ul><li>Challenge rules ki poori samajh</li><li>Prop firm ke hisaab se risk management</li><li>Drawdown handle karna</li><li>Scaling roadmap: chhote account se bade account tak</li></ul>
           <p class="who"><b>Kiske liye:</b> Jo apne paise ki jagah firm ke capital se trading business banana chahte hain.</p>
+          
         </div>
         <div class="side">
           <div class="price">₹4,999 <a class="ask" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20the%20Funded%20Account%20Mastery%20learning%20program.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">Ask now →</a><small>3 saal access</small></div>
+          
           <a class="btn green" href="https://www.explosivetrades.com/courses/692783?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp" target="_blank" rel="noopener">Program details &amp; join</a>
           <div class="intro-v soon"><span class="iv-ic" aria-hidden="true">▶</span><span><b>Intro video</b><small>Kin logon ko ye program join karna chahiye</small></span><em>Jald</em></div>
         </div>
@@ -234,9 +260,11 @@ a.intro-v:hover{ border-color:#d4190f; }
           <p class="tag">Har swing decision par focused support. Chhota group, personal attention.</p>
           <ul><li>Group Head ke saath swing setups plan aur execute karna</li><li>Har Saturday aur Sunday live session: market conditions aur weekly analysis</li><li>Trade planning, entry, risk aur position management mein seedhi madad</li><li>Patience, discipline aur swing trader mindset par coaching</li></ul>
           <p class="who"><b>Kiske liye:</b> Jinke paas basic market knowledge hai aur jo consistent, independent swing trader banna chahte hain. Bilkul naye logon ke liye nahi.</p>
+          
         </div>
         <div class="side">
           <div class="price">Elite <a class="ask" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20the%20XAUUSD%20Swing%20Traders%20Elite%20learning%20program.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">Ask now →</a><small>Fee aur seats ke liye WhatsApp karein</small></div>
+          
           <a class="btn gold" href="https://www.explosivetrades.com/courses/894443?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp" target="_blank" rel="noopener">Program details &amp; join</a>
           <div class="intro-v soon"><span class="iv-ic" aria-hidden="true">▶</span><span><b>Intro video</b><small>Kin logon ko ye program join karna chahiye</small></span><em>Jald</em></div>
         </div>
@@ -263,6 +291,12 @@ a.intro-v:hover{ border-color:#d4190f; }
       <div class="price">₹9,999</div>
       <a class="btn wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20all%20learning%20programs%3A%20Complete%20Bundle%20%28Indian%20Gold%20Market%20%2B%20Forex/XAUUSD%20%2B%20Funded%20Account%20Mastery%29%20for%20%E2%82%B99%2C999.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">Ask now</a>
     </div>
+  </section>
+
+  <section aria-label="Programs comparison" id="compare">
+    <h2>Programs comparison</h2>
+    <p class="sec-lead">Ek nazar mein: price, access, kya milta hai aur kis level ke liye hai.</p>
+    <div class="tbl"><table><thead><tr><th>Program</th><th>Price</th><th>Access</th><th>Kya milta hai</th><th>Level</th></tr></thead><tbody><tr><td><b>Trading Ka ABCD</b></td><td class="num">₹49</td><td>5 saal</td><td>Live classes, PDFs</td><td>Bilkul naye</td></tr><tr><td><b>Indian Gold Market (MCX)</b></td><td class="num">₹4,999</td><td>3 saal</td><td>Videos, tests, PDFs</td><td>Beginner se advanced</td></tr><tr><td><b>Forex / XAUUSD</b></td><td class="num">₹4,999</td><td>3 saal</td><td>Videos, PDFs</td><td>Beginner se advanced</td></tr><tr><td><b>Funded Account Mastery</b></td><td class="num">₹4,999</td><td>3 saal</td><td>Videos, PDFs</td><td>Prop firm traders</td></tr><tr class="hl"><td><b>XAUUSD Swing Traders Elite</b></td><td class="num">WhatsApp par poochein</td><td>Group membership</td><td>Weekend live sessions, swing setups Group Head ke saath, personal support</td><td>Basic knowledge zaroori</td></tr></tbody></table></div>
   </section>
 
   <section aria-label="FAQ">
@@ -323,6 +357,11 @@ a.intro-v:hover{ border-color:#d4190f; }
   })();
   </script>
 
+
+  <div class="sticky" role="region" aria-label="Quick contact">
+    <a class="s-q" href="#query">Query form</a>
+    <a class="s-wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20your%20learning%20programs.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">💬 Ask now on WhatsApp</a>
+  </div>
 
 
   <footer>

@@ -192,6 +192,20 @@ def btn(cls, url, label, soon):
         return f'<a class="btn {cls}" href="{url}" target="_blank" rel="noopener">{label}</a>'
     return f'<a class="btn {cls}" aria-disabled="true">{soon}</a>'
 
+
+# ======================= FEATURE SWITCHES (False = band, page pehle jaisa) =======================
+FEATURES = dict(
+    comparison=True,   # Learning Programs: programs comparison table
+    curriculum=True,   # Learning Programs: "Andar kya hai" modules (sirf jin programs ke modules diye hain)
+    sticky_bar=True,   # Phone par neeche "Ask now" bar
+    next_batch=True,   # Swing Elite par next batch / seats (sirf jab NEXT_BATCH bhara ho)
+)
+# ---- EDIT HERE: modules per program (Kavi bhejenge) ----
+CURRICULUM = {'728981': [], '690245': [], '690264': [], '692783': [], '894443': []}
+# ---- EDIT HERE: Swing Elite next batch (khaali = nahi dikhega) ----
+NEXT_BATCH = ''   # jaise '1 Nov 2026'
+SEATS_LEFT = ''   # jaise '8'
+
 # ======================= COURSES =======================
 # ---- EDIT HERE: intro video per program (kin logon ko join karna chahiye) ----
 SWING_RESULTS_PLAYLIST = ''  # unlisted YouTube playlist link
@@ -234,11 +248,66 @@ a.intro-v:hover{ border-color:#d4190f; }
 .results p.fine{ margin-top:8px; font-size:12px; }
 .results .btn{ white-space:nowrap; padding:13px 20px; }
 .btn[aria-disabled="true"]{ opacity:.55; pointer-events:none; }
+
+.curr{ margin-top:12px; border:1px solid var(--line); border-radius:10px; background:var(--panel2); }
+.curr summary{ cursor:pointer; padding:9px 12px; font-size:13.5px; font-weight:600; color:var(--gold); list-style:none; }
+.curr summary::-webkit-details-marker{ display:none; }
+.curr summary::after{ content:" +"; } .curr[open] summary::after{ content:" –"; }
+.curr ol{ list-style:none; margin:0; padding:0 12px 10px; display:grid; gap:4px; font-size:13.5px; }
+.curr li{ display:flex; gap:10px; } .curr li span{ color:var(--muted); font-variant-numeric:tabular-nums; }
+.batch{ font-size:12.5px; color:var(--text); background:color-mix(in srgb, var(--orange) 14%, transparent); border:1px solid var(--orange); border-radius:9px; padding:6px 10px; }
+.batch b{ color:var(--orange); }
+tr.hl td{ background:color-mix(in srgb, var(--gold) 8%, transparent); }
+.sticky{ display:none; }
+@media (max-width:760px){
+  .sticky{ display:grid; grid-template-columns:auto 1fr; gap:8px; position:fixed; left:0; right:0; bottom:0; z-index:20; padding:10px max(12px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px, env(safe-area-inset-left,0px)); background:var(--panel); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(0,0,0,.25); }
+  .sticky a{ text-align:center; text-decoration:none; font:600 14px var(--body); border-radius:10px; padding:11px 14px; }
+  .sticky .s-q{ color:var(--text); border:1px solid var(--line); }
+  .sticky .s-wa{ background:#1f8f4e; color:#fff; }
+  body:has(.sticky){ padding-bottom:72px; }
+}
 .bundle-r{ display:grid; gap:10px; justify-items:end; }
 @media (max-width:680px){ .bundle-r{ justify-items:start; } }
 .price .ask{ font-family:var(--body); font-size:12px; font-weight:600; color:#3fbf73; text-decoration:none; letter-spacing:0; vertical-align:middle; margin-left:4px; white-space:nowrap; }
 .price .ask:hover{ text-decoration:underline; }
 '''
+def curriculum_box(cid):
+    mods = CURRICULUM.get(cid) or []
+    if not (FEATURES['curriculum'] and mods): return ''
+    items = ''.join(f'<li><span>{i+1:02d}</span>{m}</li>' for i, m in enumerate(mods))
+    return f'<details class="curr"><summary>Andar kya hai · {len(mods)} modules</summary><ol>{items}</ol></details>'
+
+def batch_box(cid):
+    if not (FEATURES['next_batch'] and cid == '894443' and NEXT_BATCH): return ''
+    seats = f' · <b>{SEATS_LEFT} seats bache</b>' if SEATS_LEFT else ''
+    return f'<div class="batch">Next batch: <b>{NEXT_BATCH}</b>{seats}</div>'
+
+def comparison_html():
+    if not FEATURES['comparison']: return ''
+    rows = [
+      ('Trading Ka ABCD', '₹49', '5 saal', 'Live classes, PDFs', 'Bilkul naye'),
+      ('Indian Gold Market (MCX)', '₹4,999', '3 saal', 'Videos, tests, PDFs', 'Beginner se advanced'),
+      ('Forex / XAUUSD', '₹4,999', '3 saal', 'Videos, PDFs', 'Beginner se advanced'),
+      ('Funded Account Mastery', '₹4,999', '3 saal', 'Videos, PDFs', 'Prop firm traders'),
+      ('XAUUSD Swing Traders Elite', 'WhatsApp par poochein', 'Group membership', 'Weekend live sessions, swing setups Group Head ke saath, personal support', 'Basic knowledge zaroori'),
+    ]
+    tr = ''.join(f'<tr{" class=\"hl\"" if r[0].startswith("XAUUSD") else ""}><td><b>{r[0]}</b></td><td class="num">{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td><td>{r[4]}</td></tr>' for r in rows)
+    return f"""  <section aria-label="Programs comparison" id="compare">
+    <h2>Programs comparison</h2>
+    <p class="sec-lead">Ek nazar mein: price, access, kya milta hai aur kis level ke liye hai.</p>
+    <div class="tbl"><table><thead><tr><th>Program</th><th>Price</th><th>Access</th><th>Kya milta hai</th><th>Level</th></tr></thead><tbody>{tr}</tbody></table></div>
+  </section>
+"""
+
+def sticky_bar():
+    if not FEATURES['sticky_bar']: return ''
+    msg = 'https://wa.me/917817940814?text=' + __import__('urllib.parse').parse.quote('Namaste Kavi Sir, I am interested in your learning programs. Please share your time for a call.')
+    return f"""  <div class="sticky" role="region" aria-label="Quick contact">
+    <a class="s-q" href="#query">Query form</a>
+    <a class="s-wa" href="{msg}" target="_blank" rel="noopener">💬 Ask now on WhatsApp</a>
+  </div>
+"""
+
 def intro_box(cid):
     url = INTRO_VIDEOS.get(cid, '')
     inner = '<span class="iv-ic" aria-hidden="true">▶</span><span><b>Intro video</b><small>Kin logon ko ye program join karna chahiye</small></span>'
@@ -260,9 +329,11 @@ def course_card(no, cid, name, tagline, points, who, price, price_note, main=Fal
           <p class="tag">{tagline}</p>
           <ul>{pts}</ul>
           <p class="who"><b>Kiske liye:</b> {who}</p>
+          {curriculum_box(cid)}
         </div>
         <div class="side">
           <div class="price">{price} <a class="ask" href="{WA_ASK(name)}" target="_blank" rel="noopener">Ask now →</a><small>{price_note}</small></div>
+          {batch_box(cid)}
           <a class="btn {'gold' if main else 'green'}" href="{C(cid)}" target="_blank" rel="noopener">Program details &amp; join</a>
           {intro_box(cid)}
         </div>
@@ -333,6 +404,7 @@ courses_body = f'''  <section aria-label="Intro">
     </div>
   </section>
 
+{comparison_html()}
   <section aria-label="FAQ">
     <h2>Learning programs se jude sawal</h2>
     <p class="sec-lead">Jo sawal sabse zyada poochhe jaate hain.</p>
@@ -340,6 +412,7 @@ courses_body = f'''  <section aria-label="Intro">
 
 {enquiry()}
 
+{sticky_bar()}
 '''
 page(f'{ROOT}/courses/index.html', 'Learning Programs · Explosive Trades',
      'Explosive Trades ke saare learning programs: Trading Ka ABCD, Indian Gold, Forex/XAUUSD, Funded Account Mastery aur XAUUSD Swing Traders Elite, FAQ ke saath.',
