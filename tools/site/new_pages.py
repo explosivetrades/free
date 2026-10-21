@@ -153,7 +153,7 @@ def course_card(no, cid, name, tagline, points, who, price, price_note, main=Fal
         </div>
         <div class="side">
           <div class="price">{price}<small>{price_note}</small></div>
-          <a class="btn {'gold' if main else 'line'}" href="{C(cid)}" target="_blank" rel="noopener">Course details &amp; join</a>
+          <a class="btn {'gold' if main else 'line'}" href="{C(cid)}" target="_blank" rel="noopener">Program details &amp; join</a>
         </div>
       </article>
 '''
@@ -161,10 +161,10 @@ cards = ''.join([
   course_card(1, '728981', 'Trading Ka ABCD · Complete Trading Foundation', 'Bilkul zero se trading samjhein, simple Hindi-English mein.',
     ['Trading kya hai aur aaj kyon zaroori hai', 'Win rate, probability aur basic risk management', 'Investing, swing, intraday aur scalping ka farak', 'Ek professional trader decision kaise leta hai'],
     'Jo bilkul naye hain aur aage Gold, Forex, stocks ya funded accounts mein professional trading karna chahte hain.', '₹49', '5 saal access · live classes + PDFs', badge='Yahan se shuru karein'),
-  course_card(2, '690245', 'Indian Gold Market Course (MCX)', 'GoldMini aur GoldPetal mein zone-based trading, Indian exchange par.',
+  course_card(2, '690245', 'Indian Gold Market Program (MCX)', 'GoldMini aur GoldPetal mein zone-based trading, Indian exchange par.',
     ['GoldMini aur GoldPetal ki practical strategy', 'Zone-based trading system', 'Risk management', 'Real market analysis'],
     'Jo sirf Indian gold market (MCX) trade karna chahte hain, beginner se advanced tak.', '₹4,999', '3 saal access'),
-  course_card(3, '690264', 'Forex / XAUUSD Course', 'International market mein Gold (XAUUSD) trading.',
+  course_card(3, '690264', 'Forex / XAUUSD Program', 'International market mein Gold (XAUUSD) trading.',
     ['Zone-based, multi-timeframe strategy, news impact ke saath', 'Global market timing', 'International broker par account setup', 'Strict money management'],
     'Jo international forex brokers ke through XAUUSD trade karna chahte hain.', '₹4,999', '3 saal access'),
   course_card(4, '692783', 'Funded Account Mastery', 'Prop firm challenge pass karna aur funded account scale karna.',
@@ -175,28 +175,28 @@ cards = ''.join([
     'Jinke paas basic market knowledge hai aur jo consistent, independent swing trader banna chahte hain. Bilkul naye logon ke liye nahi.', 'Elite', 'Fee aur seats ke liye WhatsApp karein', main=True, badge='Main program'),
 ])
 faqs = [
-  ('Main bilkul naya hoon. Kahan se shuru karun?', 'Pehle "Trading Ka ABCD" (₹49) karein. Usme trading ki basic samajh, risk aur probability clear ho jati hai. Phir apne market ke hisaab se Indian Gold ya Forex/XAUUSD course chuniye.'),
-  ('Courses kis language mein hain?', 'Simple Hindi-English (Hinglish) mein, taaki har level ka trader aasani se samajh sake.'),
-  ('Course ka access kitne time tak rahega?', 'Indian Gold, Forex/XAUUSD aur Funded Account Mastery ka access 3 saal ka hai. Trading Ka ABCD ka access 5 saal ka hai.'),
-  ('Kya teen courses ek saath sasta milta hai?', 'Haan. Indian Gold + Forex/XAUUSD + Funded Account Mastery ka Complete Bundle ₹9,999 mein hai. Alag-alag lene par teeno ₹4,999 ke hain.'),
-  ('Course kahan aur kaise dekhenge?', 'Course join karne ke baad Explosive Trades app ya website par apne account se login karke videos, PDFs aur classes dekh sakte hain.'),
-  ('Swing Traders Elite baaki courses se alag kaise hai?', 'Ye recorded course se aage ka program hai: chhota group, Group Head ke saath trades ki planning, aur har weekend live sessions. Ye unke liye hai jinke paas basic knowledge pehle se hai.'),
-  ('Kya course ke baad profit ki guarantee hai?', 'Nahi. Trading mein risk hota hai aur koi bhi honest teacher profit ki guarantee nahi de sakta. Hum strategy, risk management aur discipline sikhate hain. Result aapki practice aur execution par depend karta hai.'),
+  ('Main bilkul naya hoon. Kahan se shuru karun?', 'Pehle "Trading Ka ABCD" (₹49) karein. Usme trading ki basic samajh, risk aur probability clear ho jati hai. Phir apne market ke hisaab se Indian Gold ya Forex/XAUUSD program chuniye.'),
+  ('Learning programs kis language mein hain?', 'Simple Hindi-English (Hinglish) mein, taaki har level ka trader aasani se samajh sake.'),
+  ('Program ka access kitne time tak rahega?', 'Indian Gold, Forex/XAUUSD aur Funded Account Mastery ka access 3 saal ka hai. Trading Ka ABCD ka access 5 saal ka hai.'),
+  ('Kya teen programs ek saath sasta milta hai?', 'Haan. Indian Gold + Forex/XAUUSD + Funded Account Mastery ka Complete Bundle ₹9,999 mein hai. Alag-alag lene par teeno ₹4,999 ke hain.'),
+  ('Program kahan aur kaise dekhenge?', 'Program join karne ke baad Explosive Trades app ya website par apne account se login karke videos, PDFs aur classes dekh sakte hain.'),
+  ('Swing Traders Elite baaki programs se alag kaise hai?', 'Ye recorded program se aage ka program hai: chhota group, Group Head ke saath trades ki planning, aur har weekend live sessions. Ye unke liye hai jinke paas basic knowledge pehle se hai.'),
+  ('Kya program ke baad profit ki guarantee hai?', 'Nahi. Trading mein risk hota hai aur koi bhi honest teacher profit ki guarantee nahi de sakta. Hum strategy, risk management aur discipline sikhate hain. Result aapki practice aur execution par depend karta hai.'),
   ('Kya aap buy/sell calls ya tips dete hain?', 'Nahi. Explosive Trades sirf education deta hai. Hum SEBI registered nahi hain aur koi trading tips ya calls nahi dete.'),
   ('Funded account ke liye apne paise lagane padenge?', 'Prop firm ka challenge fee dena hota hai, trading capital firm deti hai. Funded Account Mastery mein sikhaya jata hai ki challenge rules ke andar kaise trade karein.'),
-  ('Course se pehle koi sawal ho to?', 'Neeche diye WhatsApp button se message karein. Kaunsa course aapke liye sahi hai, ye hum bata denge.'),
+  ('Join karne se pehle koi sawal ho to?', 'Neeche diye WhatsApp button se message karein. Kaunsa program aapke liye sahi hai, ye hum bata denge.'),
 ]
 faq_html = ''.join(f'''    <details class="faq"><summary>{q}</summary><p>{a}</p></details>\n''' for q,a in faqs)
 courses_body = f'''  <section aria-label="Intro">
-    <p class="kicker">Learning courses</p>
+    <p class="kicker">Learning programs</p>
     <h1>Ek strategy, <span>alag markets</span></h1>
-    <p class="lead">Kavi Sharma ka zone-based system, basic se professional level tak. Apne market aur level ke hisaab se course chuniye.</p>
+    <p class="lead">Kavi Sharma ka zone-based system, basic se professional level tak. Apne market aur level ke hisaab se learning program chuniye.</p>
     <div class="path" aria-label="Recommended order"><span>Trading Ka ABCD</span><i>→</i><span>Indian Gold</span><i>→</i><span>Forex / XAUUSD</span><i>→</i><span>Funded Account</span><i>→</i><span class="end">Swing Traders Elite</span></div>
   </section>
 
-  <section aria-label="Courses">
-    <h2>Saare courses</h2>
-    <p class="sec-lead">Har course ka price, access aur kya seekhenge. "Course details &amp; join" se seedha course page khulega.</p>
+  <section aria-label="Learning programs">
+    <h2>Saare learning programs</h2>
+    <p class="sec-lead">Har program ka price, access aur kya seekhenge. "Program details &amp; join" se seedha program page khulega.</p>
     <div class="clist">
 {cards}    </div>
   </section>
@@ -205,129 +205,155 @@ courses_body = f'''  <section aria-label="Intro">
     <div>
       <span class="pill green">Save ₹4,998</span>
       <h2 style="margin:8px 0 4px">Complete Bundle</h2>
-      <p>Indian Gold Market + Forex/XAUUSD + Funded Account Mastery, teeno courses ek saath. Alag-alag lene par ₹14,997.</p>
+      <p>Indian Gold Market + Forex/XAUUSD + Funded Account Mastery, teeno programs ek saath. Alag-alag lene par ₹14,997.</p>
     </div>
     <div class="price">₹9,999</div>
   </section>
 
   <section aria-label="FAQ">
-    <h2>Courses se jude sawal</h2>
+    <h2>Learning programs se jude sawal</h2>
     <p class="sec-lead">Jo sawal sabse zyada poochhe jaate hain.</p>
 {faq_html}  </section>
 
-{WA_BOX("Kaunsa course lun?", "Apna level aur market batayein, hum sahi course suggest karenge.", "Namaste%20Kavi%20Sir%2C%20mujhe%20course%20chunne%20mein%20madad%20chahiye.")}
+{WA_BOX("Kaunsa program lun?", "Apna level aur market batayein, hum sahi learning program suggest karenge.", "Namaste%20Kavi%20Sir%2C%20mujhe%20learning%20program%20chunne%20mein%20madad%20chahiye.")}
 '''
-page(f'{ROOT}/courses/index.html', 'Learning Courses · Explosive Trades',
-     'Explosive Trades ke saare trading courses: Trading Ka ABCD, Indian Gold, Forex/XAUUSD, Funded Account Mastery aur XAUUSD Swing Traders Elite, FAQ ke saath.',
+page(f'{ROOT}/courses/index.html', 'Learning Programs · Explosive Trades',
+     'Explosive Trades ke saare learning programs: Trading Ka ABCD, Indian Gold, Forex/XAUUSD, Funded Account Mastery aur XAUUSD Swing Traders Elite, FAQ ke saath.',
      'courses', courses_css, courses_body)
 
 # ======================= PROP FIRMS =======================
-prop_css = '''
-.firms{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-@media (max-width:900px){ .firms{ grid-template-columns:1fr; } }
-.firm{ display:flex; flex-direction:column; gap:12px; }
-.firm h3{ margin:0; font-size:20px; }
-.firm .why{ margin:0; color:var(--muted); font-size:14px; }
-.firm dl{ margin:0; display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:13.5px; }
-.firm dt{ color:var(--muted); }
-.firm dd{ margin:0; font-weight:600; font-variant-numeric:tabular-nums; }
-.code{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border:1px dashed var(--gold); border-radius:10px; background:var(--panel2); }
-.code span{ font-size:12px; color:var(--muted); }
-.code b{ font-family:ui-monospace, Menlo, monospace; font-size:15px; color:var(--gold); letter-spacing:.04em; }
-.code button{ background:none; border:1px solid var(--line); color:var(--text); border-radius:7px; padding:4px 10px; font:500 12px var(--body); cursor:pointer; }
-.firm .btn{ margin-top:auto; }
-.checks{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-@media (max-width:760px){ .checks{ grid-template-columns:1fr; } }
-.checks ul{ margin:0; padding-left:18px; display:grid; gap:6px; font-size:14px; }
-.checks h3{ margin:0 0 10px; font-size:16px; }
-.checks .bad h3{ color:var(--red); } .checks .good h3{ color:var(--green); }
-.note{ font-size:12.5px; color:var(--muted); margin:10px 0 0; }
+# ---- EDIT HERE: prop firm list (Kavi batayenge to update) ----
+PROP_FIRMS = [
+  dict(name='FundingPips', note='Kavi ka main prop firm. MT5 par challenge aur alag-alag payout options.',
+       model='', video='', url='https://fundingpips.com', offer='Open FundingPips &amp; get 20% offer', code='0888028d', code_label='Code'),
+  dict(name='FundedElite', note='Kavi yahan bhi challenges trade karte hain.',
+       model='', video='', url='https://fundedelite.com', offer='', code='AFF1265748', code_label='Code'),
+  dict(name='The5ers', note='Purani aur jaani-maani firm. Kavi isme High Stakes account trade karte hain.',
+       model='', video='', url='https://the5ers.com', offer='', code='', code_label=''),
+]
+# ---- EDIT HERE: challenge pass videos ----
+CHALLENGES = [
+  # dict(title='FundingPips 100K Phase 1 clear', firm='FundingPips', video='https://youtu.be/...'),
+]
+# ---- EDIT HERE: setup links ----
+BANK_VIDEO = ''
+PAYOUTS = [
+  dict(name='Rise', desc='Prop firm payouts ke liye sabse common tareeka. Rise account se paisa bank mein le sakte hain.', url='https://www.riseworks.io'),
+  dict(name='Crypto (USDT)', desc='Kai firms crypto mein bhi payout deti hain. Apna wallet address dhyan se daalein.', url=''),
+]
+
+prop_css = """
+.flist{ display:grid; gap:14px; }
+.firm{ display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:18px; align-items:center; }
+@media (max-width:820px){ .firm{ grid-template-columns:auto minmax(0,1fr); } .firm .acts{ grid-column:1 / -1; } }
+.firm .logo{ width:52px; height:52px; border-radius:12px; background:var(--panel2); border:1px solid var(--line); display:grid; place-items:center; font-family:var(--display); font-size:22px; color:var(--gold); letter-spacing:.03em; }
+.firm h3{ margin:0 0 2px; font-size:19px; }
+.firm .why{ margin:0 0 8px; color:var(--muted); font-size:13.5px; }
+.model{ display:inline-flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:13px; }
+.model span{ color:var(--muted); }
+.model b{ color:var(--gold); }
+.model i{ font-style:normal; color:var(--muted); }
+.acts{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+@media (max-width:820px){ .acts{ justify-content:flex-start; } }
+.acts .btn{ padding:10px 14px; font-size:14px; }
+.btn[aria-disabled="true"]{ opacity:.55; pointer-events:none; }
+.code{ display:inline-flex; align-items:center; gap:8px; padding:6px 6px 6px 12px; border:1px dashed var(--gold); border-radius:10px; font-size:12px; color:var(--muted); }
+.code b{ font-family:ui-monospace, Menlo, monospace; font-size:14px; color:var(--gold); letter-spacing:.04em; }
+.code button{ background:var(--panel2); border:1px solid var(--line); color:var(--text); border-radius:7px; padding:4px 10px; font:500 12px var(--body); cursor:pointer; }
+.chal{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+@media (max-width:860px){ .chal{ grid-template-columns:1fr 1fr; } }
+@media (max-width:540px){ .chal{ grid-template-columns:1fr; } }
+.chal .card{ display:flex; flex-direction:column; gap:10px; }
+.chal .thumb{ aspect-ratio:16/9; max-width:100%; border-radius:10px; background:linear-gradient(135deg, color-mix(in srgb, var(--gold) 18%, var(--panel2)), var(--panel2)); display:grid; place-items:center; font-family:var(--display); font-size:22px; color:var(--gold); letter-spacing:.04em; text-align:center; padding:10px; }
+.chal h3{ margin:0; font-size:16px; }
+.chal p{ margin:0; font-size:13px; color:var(--muted); }
+.chal .btn{ margin-top:auto; }
+.empty{ padding:22px; border:1px dashed var(--line); border-radius:14px; color:var(--muted); text-align:center; }
+.setup{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+@media (max-width:720px){ .setup{ grid-template-columns:1fr; } }
+.setup .card{ display:flex; flex-direction:column; gap:8px; }
+.setup .k{ font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); }
+.setup h3{ margin:0; font-size:17px; }
+.setup p{ margin:0; font-size:13.5px; color:var(--muted); }
+.setup .btn{ align-self:flex-start; margin-top:4px; padding:10px 14px; font-size:14px; }
+.note{ font-size:12.5px; color:var(--muted); margin:12px 0 0; }
 .toast{ position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--gold); color:var(--on-gold); font-weight:600; padding:8px 16px; border-radius:20px; font-size:13px; opacity:0; transition:opacity .2s; pointer-events:none; }
 .toast.show{ opacity:1; }
-'''
-def firm(name, why, rows, code_label, code, url, btn):
-    dl = ''.join(f'<dt>{k}</dt><dd>{v}</dd>' for k,v in rows)
-    codebox = f'<div class="code"><div><span>{code_label}</span><br><b>{code}</b></div><button type="button" data-copy="{code}">Copy</button></div>' if code else ''
-    return f'''      <article class="card firm">
-        <h3>{name}</h3>
-        <p class="why">{why}</p>
-        <dl>{dl}</dl>
-        {codebox}
-        <a class="btn line" href="{url}" target="_blank" rel="noopener sponsored">{btn}</a>
+"""
+
+def btn(cls, url, label, soon):
+    if url:
+        return f'<a class="btn {cls}" href="{url}" target="_blank" rel="noopener">{label}</a>'
+    return f'<a class="btn {cls}" aria-disabled="true">{soon}</a>'
+
+def firm_row(f):
+    model = f'<span>Best model:</span> <b>{f["model"]}</b>' if f['model'] else '<span>Best model:</span> <i>jald update hoga</i>'
+    code = f'<span class="code">{f["code_label"]} <b>{f["code"]}</b><button type="button" data-copy="{f["code"]}">Copy</button></span>' if f['code'] else ''
+    offer = f['offer'] or f'Open {f["name"]}'
+    initials = '5%' if f['name'] == 'The5ers' else ''.join(c for c in f['name'] if c.isupper())[:2]
+    return f"""      <article class="card firm">
+        <div class="logo" aria-hidden="true">{initials}</div>
+        <div>
+          <h3>{f['name']}</h3>
+          <p class="why">{f['note']}</p>
+          <div class="model">{model} {code}</div>
+        </div>
+        <div class="acts">
+          {btn('yt', f['video'], '▶ Deep analysis video', '▶ Analysis video jald')}
+          <a class="btn gold" href="{f['url']}" target="_blank" rel="noopener sponsored">{offer}</a>
+        </div>
       </article>
-'''
-firms_html = ''.join([
-  firm('FundingPips', 'Kavi ka main prop firm. MT5 par 2-Step challenge, aur alag-alag payout options.',
-       [('Phase 1 target','8%'),('Phase 2 target','5%'),('Daily loss','5%'),('Max loss','10% (static)'),('Profit split','60% se 100%, payout cycle ke hisaab se'),('Platform','MT5, cTrader, Match-Trader')],
-       'Referral code', '0888028d', 'https://fundingpips.com', 'FundingPips website kholein'),
-  firm('FundedElite', 'Kavi yahan bhi challenges trade karte hain. Lite plan mein target thoda zyada, daily loss thoda kam.',
-       [('Phase 1 target','8% (Lite: 10%)'),('Phase 2 target','5%'),('Daily loss','5% (Lite: 4%)'),('Max loss','8%'),('Profit split','80%'),('Platform','MT5, TradeLocker')],
-       'Affiliate code', 'AFF1265748', 'https://fundedelite.com', 'FundedElite website kholein'),
-  firm('The5ers', 'Purani aur jaani-maani firm. Kavi isme High Stakes 2-Step account trade karte hain.',
-       [('Phase 1 target','10%'),('Phase 2 target','5%'),('Daily loss','5%'),('Max loss','10%'),('Profit split','Up to 100%'),('Platform','MT5, cTrader, TradingView')],
-       '', '', 'https://the5ers.com', 'The5ers website kholein'),
-])
-prop_body = f'''  <section aria-label="Intro">
+"""
+firms_html = ''.join(firm_row(f) for f in PROP_FIRMS)
+
+if CHALLENGES:
+    chal_html = '<div class="chal">' + ''.join(f"""
+      <div class="card"><div class="thumb">{c['firm']}</div><h3>{c['title']}</h3>{btn('yt', c['video'], '▶ Video dekhein', 'Video jald')}</div>""" for c in CHALLENGES) + '\n    </div>'
+else:
+    chal_html = '<div class="empty">Challenge videos jald yahan aayenge. Tab tak YouTube channel par latest videos dekhein.<br><br><a class="btn yt" href="https://www.youtube.com/@explosivetrades?sub_confirmation=1" target="_blank" rel="noopener">YouTube channel kholein</a></div>'
+
+pay_html = ''.join(f"""      <div class="card"><span class="k">Payout</span><h3>{x['name']}</h3><p>{x['desc']}</p>{btn('line', x['url'], f"{x['name']} kholein", 'Link jald')}</div>
+""" for x in PAYOUTS)
+
+prop_body = f"""  <section aria-label="Intro">
     <p class="kicker">Best prop firms</p>
     <h1>Prop firms jahan <span>Kavi khud trade karte hain</span></h1>
-    <p class="lead">Ye wahi firms hain jinke challenges aur funded accounts Kavi Sharma khud trade karte hain. Neeche har firm ke main rules ek nazar mein, taaki aap apne trading style ke hisaab se chun sakein.</p>
+    <p class="lead">Har firm ka deep analysis video, Kavi ka chuna hua best model, aur seedha offer link. Firm chunne se pehle analysis video zaroor dekhein.</p>
   </section>
 
-  <section aria-label="Firms">
-    <h2>3 firms, ek nazar mein</h2>
-    <p class="sec-lead">2-Step challenge ke standard rules (Oct 2026 tak ki public jaankari). Kharidne se pehle firm ki website par latest rules zaroor check karein.</p>
-    <div class="firms">
+  <section aria-label="Prop firm list">
+    <h2>Prop firm list</h2>
+    <p class="sec-lead">Analysis video dekhein, phir firm ki website par jaakar latest rules check karein.</p>
+    <div class="flist">
 {firms_html}    </div>
-    <p class="note">Disclosure: FundingPips aur FundedElite ke codes Explosive Trades ke affiliate codes hain. Inse kharidne par Explosive Trades ko commission mil sakta hai, aapki price par iska asar nahi padta. Rules aur prices firms kabhi bhi badal sakti hain.</p>
+    <p class="note">Disclosure: kuch links aur codes Explosive Trades ke affiliate links hain. Inse kharidne par Explosive Trades ko commission mil sakta hai, aapki price par iska asar nahi padta. Rules, offers aur prices firms kabhi bhi badal sakti hain.</p>
   </section>
 
-  <section aria-label="Comparison">
-    <h2>Side-by-side comparison</h2>
-    <div class="tbl">
-      <table>
-        <thead><tr><th>Rule</th><th>FundingPips</th><th>FundedElite</th><th>The5ers (High Stakes)</th></tr></thead>
-        <tbody>
-          <tr><td>Phase 1 target</td><td class="num">8%</td><td class="num">8% · Lite 10%</td><td class="num">10%</td></tr>
-          <tr><td>Phase 2 target</td><td class="num">5%</td><td class="num">5%</td><td class="num">5%</td></tr>
-          <tr><td>Daily loss limit</td><td class="num">5%</td><td class="num">5% · Lite 4%</td><td class="num">5%</td></tr>
-          <tr><td>Max loss</td><td class="num">10%</td><td class="num">8%</td><td class="num">10%</td></tr>
-          <tr><td>Profit split</td><td>60–100% (payout cycle par)</td><td>80%</td><td>Up to 100%</td></tr>
-          <tr><td>Platforms</td><td>MT5, cTrader, Match-Trader</td><td>MT5, TradeLocker</td><td>MT5, cTrader, TradingView</td></tr>
-        </tbody>
-      </table>
-    </div>
+  <section aria-label="Challenges">
+    <h2>Challenges live clear karte hue</h2>
+    <p class="sec-lead">Kavi challenges khud lete hain aur clear karke dikhate hain. Har video mein planning, risk aur execution poori dikhti hai.</p>
+    {chal_html}
   </section>
 
-  <section aria-label="Checklist">
-    <h2>Prop firm chunne se pehle</h2>
-    <p class="sec-lead">Sirf sasta challenge dekh kar firm mat chuniye. Ye cheezein pehle check karein.</p>
-    <div class="checks">
-      <div class="card good"><h3>✓ Ye check karein</h3><ul>
-        <li>Daily loss floating loss ke saath ginta hai ya sirf closed trades par</li>
-        <li>Max loss static hai ya trailing</li>
-        <li>Swing trading mein weekend aur overnight trade hold karne ki permission</li>
-        <li>News trading rules aur consistency rule</li>
-        <li>Payout kitne din mein aur kis tareeke se milta hai</li>
-        <li>Aapka platform (MT5 ya cTrader) available hai ya nahi</li>
-      </ul></div>
-      <div class="card bad"><h3>✕ In cheezon se bachein</h3><ul>
-        <li>"Instant funding" jaise plans jinke rules itne tight hon ki pass hona lagbhag mushkil ho</li>
-        <li>Bina padhe challenge kharidna. Har firm ki Terms of Service padhein.</li>
-        <li>VPN ya VPS ka galat use. Kai firms isse account band kar deti hain.</li>
-        <li>Ek hi trade mein poora target lene ki koshish. Daily loss limit sabse jaldi wahi todta hai.</li>
-      </ul></div>
-    </div>
-  </section>
-
-  <section class="card contact" aria-label="Course">
+  <section class="card contact" aria-label="Program">
     <div>
       <h2 style="margin-bottom:4px">Challenge pass karna seekhein</h2>
-      <p>Funded Account Mastery course mein challenge rules, prop firm ke hisaab se risk management, drawdown handle karna aur scaling roadmap sikhaya gaya hai.</p>
+      <p>Funded Account Mastery program mein challenge rules, prop firm ke hisaab se risk management, drawdown handle karna aur scaling roadmap sikhaya gaya hai.</p>
     </div>
-    <a class="btn gold" href="{C('692783')}" target="_blank" rel="noopener">Course dekhein</a>
+    <a class="btn gold" href="{C('692783')}" target="_blank" rel="noopener">Program dekhein</a>
   </section>
 
-{WA_BOX("Kaunsi firm lun?", "Apna trading style aur budget batayein, sahi firm aur plan chunne mein madad milegi.", "Namaste%20Kavi%20Sir%2C%20mujhe%20prop%20firm%20chunne%20mein%20madad%20chahiye.")}
+  <section aria-label="Setup">
+    <h2>Prop firm ke liye required setup</h2>
+    <p class="sec-lead">Challenge kharidne se pehle ye cheezein ready rakhein, taaki payout ke time koi dikkat na ho.</p>
+    <div class="setup">
+      <div class="card"><span class="k">Bank</span><h3>Best bank account</h3><p>Payout ka paisa India mein lene ke liye kaunsa bank account sahi rahega, is video mein samjhaya gaya hai.</p>{btn('yt', BANK_VIDEO, '▶ Video dekhein', '▶ Video jald')}</div>
+{pay_html}      <div class="card"><span class="k">Platform</span><h3>MT5 trading platform</h3><p>Zyadatar prop firms MT5 deti hain. Login details firm ke dashboard mein milte hain.</p><a class="btn line" href="https://www.metatrader5.com/en/download" target="_blank" rel="noopener">MT5 download karein</a></div>
+      <div class="card"><span class="k">KYC</span><h3>Documents ready rakhein</h3><p>Funded account aur payout ke time ID proof aur address proof ki KYC hoti hai. Naam har jagah same rakhein.</p></div>
+    </div>
+  </section>
+
+{WA_BOX("Kaunsi firm lun?", "Apna trading style aur budget batayein, sahi firm aur model chunne mein madad milegi.", "Namaste%20Kavi%20Sir%2C%20mujhe%20prop%20firm%20chunne%20mein%20madad%20chahiye.")}
   <div class="toast" id="toast" role="status"></div>
   <script>
   document.addEventListener('click', function(e){{
@@ -337,9 +363,9 @@ prop_body = f'''  <section aria-label="Intro">
     (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function(){{ done('Code copy ho gaya: ' + v); }}, function(){{ done('Code: ' + v); }});
   }});
   </script>
-'''
+"""
 page(f'{ROOT}/prop-firms/index.html', 'Best Prop Firms · Explosive Trades',
-     'FundingPips, FundedElite aur The5ers: prop firms jahan Kavi Sharma khud trade karte hain. Rules comparison, codes aur checklist.',
+     'Prop firms jahan Kavi Sharma khud trade karte hain: deep analysis videos, best model, offers, live challenges aur payout setup.',
      'prop', prop_css, prop_body)
 
 # ======================= GLOBAL CHANNEL =======================

@@ -4,7 +4,7 @@ ROOT = '/home/claude/kav'
 UTM = '?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp'
 
 NAV = [('', 'Free Tools', 'tools'), ('research/', '🔒 Members Login', 'research'), ('prop-firms/', 'Best Prop Firm', 'prop'),
-       ('global/', 'Global Channel', 'global'), ('courses/', 'Learning Courses', 'courses')]
+       ('courses/', 'Learning Programs', 'courses'), ('global/', 'Global Channel', 'global')]
 
 NAV_CSS = '''
 /* ---- shared site header ---- */
@@ -21,7 +21,7 @@ NAV_CSS = '''
 '''
 
 def header(prefix, active, right_inner):
-    links = ''.join(f'<a href="{prefix}{href}"{" aria-current=\"page\"" if key==active else ""}>{label}</a>' for href,label,key in NAV)
+    links = ''.join(f'<a href="{(prefix + href) or "./"}"{" aria-current=\"page\"" if key==active else ""}>{label}</a>' for href,label,key in NAV)
     return (f'<header class="top">\n  <div class="top-in">\n    <a class="brand" href="{prefix or "./"}">Explosive Trades</a>\n'
             f'    <nav class="nav" aria-label="Main menu">{links}</nav>\n    <div class="top-r">{right_inner}</div>\n  </div>\n</header>')
 
