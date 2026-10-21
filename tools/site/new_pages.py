@@ -308,8 +308,17 @@ courses_body = f'''  <section aria-label="Intro">
   <section aria-label="Learning programs">
     <h2>Saare learning programs</h2>
     <p class="sec-lead">Har program ka price, access aur kya seekhenge. "Program details &amp; join" se seedha program page khulega.</p>
-    <div class="clist">
+    <div class="clist" style="margin-bottom:16px">
 {cards}    </div>
+    <section class="card results" id="swing-results" aria-label="Swing trades results">
+    <div>
+      <span class="pill green">Trade logic + results</span>
+      <h2 style="margin:8px 0 4px">Swing Trades Results</h2>
+      <p>Kavi ke swing trades, har trade ka logic, entry, management aur result. Sab ek YouTube playlist mein, jaise-jaise trades hote hain.</p>
+      <p class="fine">Past results future profit ki guarantee nahi hain. Ye sirf education aur transparency ke liye share kiye jaate hain.</p>
+    </div>
+    {btn('yt', SWING_RESULTS_PLAYLIST, '▶ View results', '▶ Results jald')}
+    </section>
   </section>
 
   <section class="card bundle" aria-label="Complete Bundle">
@@ -331,15 +340,6 @@ courses_body = f'''  <section aria-label="Intro">
 
 {enquiry()}
 
-  <section class="card results" id="swing-results" aria-label="Swing trades results">
-    <div>
-      <span class="pill green">Trade logic + results</span>
-      <h2 style="margin:8px 0 4px">Swing Trades Results</h2>
-      <p>Kavi ke swing trades, har trade ka logic, entry, management aur result. Sab ek YouTube playlist mein, jaise-jaise trades hote hain.</p>
-      <p class="fine">Past results future profit ki guarantee nahi hain. Ye sirf education aur transparency ke liye share kiye jaate hain.</p>
-    </div>
-    {btn('yt', SWING_RESULTS_PLAYLIST, '▶ View results', '▶ Results jald')}
-  </section>
 '''
 page(f'{ROOT}/courses/index.html', 'Learning Programs · Explosive Trades',
      'Explosive Trades ke saare learning programs: Trading Ka ABCD, Indian Gold, Forex/XAUUSD, Funded Account Mastery aur XAUUSD Swing Traders Elite, FAQ ke saath.',
