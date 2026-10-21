@@ -87,7 +87,8 @@ WA_BOX = lambda title, text, msg: f'''  <section class="contact" aria-label="Wha
     <a class="btn wa" href="https://wa.me/917817940814?text={msg}" target="_blank" rel="noopener">WhatsApp karein</a>
   </section>'''
 
-def page(path, title, desc, active, extra_css, body):
+def page(path, title, desc, active, extra_css, body, bar=''):
+    if bar: extra_css += STICKY_CSS
     out = f'''<!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -103,14 +104,14 @@ def page(path, title, desc, active, extra_css, body):
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>{BASE_CSS}{NAV_CSS}{extra_css}</style>
 </head>
-<body>
+<body{' class="has-sticky"' if bar else ''}>
 {header("../", active, '<span class="by">Prepared by Kavi Sharma</span>\n      <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button>')}
 
 <main class="wrap">
 {body}
 {FOOTER}
 </main>
-{THEME_JS}
+{bar}{THEME_JS}
 </body>
 </html>
 '''
@@ -258,19 +259,22 @@ a.intro-v:hover{ border-color:#d4190f; }
 .batch{ font-size:12.5px; color:var(--text); background:color-mix(in srgb, var(--orange) 14%, transparent); border:1px solid var(--orange); border-radius:9px; padding:6px 10px; }
 .batch b{ color:var(--orange); }
 tr.hl td{ background:color-mix(in srgb, var(--gold) 8%, transparent); }
-.sticky{ display:none; }
-@media (max-width:760px){
-  .sticky{ display:grid; grid-template-columns:auto 1fr; gap:8px; position:fixed; left:0; right:0; bottom:0; z-index:20; padding:10px max(12px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px, env(safe-area-inset-left,0px)); background:var(--panel); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(0,0,0,.25); }
-  .sticky a{ text-align:center; text-decoration:none; font:600 14px var(--body); border-radius:10px; padding:11px 14px; }
-  .sticky .s-q{ color:var(--text); border:1px solid var(--line); }
-  .sticky .s-wa{ background:#1f8f4e; color:#fff; }
-  body:has(.sticky){ padding-bottom:72px; }
-}
 .bundle-r{ display:grid; gap:10px; justify-items:end; }
 @media (max-width:680px){ .bundle-r{ justify-items:start; } }
 .price .ask{ font-family:var(--body); font-size:12px; font-weight:600; color:#3fbf73; text-decoration:none; letter-spacing:0; vertical-align:middle; margin-left:4px; white-space:nowrap; }
 .price .ask:hover{ text-decoration:underline; }
 '''
+STICKY_CSS = '''
+.sticky{ display:none; }
+@media (max-width:900px){
+  .sticky{ display:grid; grid-template-columns:auto 1fr; gap:8px; position:fixed; left:0; right:0; bottom:0; z-index:60; padding:10px max(12px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px, env(safe-area-inset-left,0px)); background:var(--panel); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(0,0,0,.25); }
+  .sticky a{ text-align:center; text-decoration:none; font:600 14px var(--body); border-radius:10px; padding:11px 14px; }
+  .sticky .s-q{ color:var(--text); border:1px solid var(--line); }
+  .sticky .s-wa{ background:#1f8f4e; color:#fff; }
+  body.has-sticky{ padding-bottom:76px; }
+}
+'''
+
 def curriculum_box(cid):
     mods = CURRICULUM.get(cid) or []
     if not (FEATURES['curriculum'] and mods): return ''
@@ -299,13 +303,13 @@ def comparison_html():
   </section>
 """
 
-def sticky_bar():
+def sticky_bar(msg='Namaste Kavi Sir, I am interested in your learning programs. Please share your time for a call.', form='#query'):
     if not FEATURES['sticky_bar']: return ''
-    msg = 'https://wa.me/917817940814?text=' + __import__('urllib.parse').parse.quote('Namaste Kavi Sir, I am interested in your learning programs. Please share your time for a call.')
-    return f"""  <div class="sticky" role="region" aria-label="Quick contact">
-    <a class="s-q" href="#query">Query form</a>
-    <a class="s-wa" href="{msg}" target="_blank" rel="noopener">💬 Ask now on WhatsApp</a>
-  </div>
+    url = 'https://wa.me/917817940814?text=' + __import__('urllib.parse').parse.quote(msg)
+    return f"""<div class="sticky" role="region" aria-label="Quick contact">
+  <a class="s-q" href="{form}">Query form</a>
+  <a class="s-wa" href="{url}" target="_blank" rel="noopener">💬 Ask now on WhatsApp</a>
+</div>
 """
 
 def intro_box(cid):
@@ -411,12 +415,10 @@ courses_body = f'''  <section aria-label="Intro">
 {faq_html}  </section>
 
 {enquiry()}
-
-{sticky_bar()}
 '''
 page(f'{ROOT}/courses/index.html', 'Learning Programs · Explosive Trades',
      'Explosive Trades ke saare learning programs: Trading Ka ABCD, Indian Gold, Forex/XAUUSD, Funded Account Mastery aur XAUUSD Swing Traders Elite, FAQ ke saath.',
-     'courses', courses_css + ENQ_CSS, courses_body)
+     'courses', courses_css + ENQ_CSS, courses_body, sticky_bar())
 
 # ======================= PROP FIRMS =======================
 # ---- EDIT HERE: prop firm list (Kavi batayenge to update) ----
@@ -560,7 +562,8 @@ prop_body = f"""  <section aria-label="Intro">
 """
 page(f'{ROOT}/prop-firms/index.html', 'Best Prop Firms · Explosive Trades',
      'Prop firms jahan Kavi Sharma khud trade karte hain: deep analysis videos, best model, offers, live challenges aur payout setup.',
-     'prop', prop_css + ENQ_CSS, prop_body)
+     'prop', prop_css + ENQ_CSS, prop_body,
+     sticky_bar('Namaste Kavi Sir, I need help with prop firm challenges. Please share your time for a call.'))
 
 # ======================= GLOBAL CHANNEL =======================
 global_css = '''
@@ -678,5 +681,6 @@ global_body = '''  <section class="hero" aria-label="Intro">
 '''
 page(f'{ROOT}/global/index.html', 'Explosive Trades Global',
      'Explosive Trades Global: Kavi Sharma ka English YouTube channel. Prop firm challenges, gold swing trading aur real results.',
-     'global', global_css, global_body)
+     'global', global_css, global_body,
+     sticky_bar('Namaste Kavi Sir, I saw your Explosive Trades Global page and want to know more about your learning programs. Please share your time for a call.', '../courses/#query'))
 print('pages written')

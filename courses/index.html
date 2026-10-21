@@ -130,14 +130,6 @@ a.intro-v:hover{ border-color:#d4190f; }
 .batch{ font-size:12.5px; color:var(--text); background:color-mix(in srgb, var(--orange) 14%, transparent); border:1px solid var(--orange); border-radius:9px; padding:6px 10px; }
 .batch b{ color:var(--orange); }
 tr.hl td{ background:color-mix(in srgb, var(--gold) 8%, transparent); }
-.sticky{ display:none; }
-@media (max-width:760px){
-  .sticky{ display:grid; grid-template-columns:auto 1fr; gap:8px; position:fixed; left:0; right:0; bottom:0; z-index:20; padding:10px max(12px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px, env(safe-area-inset-left,0px)); background:var(--panel); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(0,0,0,.25); }
-  .sticky a{ text-align:center; text-decoration:none; font:600 14px var(--body); border-radius:10px; padding:11px 14px; }
-  .sticky .s-q{ color:var(--text); border:1px solid var(--line); }
-  .sticky .s-wa{ background:#1f8f4e; color:#fff; }
-  body:has(.sticky){ padding-bottom:72px; }
-}
 .bundle-r{ display:grid; gap:10px; justify-items:end; }
 @media (max-width:680px){ .bundle-r{ justify-items:start; } }
 .price .ask{ font-family:var(--body); font-size:12px; font-weight:600; color:#3fbf73; text-decoration:none; letter-spacing:0; vertical-align:middle; margin-left:4px; white-space:nowrap; }
@@ -160,9 +152,18 @@ tr.hl td{ background:color-mix(in srgb, var(--gold) 8%, transparent); }
 .enq .status{ margin:0; font-size:13px; min-height:18px; color:var(--muted); }
 .enq .status.err{ color:var(--orange); } .enq .status.ok{ color:var(--green); }
 .enq .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+.sticky{ display:none; }
+@media (max-width:900px){
+  .sticky{ display:grid; grid-template-columns:auto 1fr; gap:8px; position:fixed; left:0; right:0; bottom:0; z-index:60; padding:10px max(12px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px, env(safe-area-inset-left,0px)); background:var(--panel); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(0,0,0,.25); }
+  .sticky a{ text-align:center; text-decoration:none; font:600 14px var(--body); border-radius:10px; padding:11px 14px; }
+  .sticky .s-q{ color:var(--text); border:1px solid var(--line); }
+  .sticky .s-wa{ background:#1f8f4e; color:#fff; }
+  body.has-sticky{ padding-bottom:76px; }
+}
 </style>
 </head>
-<body>
+<body class="has-sticky">
 <header class="top">
   <div class="top-in">
     <a class="brand" href="../">Explosive Trades</a>
@@ -358,17 +359,15 @@ tr.hl td{ background:color-mix(in srgb, var(--gold) 8%, transparent); }
   </script>
 
 
-  <div class="sticky" role="region" aria-label="Quick contact">
-    <a class="s-q" href="#query">Query form</a>
-    <a class="s-wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20your%20learning%20programs.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">💬 Ask now on WhatsApp</a>
-  </div>
-
-
   <footer>
     <span>© Explosive Trades · Kavi Sharma · <a href="https://www.explosivetrades.com" target="_blank" rel="noopener">www.explosivetrades.com</a></span>
     <span>Disclaimer: Explosive Trades ka content sirf education ke liye hai. Hum SEBI registered nahi hain, koi buy/sell call ya profit ki guarantee nahi dete. Trading mein capital ka risk hota hai, apni samajh se trade karein.</span>
   </footer>
 </main>
+<div class="sticky" role="region" aria-label="Quick contact">
+  <a class="s-q" href="#query">Query form</a>
+  <a class="s-wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20your%20learning%20programs.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">💬 Ask now on WhatsApp</a>
+</div>
 <script>
 (function(){
   var b = document.getElementById('themeBtn');

@@ -127,9 +127,18 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
 .stats div{ background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
 .stats b{ display:block; font-family:var(--display); color:var(--gold); font-size:26px; line-height:1.1; letter-spacing:.02em; }
 .stats span{ font-size:12.5px; color:var(--muted); }
+
+.sticky{ display:none; }
+@media (max-width:900px){
+  .sticky{ display:grid; grid-template-columns:auto 1fr; gap:8px; position:fixed; left:0; right:0; bottom:0; z-index:60; padding:10px max(12px, env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px, env(safe-area-inset-left,0px)); background:var(--panel); border-top:1px solid var(--line); box-shadow:0 -6px 20px rgba(0,0,0,.25); }
+  .sticky a{ text-align:center; text-decoration:none; font:600 14px var(--body); border-radius:10px; padding:11px 14px; }
+  .sticky .s-q{ color:var(--text); border:1px solid var(--line); }
+  .sticky .s-wa{ background:#1f8f4e; color:#fff; }
+  body.has-sticky{ padding-bottom:76px; }
+}
 </style>
 </head>
-<body>
+<body class="has-sticky">
 <header class="top">
   <div class="top-in">
     <a class="brand" href="../">Explosive Trades</a>
@@ -213,6 +222,10 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
     <span>Disclaimer: Explosive Trades ka content sirf education ke liye hai. Hum SEBI registered nahi hain, koi buy/sell call ya profit ki guarantee nahi dete. Trading mein capital ka risk hota hai, apni samajh se trade karein.</span>
   </footer>
 </main>
+<div class="sticky" role="region" aria-label="Quick contact">
+  <a class="s-q" href="../courses/#query">Query form</a>
+  <a class="s-wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20saw%20your%20Explosive%20Trades%20Global%20page%20and%20want%20to%20know%20more%20about%20your%20learning%20programs.%20Please%20share%20your%20time%20for%20a%20call." target="_blank" rel="noopener">💬 Ask now on WhatsApp</a>
+</div>
 <script>
 (function(){
   var b = document.getElementById('themeBtn');
