@@ -3,8 +3,8 @@ import re, html, os
 ROOT = '/home/claude/kav'
 UTM = '?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp'
 
-NAV = [('', 'Free Tools', 'tools'), ('research/', '🔒 Members Login', 'research'), ('prop-firms/', 'Best Prop Firm', 'prop'),
-       ('courses/', 'Learning Programs', 'courses'), ('global/', 'Global Channel', 'global')]
+NAV = [('', 'Free Tools', 'tools'), ('prop-firms/', 'Best Prop Firm', 'prop'), ('courses/', 'Learning Programs', 'courses'),
+       ('research/', '🔒 Members Login', 'research'), ('global/', 'Global Channel', 'global')]
 
 NAV_CSS = '''
 /* ---- shared site header ---- */

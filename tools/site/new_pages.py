@@ -104,7 +104,7 @@ def page(path, title, desc, active, extra_css, body):
 <style>{BASE_CSS}{NAV_CSS}{extra_css}</style>
 </head>
 <body>
-{header("../", active, '<span class="by">Prepared by Kavi Sharma</span>\n      <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button>')}
+{header("../", active, '<span class="by">Kavi Sharma · Founder</span>\n      <button class="icon-btn" id="themeBtn" type="button" aria-label="Theme badlein">Light</button>')}
 
 <main class="wrap">
 {body}
