@@ -141,7 +141,15 @@ courses_css = '''
 @media (max-width:680px){ .bundle{ grid-template-columns:1fr; } }
 .bundle p{ margin:0; color:var(--muted); font-size:14px; }
 .bundle .price{ font-size:44px; color:var(--gold); }
+.bundle-r{ display:grid; gap:10px; justify-items:end; }
+@media (max-width:680px){ .bundle-r{ justify-items:start; } }
+.price .ask{ font-family:var(--body); font-size:12px; font-weight:600; color:#3fbf73; text-decoration:none; letter-spacing:0; vertical-align:middle; margin-left:4px; white-space:nowrap; }
+.price .ask:hover{ text-decoration:underline; }
 '''
+def WA_ASK(name):
+    import urllib.parse
+    return 'https://wa.me/917817940814?text=' + urllib.parse.quote(f'Namaste Kavi Sir, I am interested in the {name} learning program. Please share details.')
+
 def course_card(no, cid, name, tagline, points, who, price, price_note, main=False, badge=''):
     pts = ''.join(f'<li>{p}</li>' for p in points)
     return f'''      <article class="card course{' main' if main else ''}">
@@ -154,7 +162,7 @@ def course_card(no, cid, name, tagline, points, who, price, price_note, main=Fal
           <p class="who"><b>Kiske liye:</b> {who}</p>
         </div>
         <div class="side">
-          <div class="price">{price}<small>{price_note}</small></div>
+          <div class="price">{price} <a class="ask" href="{WA_ASK(name)}" target="_blank" rel="noopener">Ask now →</a><small>{price_note}</small></div>
           <a class="btn {'gold' if main else 'green'}" href="{C(cid)}" target="_blank" rel="noopener">Program details &amp; join</a>
         </div>
       </article>
@@ -209,7 +217,10 @@ courses_body = f'''  <section aria-label="Intro">
       <h2 style="margin:8px 0 4px">Complete Bundle</h2>
       <p>Indian Gold Market + Forex/XAUUSD + Funded Account Mastery, teeno programs ek saath. Alag-alag lene par ₹14,997.</p>
     </div>
-    <div class="price">₹9,999</div>
+    <div class="bundle-r">
+      <div class="price">₹9,999</div>
+      <a class="btn wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20am%20interested%20in%20all%20learning%20programs%3A%20Complete%20Bundle%20%28Indian%20Gold%20Market%20%2B%20Forex/XAUUSD%20%2B%20Funded%20Account%20Mastery%29%20for%20%E2%82%B99%2C999.%20Please%20share%20details." target="_blank" rel="noopener">Ask now</a>
+    </div>
   </section>
 
   <section aria-label="FAQ">
