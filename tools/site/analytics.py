@@ -17,6 +17,8 @@ document.addEventListener('click',function(e){
   else if(/explosivetrades\.com|clplily\.page\.link/i.test(h)) ev='program_click';
   else if(/youtube\.com|youtu\.be/i.test(h)) ev='youtube_click';
   else if(/t\.me\//i.test(h)) ev='telegram_click';
+  else if(/instagram\.com/i.test(h)) ev='instagram_click';
+  else if(/facebook\.com/i.test(h)) ev='facebook_click';
   else if(a.hasAttribute('download')||/\/downloads\//.test(h)) ev='tool_download';
   if(ev) gtag('event',ev,{link_text:t,link_url:u.slice(0,100),page_name:document.title.slice(0,60)});
 },true);
