@@ -681,6 +681,5 @@ global_body = '''  <section class="hero" aria-label="Intro">
 '''
 page(f'{ROOT}/global/index.html', 'Explosive Trades Global',
      'Explosive Trades Global: Kavi Sharma ka English YouTube channel. Prop firm challenges, gold swing trading aur real results.',
-     'global', global_css, global_body,
-     sticky_bar('Namaste Kavi Sir, I saw your Explosive Trades Global page and want to know more about your learning programs. Please share your time for a call.', '../courses/#query'))
+     'global', global_css, global_body)
 print('pages written')
