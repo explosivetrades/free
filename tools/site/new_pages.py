@@ -118,6 +118,75 @@ def page(path, title, desc, active, extra_css, body):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     open(path, 'w').write(out)
 
+
+SHEET_URL = 'https://script.google.com/macros/s/AKfycbxAMCT0OHo6qOcxxX289y_ruMwcv4OyidIx-lSvUdQR-U8Fi0a51C8v6xEcGKZwvtwA/exec'
+INTERESTS = ['Trading Ka ABCD (₹49)', 'Indian Gold Market Program', 'Forex / XAUUSD Program', 'Funded Account Mastery', 'XAUUSD Swing Traders Elite', 'Complete Bundle (₹9,999)', 'Prop firm help', 'Kuch aur']
+ENQ_CSS = """
+.enq{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); gap:24px; align-items:start; border:1.5px solid #1f8f4e; }
+@media (max-width:820px){ .enq{ grid-template-columns:1fr; } }
+.enq h2{ margin:0 0 6px; }
+.enq .intro p{ margin:0 0 10px; color:var(--muted); font-size:14px; }
+.enq .intro ul{ margin:0; padding-left:18px; color:var(--muted); font-size:13.5px; display:grid; gap:4px; }
+.enq form{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width:560px){ .enq form{ grid-template-columns:1fr; } }
+.enq .full{ grid-column:1 / -1; }
+.enq label{ display:block; font-size:13px; color:var(--muted); margin-bottom:4px; }
+.enq input, .enq select, .enq textarea{ width:100%; padding:11px 12px; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:10px; font:15px var(--body); }
+.enq textarea{ min-height:76px; resize:vertical; }
+.enq input:focus, .enq select:focus, .enq textarea:focus{ outline:none; border-color:var(--gold); }
+.enq [aria-invalid="true"]{ border-color:var(--orange); }
+.enq .send{ width:100%; padding:13px 16px; font-size:16px; }
+.enq .status{ margin:0; font-size:13px; min-height:18px; color:var(--muted); }
+.enq .status.err{ color:var(--orange); } .enq .status.ok{ color:var(--green); }
+.enq .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+"""
+def enquiry(default_interest='', page_label=''):
+    opts = ''.join(f'<option{" selected" if o == default_interest else ""}>{o}</option>' for o in INTERESTS)
+    first = '' if default_interest else '<option value="" selected disabled>Chuniye…</option>'
+    return f"""  <section class="card enq" id="query" aria-label="Query bhejein">
+    <div class="intro">
+      <h2>Query bhejein</h2>
+      <p>Form bhariye aur "WhatsApp par bhejein" dabaiye. Aapki query seedha Kavi Sir ke WhatsApp par pahunch jayegi.</p>
+      <ul><li>Kaunsa program aapke liye sahi hai</li><li>Fees, batch aur access ki jaankari</li><li>Call ka time aap khud chuniye</li></ul>
+    </div>
+    <form id="enqForm" novalidate>
+      <div><label for="eName">Aapka naam</label><input id="eName" type="text" autocomplete="name" maxlength="60" placeholder="Jaise: Rahul Verma"></div>
+      <div><label for="ePhone">WhatsApp number</label><input id="ePhone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="98765 43210"></div>
+      <div><label for="eInt">Kis cheez mein interest hai</label><select id="eInt">{first}{opts}</select></div>
+      <div><label for="eTime">Call ka best time</label><select id="eTime"><option>Subah (9–12)</option><option>Dopahar (12–4)</option><option selected>Shaam (4–8)</option><option>Raat (8–10)</option></select></div>
+      <div class="full"><label for="eQ">Aapka sawal (optional)</label><textarea id="eQ" maxlength="400" placeholder="Jaise: main beginner hoon, kahan se shuru karun?"></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="eWeb">Website</label><input id="eWeb" type="text" tabindex="-1" autocomplete="off"></div>
+      <div class="full"><button class="btn wa send" type="submit">WhatsApp par bhejein</button></div>
+      <p class="status full" id="eStatus" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+  <script>
+  (function(){{
+    var f = document.getElementById('enqForm'); if (!f) return;
+    var $ = function(id){{ return document.getElementById(id); }};
+    var say = function(t, c){{ var s = $('eStatus'); s.textContent = t; s.className = 'status full' + (c ? ' ' + c : ''); }};
+    f.addEventListener('submit', function(e){{
+      e.preventDefault();
+      if ($('eWeb').value) return;
+      var name = $('eName').value.trim(), raw = $('ePhone').value, d = raw.replace(/\\D/g, ''), it = $('eInt').value, tm = $('eTime').value, q = $('eQ').value.trim();
+      if (d.length === 12 && d.indexOf('91') === 0) d = d.slice(2);
+      $('eName').setAttribute('aria-invalid', name.length < 2); $('ePhone').setAttribute('aria-invalid', d.length < 10 || d.length > 13); $('eInt').setAttribute('aria-invalid', !it);
+      if (name.length < 2) return say('Kripya apna naam daliye.', 'err');
+      if (d.length < 10 || d.length > 13) return say('Kripya sahi WhatsApp number daliye.', 'err');
+      if (!it) return say('Kripya interest chuniye.', 'err');
+      var msg = 'Namaste Kavi Sir, I am ' + name + ' (' + d + '). I am interested in ' + it + '. Best time for a call: ' + tm + '.' + (q ? ' My question: ' + q.replace(/[.?!\\s]+$/, '') + '.' : '') + ' Please share your time for a call.';
+      var url = 'https://wa.me/917817940814?text=' + encodeURIComponent(msg);
+      var w = window.open(url, '_blank');
+      try {{
+        fetch('{SHEET_URL}', {{ method:'POST', mode:'no-cors', body: new URLSearchParams({{ name: name, phone: d, tool: 'Query · ' + it + ' · Call: ' + tm + (q ? ' · ' + q : ''), page: location.href }}) }});
+      }} catch(x){{}}
+      if (w) say('WhatsApp khul gaya. Message bhejne ke liye wahan Send dabaiye.', 'ok');
+      else {{ say('WhatsApp kholne ke liye yahan dabaiye.', 'ok'); var a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = ' WhatsApp kholein →'; a.style.fontWeight = '600'; $('eStatus').appendChild(a); }}
+    }});
+  }})();
+  </script>
+"""
+
 # ======================= COURSES =======================
 C = lambda cid: f'https://www.explosivetrades.com/courses/{cid}{UTM}'
 courses_css = '''
@@ -230,11 +299,11 @@ courses_body = f'''  <section aria-label="Intro">
     <p class="sec-lead">Jo sawal sabse zyada poochhe jaate hain.</p>
 {faq_html}  </section>
 
-{WA_BOX("Kaunsa program lun?", "Apna level aur market batayein, hum sahi learning program suggest karenge.", "Namaste%20Kavi%20Sir%2C%20mujhe%20learning%20program%20chunne%20mein%20madad%20chahiye.")}
+{enquiry()}
 '''
 page(f'{ROOT}/courses/index.html', 'Learning Programs · Explosive Trades',
      'Explosive Trades ke saare learning programs: Trading Ka ABCD, Indian Gold, Forex/XAUUSD, Funded Account Mastery aur XAUUSD Swing Traders Elite, FAQ ke saath.',
-     'courses', courses_css, courses_body)
+     'courses', courses_css + ENQ_CSS, courses_body)
 
 # ======================= PROP FIRMS =======================
 # ---- EDIT HERE: prop firm list (Kavi batayenge to update) ----
@@ -368,7 +437,7 @@ prop_body = f"""  <section aria-label="Intro">
     </div>
   </section>
 
-{WA_BOX("Kaunsi firm lun?", "Apna trading style aur budget batayein, sahi firm aur model chunne mein madad milegi.", "Namaste%20Kavi%20Sir%2C%20mujhe%20prop%20firm%20chunne%20mein%20madad%20chahiye.")}
+{enquiry('Prop firm help')}
   <div class="toast" id="toast" role="status"></div>
   <script>
   document.addEventListener('click', function(e){{
@@ -381,7 +450,7 @@ prop_body = f"""  <section aria-label="Intro">
 """
 page(f'{ROOT}/prop-firms/index.html', 'Best Prop Firms · Explosive Trades',
      'Prop firms jahan Kavi Sharma khud trade karte hain: deep analysis videos, best model, offers, live challenges aur payout setup.',
-     'prop', prop_css, prop_body)
+     'prop', prop_css + ENQ_CSS, prop_body)
 
 # ======================= GLOBAL CHANNEL =======================
 global_css = '''

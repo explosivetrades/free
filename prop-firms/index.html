@@ -120,6 +120,24 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
 .note{ font-size:12.5px; color:var(--muted); margin:12px 0 0; }
 .toast{ position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--gold); color:var(--on-gold); font-weight:600; padding:8px 16px; border-radius:20px; font-size:13px; opacity:0; transition:opacity .2s; pointer-events:none; }
 .toast.show{ opacity:1; }
+
+.enq{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); gap:24px; align-items:start; border:1.5px solid #1f8f4e; }
+@media (max-width:820px){ .enq{ grid-template-columns:1fr; } }
+.enq h2{ margin:0 0 6px; }
+.enq .intro p{ margin:0 0 10px; color:var(--muted); font-size:14px; }
+.enq .intro ul{ margin:0; padding-left:18px; color:var(--muted); font-size:13.5px; display:grid; gap:4px; }
+.enq form{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width:560px){ .enq form{ grid-template-columns:1fr; } }
+.enq .full{ grid-column:1 / -1; }
+.enq label{ display:block; font-size:13px; color:var(--muted); margin-bottom:4px; }
+.enq input, .enq select, .enq textarea{ width:100%; padding:11px 12px; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:10px; font:15px var(--body); }
+.enq textarea{ min-height:76px; resize:vertical; }
+.enq input:focus, .enq select:focus, .enq textarea:focus{ outline:none; border-color:var(--gold); }
+.enq [aria-invalid="true"]{ border-color:var(--orange); }
+.enq .send{ width:100%; padding:13px 16px; font-size:16px; }
+.enq .status{ margin:0; font-size:13px; min-height:18px; color:var(--muted); }
+.enq .status.err{ color:var(--orange); } .enq .status.ok{ color:var(--green); }
+.enq .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
 </style>
 </head>
 <body>
@@ -209,13 +227,49 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
     </div>
   </section>
 
-  <section class="contact" aria-label="WhatsApp">
-    <div>
-      <h2 style="margin-bottom:4px">Kaunsi firm lun?</h2>
-      <p>Apna trading style aur budget batayein, sahi firm aur model chunne mein madad milegi. WhatsApp: <b style="color:var(--text)">+91 78179 40814</b></p>
+  <section class="card enq" id="query" aria-label="Query bhejein">
+    <div class="intro">
+      <h2>Query bhejein</h2>
+      <p>Form bhariye aur "WhatsApp par bhejein" dabaiye. Aapki query seedha Kavi Sir ke WhatsApp par pahunch jayegi.</p>
+      <ul><li>Kaunsa program aapke liye sahi hai</li><li>Fees, batch aur access ki jaankari</li><li>Call ka time aap khud chuniye</li></ul>
     </div>
-    <a class="btn wa" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20mujhe%20prop%20firm%20chunne%20mein%20madad%20chahiye." target="_blank" rel="noopener">WhatsApp karein</a>
+    <form id="enqForm" novalidate>
+      <div><label for="eName">Aapka naam</label><input id="eName" type="text" autocomplete="name" maxlength="60" placeholder="Jaise: Rahul Verma"></div>
+      <div><label for="ePhone">WhatsApp number</label><input id="ePhone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="98765 43210"></div>
+      <div><label for="eInt">Kis cheez mein interest hai</label><select id="eInt"><option>Trading Ka ABCD (₹49)</option><option>Indian Gold Market Program</option><option>Forex / XAUUSD Program</option><option>Funded Account Mastery</option><option>XAUUSD Swing Traders Elite</option><option>Complete Bundle (₹9,999)</option><option selected>Prop firm help</option><option>Kuch aur</option></select></div>
+      <div><label for="eTime">Call ka best time</label><select id="eTime"><option>Subah (9–12)</option><option>Dopahar (12–4)</option><option selected>Shaam (4–8)</option><option>Raat (8–10)</option></select></div>
+      <div class="full"><label for="eQ">Aapka sawal (optional)</label><textarea id="eQ" maxlength="400" placeholder="Jaise: main beginner hoon, kahan se shuru karun?"></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="eWeb">Website</label><input id="eWeb" type="text" tabindex="-1" autocomplete="off"></div>
+      <div class="full"><button class="btn wa send" type="submit">WhatsApp par bhejein</button></div>
+      <p class="status full" id="eStatus" role="status" aria-live="polite"></p>
+    </form>
   </section>
+  <script>
+  (function(){
+    var f = document.getElementById('enqForm'); if (!f) return;
+    var $ = function(id){ return document.getElementById(id); };
+    var say = function(t, c){ var s = $('eStatus'); s.textContent = t; s.className = 'status full' + (c ? ' ' + c : ''); };
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      if ($('eWeb').value) return;
+      var name = $('eName').value.trim(), raw = $('ePhone').value, d = raw.replace(/\D/g, ''), it = $('eInt').value, tm = $('eTime').value, q = $('eQ').value.trim();
+      if (d.length === 12 && d.indexOf('91') === 0) d = d.slice(2);
+      $('eName').setAttribute('aria-invalid', name.length < 2); $('ePhone').setAttribute('aria-invalid', d.length < 10 || d.length > 13); $('eInt').setAttribute('aria-invalid', !it);
+      if (name.length < 2) return say('Kripya apna naam daliye.', 'err');
+      if (d.length < 10 || d.length > 13) return say('Kripya sahi WhatsApp number daliye.', 'err');
+      if (!it) return say('Kripya interest chuniye.', 'err');
+      var msg = 'Namaste Kavi Sir, I am ' + name + ' (' + d + '). I am interested in ' + it + '. Best time for a call: ' + tm + '.' + (q ? ' My question: ' + q.replace(/[.?!\s]+$/, '') + '.' : '') + ' Please share your time for a call.';
+      var url = 'https://wa.me/917817940814?text=' + encodeURIComponent(msg);
+      var w = window.open(url, '_blank');
+      try {
+        fetch('https://script.google.com/macros/s/AKfycbxAMCT0OHo6qOcxxX289y_ruMwcv4OyidIx-lSvUdQR-U8Fi0a51C8v6xEcGKZwvtwA/exec', { method:'POST', mode:'no-cors', body: new URLSearchParams({ name: name, phone: d, tool: 'Query · ' + it + ' · Call: ' + tm + (q ? ' · ' + q : ''), page: location.href }) });
+      } catch(x){}
+      if (w) say('WhatsApp khul gaya. Message bhejne ke liye wahan Send dabaiye.', 'ok');
+      else { say('WhatsApp kholne ke liye yahan dabaiye.', 'ok'); var a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = ' WhatsApp kholein →'; a.style.fontWeight = '600'; $('eStatus').appendChild(a); }
+    });
+  })();
+  </script>
+
   <div class="toast" id="toast" role="status"></div>
   <script>
   document.addEventListener('click', function(e){
