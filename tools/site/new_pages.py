@@ -584,9 +584,9 @@ page(f'{ROOT}/prop-firms/index.html', 'Best Prop Firms · Explosive Trades',
 SOCIAL = [
   ('YouTube Global', 'https://www.youtube.com/@ExplosiveTradesGlobal', 'yt'),
   ('YouTube Hindi', 'https://www.youtube.com/@explosivetrades', 'yt'),
-  ('Instagram', 'https://www.instagram.com/FullPotentialMode', 'ig'),
+  ('Instagram', 'https://www.instagram.com/kavisharma.trader', 'ig'),
   ('Facebook', 'https://www.facebook.com/kavisharma.trader', 'fb'),
-  ('Telegram', 'https://t.me/Explosivetradeslearning', 'tg'),
+  ('Telegram', 'https://t.me/FullPotentialMode', 'tg'),
 ]
 _ICON = {
   'yt': '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1c.4-1.6.5-3.2.5-4.8s-.1-3.2-.5-4.8ZM9.8 15.1V8.9l5.6 3.1-5.6 3.1Z"/></svg>',
