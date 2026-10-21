@@ -187,8 +187,14 @@ def enquiry(default_interest='', page_label=''):
   </script>
 """
 
+def btn(cls, url, label, soon):
+    if url:
+        return f'<a class="btn {cls}" href="{url}" target="_blank" rel="noopener">{label}</a>'
+    return f'<a class="btn {cls}" aria-disabled="true">{soon}</a>'
+
 # ======================= COURSES =======================
 # ---- EDIT HERE: intro video per program (kin logon ko join karna chahiye) ----
+SWING_RESULTS_PLAYLIST = ''  # unlisted YouTube playlist link
 INTRO_VIDEOS = {'728981': '', '690245': '', '690264': '', '692783': '', '894443': ''}
 C = lambda cid: f'https://www.explosivetrades.com/courses/{cid}{UTM}'
 courses_css = '''
@@ -222,6 +228,12 @@ a.intro-v:hover{ border-color:#d4190f; }
 .intro-v.soon{ opacity:.75; }
 .intro-v.soon .iv-ic{ background:var(--line); color:var(--muted); }
 .intro-v em{ margin-left:auto; font-style:normal; font-size:11px; color:var(--muted); border:1px solid var(--line); border-radius:20px; padding:1px 8px; }
+.results{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:20px; align-items:center; border:1.5px solid #d4190f; background:linear-gradient(135deg, color-mix(in srgb, #d4190f 10%, var(--panel)), var(--panel) 70%); }
+@media (max-width:680px){ .results{ grid-template-columns:1fr; } }
+.results p{ margin:0; color:var(--muted); font-size:14px; max-width:62ch; }
+.results p.fine{ margin-top:8px; font-size:12px; }
+.results .btn{ white-space:nowrap; padding:13px 20px; }
+.btn[aria-disabled="true"]{ opacity:.55; pointer-events:none; }
 .bundle-r{ display:grid; gap:10px; justify-items:end; }
 @media (max-width:680px){ .bundle-r{ justify-items:start; } }
 .price .ask{ font-family:var(--body); font-size:12px; font-weight:600; color:#3fbf73; text-decoration:none; letter-spacing:0; vertical-align:middle; margin-left:4px; white-space:nowrap; }
@@ -318,6 +330,16 @@ courses_body = f'''  <section aria-label="Intro">
 {faq_html}  </section>
 
 {enquiry()}
+
+  <section class="card results" id="swing-results" aria-label="Swing trades results">
+    <div>
+      <span class="pill green">Trade logic + results</span>
+      <h2 style="margin:8px 0 4px">Swing Trades Results</h2>
+      <p>Kavi ke swing trades, har trade ka logic, entry, management aur result. Sab ek YouTube playlist mein, jaise-jaise trades hote hain.</p>
+      <p class="fine">Past results future profit ki guarantee nahi hain. Ye sirf education aur transparency ke liye share kiye jaate hain.</p>
+    </div>
+    {btn('yt', SWING_RESULTS_PLAYLIST, '▶ View results', '▶ Results jald')}
+  </section>
 '''
 page(f'{ROOT}/courses/index.html', 'Learning Programs · Explosive Trades',
      'Explosive Trades ke saare learning programs: Trading Ka ABCD, Indian Gold, Forex/XAUUSD, Funded Account Mastery aur XAUUSD Swing Traders Elite, FAQ ke saath.',
@@ -384,10 +406,6 @@ prop_css = """
 .toast.show{ opacity:1; }
 """
 
-def btn(cls, url, label, soon):
-    if url:
-        return f'<a class="btn {cls}" href="{url}" target="_blank" rel="noopener">{label}</a>'
-    return f'<a class="btn {cls}" aria-disabled="true">{soon}</a>'
 
 def firm_row(f):
     model = f'<span>Best model:</span> <b>{f["model"]}</b>' if f['model'] else '<span>Best model:</span> <i>jald update hoga</i>'

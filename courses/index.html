@@ -114,6 +114,12 @@ a.intro-v:hover{ border-color:#d4190f; }
 .intro-v.soon{ opacity:.75; }
 .intro-v.soon .iv-ic{ background:var(--line); color:var(--muted); }
 .intro-v em{ margin-left:auto; font-style:normal; font-size:11px; color:var(--muted); border:1px solid var(--line); border-radius:20px; padding:1px 8px; }
+.results{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:20px; align-items:center; border:1.5px solid #d4190f; background:linear-gradient(135deg, color-mix(in srgb, #d4190f 10%, var(--panel)), var(--panel) 70%); }
+@media (max-width:680px){ .results{ grid-template-columns:1fr; } }
+.results p{ margin:0; color:var(--muted); font-size:14px; max-width:62ch; }
+.results p.fine{ margin-top:8px; font-size:12px; }
+.results .btn{ white-space:nowrap; padding:13px 20px; }
+.btn[aria-disabled="true"]{ opacity:.55; pointer-events:none; }
 .bundle-r{ display:grid; gap:10px; justify-items:end; }
 @media (max-width:680px){ .bundle-r{ justify-items:start; } }
 .price .ask{ font-family:var(--body); font-size:12px; font-weight:600; color:#3fbf73; text-decoration:none; letter-spacing:0; vertical-align:middle; margin-left:4px; white-space:nowrap; }
@@ -308,6 +314,16 @@ a.intro-v:hover{ border-color:#d4190f; }
   })();
   </script>
 
+
+  <section class="card results" id="swing-results" aria-label="Swing trades results">
+    <div>
+      <span class="pill green">Trade logic + results</span>
+      <h2 style="margin:8px 0 4px">Swing Trades Results</h2>
+      <p>Kavi ke swing trades, har trade ka logic, entry, management aur result. Sab ek YouTube playlist mein, jaise-jaise trades hote hain.</p>
+      <p class="fine">Past results future profit ki guarantee nahi hain. Ye sirf education aur transparency ke liye share kiye jaate hain.</p>
+    </div>
+    <a class="btn yt" aria-disabled="true">▶ Results jald</a>
+  </section>
 
   <footer>
     <span>© Explosive Trades · Kavi Sharma · <a href="https://www.explosivetrades.com" target="_blank" rel="noopener">www.explosivetrades.com</a></span>
