@@ -4,7 +4,7 @@ ROOT = '/home/claude/kav'
 UTM = '?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp'
 
 NAV = [('', 'Free Tools', 'tools'), ('zone-ai/', 'Zone AI Tool', 'zone'), ('courses/', 'Learning Programs', 'courses'), ('prop-firms/', 'Best Prop Firm', 'prop'),
-       ('global/', 'Global Channel', 'global'), ('research/', '🔒 Members Login', 'research')]
+       ('global/', 'Global Channel', 'global')]
 
 NAV_CSS = '''
 /* ---- shared site header ---- */
