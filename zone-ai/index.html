@@ -145,6 +145,7 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
 .planmsg{ margin:0 auto 0 0; font-size:14px; color:var(--muted); min-height:20px; }
 .planmsg.err{ color:var(--orange); font-weight:600; } .planmsg.ok{ color:#3fbf73; font-weight:600; }
 @media (max-width:760px){ .joinrow .btn{ width:100%; } }
+@media (min-width:761px){ .rules.three{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
 .rlink{ display:grid; gap:10px; justify-items:start; align-content:start; }
 .rlink h3{ margin:0; font-size:18px; }
 .rlink p{ margin:0; color:var(--muted); font-size:14px; }
@@ -216,14 +217,15 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
     </div>
   </section>
 
-  <section aria-label="Results">
-    <h2>Results dekhein</h2>
-    <p class="sec-lead">Join karne se pehle results aur unka analysis khud dekhein.</p>
-    <div class="rules">
+  <section aria-label="Results aur feedback">
+    <h2>Results aur client feedback</h2>
+    <p class="sec-lead">Join karne se pehle results, unka analysis aur clients ka feedback khud dekhein.</p>
+    <div class="rules three">
       <article class="card rlink"><h3>Telegram Results Channel</h3><p>Har din shaam ko results is channel par post hote hain.</p><a class="btn tg" href="https://t.me/ExplosiveTradesResults" target="_blank" rel="noopener">Telegram par dekhein</a></article>
       <article class="card rlink"><h3>Zone AI Tool Results Analysis</h3><p>YouTube playlist mein Zone AI Tool ke results ka analysis dekhein.</p><a class="btn yt" href="https://www.youtube.com/playlist?list=PLU7_Kk65kgp4" target="_blank" rel="noopener">YouTube playlist dekhein</a></article>
+      <article class="card rlink"><h3>Client Feedback</h3><p>YouTube playlist mein Zone AI Tool use karne wale clients ka feedback sunein.</p><a class="btn yt" href="https://www.youtube.com/playlist?list=PLQq3ryXYr_Wg" target="_blank" rel="noopener">Feedback playlist dekhein</a></article>
     </div>
-    <p class="sec-lead" style="margin:12px 0 0;font-size:13px">Past results future results ki guarantee nahi hain. Har trader ka result alag ho sakta hai.</p>
+    <p class="sec-lead" style="margin:12px 0 0;font-size:13px">Past results aur client feedback future results ki guarantee nahi hain. Har trader ka result alag ho sakta hai.</p>
   </section>
 
   <footer>
