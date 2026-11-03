@@ -129,6 +129,22 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
 .plan h3{ margin:0 0 6px; font-size:16px; font-weight:600; }
 .plan .price{ font-family:var(--display); font-size:46px; line-height:1; color:var(--gold); }
 @media (max-width:760px){ .flow,.rules,.plans{ grid-template-columns:1fr; } }
+.joinbox{ border:1.5px solid #1f8f4e; }
+.joinbox .sec-lead{ margin-bottom:0; }
+.plan{ display:block; cursor:pointer; position:relative; background:var(--panel2); }
+.plan:hover{ border-color:var(--gold); }
+.plan input{ position:absolute; opacity:0; width:1px; height:1px; }
+.plan .pick{ display:inline-block; margin-top:10px; font-size:13px; font-weight:600; color:var(--muted); border:1px solid var(--line); border-radius:20px; padding:3px 14px; }
+.plan .pick::before{ content:""; }
+.plan:has(input:checked){ border:2px solid #3fbf73; background:color-mix(in srgb, #1f8f4e 14%, var(--panel)); }
+.plan:has(input:checked) .pick{ color:#fff; background:#1f8f4e; border-color:#1f8f4e; }
+.plan:has(input:focus-visible){ outline:2px solid var(--gold); outline-offset:3px; }
+.plans.need .plan{ border-color:var(--orange); }
+.joinrow{ display:flex; align-items:center; justify-content:flex-end; gap:14px; flex-wrap:wrap; margin-top:16px; }
+.joinrow .btn{ font-size:17px; padding:14px 24px; }
+.planmsg{ margin:0 auto 0 0; font-size:14px; color:var(--muted); min-height:20px; }
+.planmsg.err{ color:var(--orange); font-weight:600; } .planmsg.ok{ color:#3fbf73; font-weight:600; }
+@media (max-width:760px){ .joinrow .btn{ width:100%; } }
 </style>
 </head>
 <body>
@@ -180,14 +196,18 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
   </section>
 
   <section aria-label="Join aur plans">
-    <div class="card join">
+    <div class="card joinbox">
       <h2>Join Zone AI Tool</h2>
-      <a class="btn green" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20want%20to%20join%20the%20Zone%20AI%20Tool.%20Please%20share%20the%20details." target="_blank" rel="noopener">💬 WhatsApp here</a>
-    </div>
-    <div class="plans">
-      <article class="card plan"><h3>3 Month Plan</h3><div class="price">₹4,999</div></article>
-      <article class="card plan"><h3>6 Month Plan</h3><div class="price">₹9,999</div></article>
-      <article class="card plan best"><h3>Yearly Plan</h3><div class="price">₹14,999</div></article>
+      <p class="sec-lead" id="planLead">Apna plan chuniye, phir WhatsApp button dabaiye. Aapka chuna hua plan message mein apne aap aa jayega.</p>
+      <div class="plans" role="radiogroup" aria-labelledby="planLead">
+        <label class="card plan"><input type="radio" name="plan" value="3 Month Plan (₹4,999)"><h3>3 Month Plan</h3><div class="price">₹4,999</div><span class="pick">Chuniye</span></label>
+        <label class="card plan"><input type="radio" name="plan" value="6 Month Plan (₹9,999)"><h3>6 Month Plan</h3><div class="price">₹9,999</div><span class="pick">Chuniye</span></label>
+        <label class="card plan"><input type="radio" name="plan" value="Yearly Plan (₹14,999)"><h3>Yearly Plan</h3><div class="price">₹14,999</div><span class="pick">Chuniye</span></label>
+      </div>
+      <div class="joinrow">
+        <p class="planmsg" id="planMsg" role="status"></p>
+        <a class="btn green" id="waBtn" href="https://wa.me/917817940814?text=Namaste%20Kavi%20Sir%2C%20I%20want%20to%20join%20the%20Zone%20AI%20Tool.%20Please%20share%20the%20details." target="_blank" rel="noopener">💬 WhatsApp here</a>
+      </div>
     </div>
   </section>
 
@@ -203,6 +223,20 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
   function set(t){ document.documentElement.setAttribute('data-theme', t); b.textContent = t === 'light' ? 'Dark' : 'Light'; }
   try { var s = localStorage.getItem('et-dl-theme'); if (s) set(s); } catch(e){}
   b.addEventListener('click', function(){ var t = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'; set(t); try { localStorage.setItem('et-dl-theme', t); } catch(e){} });
+})();
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('waBtn'), msg=document.getElementById('planMsg'), box=document.querySelector('.plans');
+  var radios=document.querySelectorAll('input[name="plan"]');
+  function chosen(){ var c=document.querySelector('input[name="plan"]:checked'); return c?c.value:''; }
+  radios.forEach(function(r){ r.addEventListener('change',function(){
+    var p=chosen(); box.classList.remove('need');
+    document.querySelectorAll('.plan').forEach(function(l){ l.querySelector('.pick').textContent=l.querySelector('input').checked?'✓ Chuna gaya':'Chuniye'; });
+    msg.className='planmsg ok'; msg.textContent='Aapne chuna: '+p;
+    btn.href='https://wa.me/917817940814?text='+encodeURIComponent('Namaste Kavi Sir, I want to join the Zone AI Tool - '+p+'. Please share the details.');
+  }); });
+  btn.addEventListener('click',function(e){ if(chosen()) return; e.preventDefault(); e.stopPropagation(); box.classList.add('need'); msg.className='planmsg err'; msg.textContent='Pehle upar se apna plan chuniye.'; box.scrollIntoView({behavior:'smooth',block:'center'}); },true);
 })();
 </script>
 </body>
