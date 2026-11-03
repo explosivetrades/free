@@ -3,7 +3,7 @@ import re, html, os
 ROOT = '/home/claude/kav'
 UTM = '?utm_source=other&amp;utm_medium=tutor-course-referral&amp;utm_campaign=course-overview-webapp'
 
-NAV = [('', 'Free Tools', 'tools'), ('courses/', 'Learning Programs', 'courses'), ('prop-firms/', 'Best Prop Firm', 'prop'),
+NAV = [('', 'Free Tools', 'tools'), ('zone-ai/', 'Zone AI Tool', 'zone'), ('courses/', 'Learning Programs', 'courses'), ('prop-firms/', 'Best Prop Firm', 'prop'),
        ('global/', 'Global Channel', 'global'), ('research/', '🔒 Members Login', 'research')]
 
 NAV_CSS = '''
@@ -20,7 +20,8 @@ NAV_CSS = '''
 .nav a.nav-login:hover{ background:color-mix(in srgb, var(--gold) 12%, transparent); color:var(--gold); }
 .nav a.nav-login[aria-current="page"]{ background:var(--gold); color:var(--on-gold); border-color:var(--gold); }
 .top-r{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); }
-@media (max-width:960px){ .nav{ order:3; flex-basis:100%; margin:0 -6px; flex-wrap:wrap; overflow:visible; } .nav a{ padding:6px 10px; font-size:13px; } .nav a.nav-login{ margin-left:0; } .top-r .by{ display:none; } }
+@media (max-width:1320px){ .top-r .by{ display:none; } }
+@media (max-width:1060px){ .nav{ order:3; flex-basis:100%; margin:0 -6px; flex-wrap:wrap; overflow:visible; } .nav a{ padding:6px 10px; font-size:13px; } .nav a.nav-login{ margin-left:0; } .top-r .by{ display:none; } }
 /* ---- end header ---- */
 '''
 
