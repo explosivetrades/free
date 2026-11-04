@@ -134,6 +134,7 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
 .plan{ display:block; cursor:pointer; position:relative; background:var(--panel2); }
 .plan:hover{ border-color:var(--gold); }
 .plan input{ position:absolute; opacity:0; width:1px; height:1px; }
+.plan .perday{ margin-top:4px; font-size:14px; font-weight:600; color:var(--muted); }
 .plan .pick{ display:inline-block; margin-top:10px; font-size:13px; font-weight:600; color:var(--muted); border:1px solid var(--line); border-radius:20px; padding:3px 14px; }
 .plan .pick::before{ content:""; }
 .plan:has(input:checked){ border:2px solid #3fbf73; background:color-mix(in srgb, #1f8f4e 14%, var(--panel)); }
@@ -206,9 +207,9 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
       <h2>Join Zone AI Tool</h2>
       <p class="sec-lead" id="planLead">Apna plan chuniye, phir WhatsApp button dabaiye. Aapka chuna hua plan message mein apne aap aa jayega.</p>
       <div class="plans" role="radiogroup" aria-labelledby="planLead">
-        <label class="card plan"><input type="radio" name="plan" value="3 Month Plan (₹4,999)"><h3>3 Month Plan</h3><div class="price">₹4,999</div><span class="pick">Chuniye</span></label>
-        <label class="card plan"><input type="radio" name="plan" value="6 Month Plan (₹9,999)"><h3>6 Month Plan</h3><div class="price">₹9,999</div><span class="pick">Chuniye</span></label>
-        <label class="card plan"><input type="radio" name="plan" value="Yearly Plan (₹14,999)"><h3>Yearly Plan</h3><div class="price">₹14,999</div><span class="pick">Chuniye</span></label>
+        <label class="card plan"><input type="radio" name="plan" value="3 Month Plan (₹4,999)" data-name="3 Month Plan" data-cost="₹4,999"><h3>3 Month Plan</h3><div class="price">₹55.5</div><div class="perday">per day only</div><span class="pick">Chuniye</span></label>
+        <label class="card plan"><input type="radio" name="plan" value="6 Month Plan (₹9,999)" data-name="6 Month Plan" data-cost="₹9,999"><h3>6 Month Plan</h3><div class="price">₹55.5</div><div class="perday">per day only</div><span class="pick">Chuniye</span></label>
+        <label class="card plan"><input type="radio" name="plan" value="Yearly Plan (₹14,999)" data-name="Yearly Plan" data-cost="₹14,999"><h3>Yearly Plan</h3><div class="price">₹41</div><div class="perday">per day only</div><span class="pick">Chuniye</span></label>
       </div>
       <div class="joinrow">
         <p class="planmsg" id="planMsg" role="status"></p>
@@ -250,7 +251,7 @@ footer{ border-top:1px solid var(--line); padding-top:16px; display:grid; gap:8p
   radios.forEach(function(r){ r.addEventListener('change',function(){
     var p=chosen(); box.classList.remove('need');
     document.querySelectorAll('.plan').forEach(function(l){ l.querySelector('.pick').textContent=l.querySelector('input').checked?'✓ Chuna gaya':'Chuniye'; });
-    msg.className='planmsg ok'; msg.textContent='Aapne chuna: '+p;
+    msg.className='planmsg ok'; var c=document.querySelector('input[name="plan"]:checked'); msg.textContent='Aapne chuna: '+c.dataset.name+'. Cost: sirf '+c.dataset.cost;
     btn.href='https://wa.me/917817940814?text='+encodeURIComponent('Namaste Kavi Sir, I want to join the Zone AI Tool - '+p+'. Please share the details.');
   }); });
   btn.addEventListener('click',function(e){ if(chosen()) return; e.preventDefault(); e.stopPropagation(); box.classList.add('need'); msg.className='planmsg err'; msg.textContent='Pehle upar se apna plan chuniye.'; box.scrollIntoView({behavior:'smooth',block:'center'}); },true);
