@@ -225,7 +225,7 @@ SEATS_LEFT = ''   # jaise '8'
 # ======================= COURSES =======================
 # ---- EDIT HERE: intro video per program (kin logon ko join karna chahiye) ----
 SWING_RESULTS_PLAYLIST = ''  # unlisted YouTube playlist link
-INTRO_VIDEOS = {'728981': '', '690245': '', '690264': '', '692783': '', '894443': ''}
+INTRO_VIDEOS = {'728981': 'https://youtu.be/6dDqMZQfq84', '690245': '', '690264': '', '692783': '', '894443': ''}
 C = lambda cid: f'https://www.explosivetrades.com/courses/{cid}{UTM}'
 courses_css = '''
 .path{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:18px; font-size:13px; }
