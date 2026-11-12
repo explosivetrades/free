@@ -6,6 +6,7 @@ Live page: https://explosivetrades.github.io/free/
 
 - Swing Elite Trade Planner
 - Pivot Ladder Calculator
+- ET Risk & Lot Calculator + Trade Journal
 
 Educational tools only. No buy/sell calls, no profit guarantee.
 © Explosive Trades · www.explosivetrades.com

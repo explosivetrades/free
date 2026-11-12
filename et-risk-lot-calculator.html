@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ET Risk & Lot Calculator — Explosive Trades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1a1510;--panel:#231d15;--panel2:#2b2419;--line:#3a3023;--text:#f3ead8;--muted:#b3a68c;--gold:#d9a93a;--orange:#e8843a;--green:#6cc58a;--red:#e05a4f}
+body.light{--bg:#f6f1e6;--panel:#fffaf0;--panel2:#f1e8d6;--line:#e0d3b8;--text:#2a2218;--muted:#7a6a4f;--gold:#b8861b;--orange:#c9661c;--green:#2f9a57;--red:#c23b31}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:Poppins,sans-serif;font-size:14px;line-height:1.5;padding-bottom:60px}
+h1,h2,h3{font-family:'Bebas Neue',sans-serif;letter-spacing:1px;font-weight:400}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 18px}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{font-family:'Bebas Neue';font-size:24px;color:var(--gold);letter-spacing:2px}
+.brand small{font-family:Poppins;font-size:11px;color:var(--muted);letter-spacing:0;margin-left:8px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:6px 14px;border-radius:20px;cursor:pointer;font:500 13px Poppins}
+.tab.on{background:var(--gold);color:#1a1510;border-color:var(--gold)}
+.accbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.acc{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:5px 12px;border-radius:8px;cursor:pointer;font:500 12px Poppins}
+.acc.on{border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.acc .ml{color:var(--muted);font-size:11px;margin-left:4px}
+.wrap{max-width:1180px;margin:0 auto;padding:18px}
+.view{display:none}.view.on{display:block}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:860px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h2{font-size:22px;color:var(--gold);margin-bottom:10px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}
+input,select,textarea{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:8px 10px;font:14px Poppins}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+input.huge{font:600 28px Poppins;padding:10px 14px;color:var(--gold);border-color:var(--gold)}
+.f{margin-bottom:10px}
+.hint{font-size:11px;color:var(--muted);margin-top:2px}
+.btn{background:var(--gold);color:#1a1510;border:none;padding:9px 16px;border-radius:8px;font:600 13px Poppins;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.btn.red{background:var(--red);color:#fff}
+.btn.sm{padding:4px 10px;font-size:12px}
+.btn.wide{width:100%;font-size:18px;padding:14px;margin-top:6px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.big{background:linear-gradient(135deg,#2b2112,#231d15);border:1px solid var(--gold);border-radius:14px;padding:20px;text-align:center}
+body.light .big{background:linear-gradient(135deg,#fff3d6,#fffaf0)}
+.big .lbl{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.big .lot{font-family:'Bebas Neue';font-size:80px;color:var(--gold);line-height:1}
+.big .sub{font-size:15px}
+.steps{background:var(--panel2);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:14px;line-height:2;text-align:left}
+.steps b{color:var(--gold)}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.stat .v{font-family:'Bebas Neue';font-size:28px;letter-spacing:1px}
+.green{color:var(--green)}.red{color:var(--red)}.gold{color:var(--gold)}.orange{color:var(--orange)}
+.alert{border-radius:8px;padding:9px 12px;margin-top:8px;font-size:13px;border-left:4px solid}
+.alert.bad{background:rgba(224,90,79,.12);border-color:var(--red)}
+.alert.warn{background:rgba(232,132,58,.12);border-color:var(--orange)}
+.alert.ok{background:rgba(108,197,138,.12);border-color:var(--green)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--gold);font-weight:600;border-bottom:1px solid var(--line);padding:7px 6px;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:7px 6px;white-space:nowrap}
+tr.cur td{background:rgba(217,169,58,.10)}
+.tblwrap{overflow-x:auto}
+.sszone{border:2px dashed var(--line);border-radius:10px;padding:14px;text-align:center;color:var(--muted);cursor:pointer;font-size:13px;background:var(--panel2)}
+.sszone:hover,.sszone.drag,.sszone:focus{border-color:var(--gold);color:var(--gold);outline:none}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.th{position:relative;width:110px;height:70px;border-radius:8px;overflow:hidden;border:1px solid var(--line);cursor:pointer}
+.th img{width:100%;height:100%;object-fit:cover}
+.th button{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px}
+#mImg .card{max-width:min(1200px,96vw)}
+#mImg img{max-width:100%;max-height:75vh;display:block;margin:0 auto;border-radius:8px}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.pill.w{background:rgba(108,197,138,.18);color:var(--green)}
+.pill.l{background:rgba(224,90,79,.18);color:var(--red)}
+.pill.b{background:rgba(179,166,140,.18);color:var(--muted)}
+canvas{width:100%;height:260px;display:block}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
+.modal.on{display:flex}
+.modal .card{max-width:420px;width:100%}
+.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:24px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--gold);color:#1a1510;padding:8px 16px;border-radius:20px;font-weight:600;display:none;z-index:30}
+details summary{cursor:pointer;color:var(--muted);font-size:12px;margin-top:6px}
+.stale{opacity:.3}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="toprow">
+    <div class="brand">EXPLOSIVE TRADES <small>Risk & Lot Calculator · Free tool by Kavi Sharma</small></div>
+    <div class="tabs">
+      <button class="tab on" data-v="calc">🎯 Lot Calculator</button>
+      <button class="tab" data-v="plan">🗺️ Target Planner</button>
+            <button class="tab" data-v="ana">📊 Analysis</button>
+      <button class="tab" id="themeBtn">☀️</button>
+    </div>
+  </div>
+  <div class="toprow" style="margin-top:8px"><div class="accbar" id="accbar" style="margin-top:0"></div>
+    <div class="row"><span class="hint" id="fsStatus" style="margin:0">📁 Data abhi sirf browser mein hai — laptop folder connect karein</span><button class="btn sm" id="fsBtn">📁 Data folder connect karein</button><button class="btn ghost sm" id="dlBtn">⬇️ Backup download</button></div></div>
+</div>
+
+<div class="wrap">
+
+<!-- ============ CALCULATOR ============ -->
+<section class="view on" id="v-calc">
+  <div class="card" id="helpCard" style="margin-bottom:14px;border-color:var(--gold)">
+    <div class="row" style="justify-content:space-between"><h2 style="margin:0">👋 Pehli baar? 3 steps</h2><button class="btn ghost sm" id="helpHide">✕ Chhupayein</button></div>
+    <div style="font-size:13px;line-height:1.9;margin-top:6px">1) Yeh file <b>Google Chrome</b> mein kholein (Safari mein folder save kaam nahi karta).<br>
+    2) Apne laptop par ek folder banayein (jaise <b>Documents › ET Risk Calculator</b>) aur upar <b>📁 Data folder connect karein</b> se use chunein — aapke saare trades, screenshots aur reports wahin save honge.<br>
+    3) Neeche account details bharein aur <b>CALCULATE</b> dabayein. Har trade journal mein add karein — max loss aur agla lot apne aap update hoga.</div>
+  </div>
+  <div class="card">
+    <h2>Account details — <span id="accTitle"></span></h2>
+    <div class="grid g4">
+      <div class="f"><label>Aapka naam (report mein dikhega)</label><input type="text" id="trader" placeholder="jaise Rahul Sharma"></div>
+      <div class="f"><label>Account / challenge naam</label><input type="text" id="acct" placeholder="jaise FundingPips 100K Phase 1"></div>
+      <div class="f"><label>Account size ($)</label><input type="number" id="acc" step="1" placeholder="200000"></div>
+      <div class="f"><label>Max loss allowed abhi ($)</label><input type="number" id="ml" step="1" placeholder="20000" style="color:var(--gold);font-weight:600;border-color:var(--gold)"></div>
+      <div class="f"><label>Ek trade mein risk (% of max loss)</label><input type="number" id="rp" step="0.5" placeholder="10"></div>
+      <div class="f"><label>SL (points)</label><input type="number" id="sl" step="1" placeholder="50"></div>
+      <div class="f"><label>Risk : Reward (1 : x)</label><input type="number" id="rr" step="0.1" placeholder="1"></div>
+      <div class="f"><label>Max loss per day allowed (% of account)</label><input type="number" id="dlp" step="0.1" placeholder="3"><div class="hint" id="dlpHint"></div></div>
+      <div class="f"><label>Profit target — kitna kamana hai ($)</label><input type="number" id="tg" step="1" placeholder="20000"></div>
+      <div class="f"><label>Aapka win rate (%)</label><input type="number" id="wr" step="1" placeholder="60"></div>
+      <div class="f"><label>Pair</label><input type="text" id="pair"></div>
+      <div class="f"><label>$ per 1 point per 1 lot</label><input type="number" id="pv" step="0.01"><div class="hint">XAUUSD = 100</div></div>
+    </div>
+    <button class="btn wide" id="calcBtn">🧮 CALCULATE</button>
+  </div>
+
+  <div id="results">
+    <div class="card" id="sumBox" style="margin-top:14px;border-color:var(--gold)"></div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="big" id="outBox">
+        <div class="lbl">① Lot size (<span id="oPair">XAUUSD</span>)</div>
+        <div class="lot" id="oLot">0.00</div>
+        <div class="sub">Risk: <b class="red" id="oRisk">$0</b> · Target: <b class="green" id="oTp">$0</b></div>
+        <div class="steps" id="oSteps"></div>
+      </div>
+      <div class="card" id="dayBox">
+        <h2>② Aaj kitne trades le sakte hain (SL hit hone par bhi)</h2>
+        <div class="grid g3">
+          <div class="stat"><div class="k">Daily limit</div><div class="v" id="dLim">-</div></div>
+          <div class="stat"><div class="k">Aaj ka P&L</div><div class="v" id="dPnl">-</div></div>
+          <div class="stat"><div class="k">Bacha loss limit</div><div class="v orange" id="dRem">-</div></div>
+        </div>
+        <div id="dOut"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px" id="tgBox">
+      <h2>③ Profit target tak kitne trades lagenge</h2>
+      <div id="tgOut"></div>
+    </div>
+    <div id="oAlerts"></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="useLot">⬇️ Is lot se neeche trade add karein</button></div>
+    <div class="card" style="margin-top:14px" id="ladders">
+      <h2 class="green">📈 Agar har trade WIN ho — trade by trade plan (target clear hone tak)</h2>
+      <div class="tblwrap"><table><thead><tr><th>✅ Win hui?</th><th>Trade #</th><th>Max loss (trade se pehle)</th><th>Risk $</th><th>Is trade ka lot</th><th>Win par profit</th><th>Max loss (baad)</th><th>Total profit</th><th>Target bacha</th></tr></thead><tbody id="winL"></tbody></table></div>
+      <div id="planBar" class="row" style="justify-content:space-between;margin:8px 0 2px"></div>
+      <div class="hint" id="winNote" style="margin-top:6px"></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h2 class="red">📉 Agar lagatar LOSS ho — 75% max loss tak</h2>
+      <div class="grid g4" id="lossSum"></div>
+      <div id="lossMsg"></div>
+      <div class="tblwrap" style="margin-top:10px;max-height:520px;overflow-y:auto"><table><thead><tr><th>Loss #</th><th>Din</th><th>Max loss (pehle)</th><th>Risk $</th><th>Is trade ka lot</th><th>Max loss (baad)</th><th>Total loss</th><th>Max loss use hua</th></tr></thead><tbody id="lossL"></tbody></table></div>
+      <div class="hint" style="margin-top:6px">Din = daily loss limit ke hisaab se kis din yeh trade aayegi (aaj ke P&L ke saath). Highlight rows = 50%, 75%, 90% max loss khatam hone ka point.</div>
+    </div>
+  </div>
+
+  <div id="journalArea" style="margin-top:22px">
+  <h2 style="font-size:30px;color:var(--gold);margin-bottom:10px">📒 Is account ki trades</h2>
+  <div class="card">
+    <h2 id="fTitle">Trade add karein</h2>
+    <div class="grid g4">
+      <div class="f"><label>Date</label><input type="date" id="tDate"></div>
+      <div class="f"><label>Pair</label><input type="text" id="tPair"></div>
+      <div class="f"><label>Direction</label><select id="tDir"><option>Buy</option><option>Sell</option></select></div>
+      <div class="f"><label>Type</label><select id="tType"><option>Normal</option><option>Pyramid add</option></select></div>
+      <div class="f"><label>Entry price</label><input type="number" id="tEntry" step="0.01" style="color:var(--gold);font-weight:600"></div>
+      <div class="f"><label>Lot</label><input type="number" id="tLot" step="0.01"></div>
+      <div class="f"><label>Trade status</label><select id="tSt"><option value="R">🟠 Running</option><option value="TP">✅ TP hit</option><option value="SL">❌ SL hit</option><option value="M">✋ Manual close</option></select></div>
+      <div class="f" style="display:flex;align-items:flex-end"><label style="display:flex;gap:8px;align-items:center;font-size:15px;color:var(--text);cursor:pointer;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px 12px;width:100%"><input type="checkbox" id="tTpHit" style="width:20px;height:20px;accent-color:#6cc58a"> ✅ TP hit ho gaya</label></div>
+    </div>
+    <div class="grid g4">
+      <div class="f"><label>Shuruaati SL (points) — entry ke time</label><input type="number" id="tSl" step="0.1"></div>
+      <div class="f"><label>Abhi ka SL (points) — trail kiya toh naya</label><input type="number" id="tSlc" step="0.1"><div class="hint">Entry se kitna door. Entry ke paar profit mein ho toh minus mein (jaise −10)</div></div>
+      <div class="f"><label>Abhi ka SL price</label><input type="number" id="tSlp" step="0.01" style="color:var(--red)"></div>
+      <div class="f"><label>Exit points (sirf Manual close)</label><input type="number" id="tExit" step="0.1" placeholder="jaise +70 ya −20"></div>
+      <div class="f"><label>TP (points)</label><input type="number" id="tTp" step="0.1"></div>
+      <div class="f"><label>TP price</label><input type="number" id="tTpp" step="0.01" style="color:var(--green)"></div>
+      <div class="f"><label>Points (result)</label><input type="number" id="tPts" step="0.1" readonly style="opacity:.75"></div>
+      <div class="f"><label>P&L $ (auto, badal sakte hain)</label><input type="number" id="tPnl" step="0.01"></div>
+    </div>
+    <div id="tLive" style="margin:4px 0 12px"></div>
+    <div class="f"><label>Note (setup, mistake...)</label><input type="text" id="tNote"></div>
+    <div class="grid g2">
+      <div class="f"><label>📷 Screenshots (jitne chahein — entry, exit, analysis)</label>
+        <div id="ssZone" class="sszone" tabindex="0">📷 Click karke screenshot chunein · ya yahan drag karein · ya yahan click karke <b>Cmd + V</b> se paste karein</div>
+        <input type="file" id="ssFile" accept="image/*" multiple style="display:none"><div id="ssThumbs" class="thumbs"></div></div>
+      <div class="f"><label>▶ YouTube self-analysis video link</label><input type="url" id="tYt" placeholder="https://youtu.be/..."><div class="hint" id="ytHint"></div></div>
+    </div>
+    <div class="row"><button class="btn" id="tSave">✅ Save trade</button><button class="btn ghost" id="tCancel" style="display:none">Cancel edit</button></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="row" style="justify-content:space-between"><h2 style="margin:0">Trade journal — <span id="logAcc"></span></h2>
+      <div class="row"><button class="btn sm" id="repBtn">📤 Share report banayein</button><button class="btn ghost sm" id="copyCsv">Copy CSV</button><button class="btn ghost sm" id="copyJson">Copy backup (sab accounts)</button><button class="btn ghost sm" id="openImport">Import backup</button><button class="btn ghost sm" id="pwBtn">🔒 Delete password</button><button class="btn red sm" id="resetAll">Is account ka journal reset</button></div>
+    </div>
+    <div class="tblwrap" style="margin-top:10px"><table>
+      <thead><tr><th>#</th><th>Date</th><th>Pair</th><th>Dir</th><th>Entry</th><th>Lot</th><th>SL (shuru → abhi)</th><th>TP</th><th>Status</th><th>RR</th><th>P&L $</th><th>Max loss baad</th><th>Media</th><th>Note</th><th></th></tr></thead>
+      <tbody id="logBody"></tbody>
+    </table></div>
+    <div class="hint" id="logEmpty" style="margin-top:8px">Abhi koi trade nahi hai.</div>
+  </div>
+  </div>
+</section>
+
+<!-- ============ PLANNER ============ -->
+<section class="view" id="v-plan">
+  <div class="card">
+    <h2>Target Planner — RR aur SL badalne par kitne trades</h2>
+    <div class="grid g4">
+      <div class="f"><label>Profit target ($)</label><input type="number" id="pTg"></div>
+      <div class="f"><label>Max loss allowed ($)</label><input type="number" id="pMl"></div>
+      <div class="f"><label>Risk % of max loss</label><input type="number" id="pRp" step="0.5"></div>
+      <div class="f"><label>Aapka win rate (%) at 1:1</label><input type="number" id="pWr" step="1"><div class="hint">Higher RR par win rate apne aap kam maana jayega</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="f"><label>RR options (comma se)</label><input type="text" id="pRrs" value="1, 1.5, 2, 2.5, 3"></div>
+      <div class="f"><label>SL options in points (comma se)</label><input type="text" id="pSls" value="30, 50, 75, 100"></div>
+    </div>
+    <button class="btn wide" id="planBtn">🗺️ PLAN CALCULATE KAREIN</button>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2>RR ke hisaab se</h2>
+    <div class="tblwrap"><table><thead><tr><th>RR</th><th>Break-even win rate</th><th>Assumed win rate</th><th>Sab win hon toh trades</th><th>Expected trades (avg)</th><th>Target pass chance*</th><th>Lag-bhag median trades*</th></tr></thead><tbody id="rrT"></tbody></table></div>
+    <div class="hint" style="margin-top:6px">* 1000 random simulations se. Fail = 400 trades ke andar target na aaye ya lot 0.01 se neeche chala jaye. Yeh estimate hai, guarantee nahi.</div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2>SL ke hisaab se (RR <span id="slRr"></span>)</h2>
+    <div class="tblwrap"><table><thead><tr><th>SL points</th><th>Pehla lot</th><th>Pehla risk</th><th>Sab win hon toh trades</th><th>Expected trades</th><th>Pass chance*</th></tr></thead><tbody id="slT"></tbody></table></div>
+    <div id="slNote"></div>
+  </div>
+</section>
+
+<!-- ============ ANALYSIS ============ -->
+<section class="view" id="v-ana">
+  <div class="grid g4" id="anaStats"></div>
+  <div class="card" style="margin-top:14px"><h2>Cumulative P&L curve — <span id="anaAcc"></span></h2><canvas id="eq"></canvas></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h2>System health</h2><div id="anaHealth"></div></div>
+    <div class="card"><h2>Sab accounts ek nazar mein</h2><div class="tblwrap"><table><thead><tr><th>Account</th><th>Max loss</th><th>Target bacha</th><th>Trades</th><th>Win %</th><th>Net P&L</th><th>Agla lot</th></tr></thead><tbody id="anaAll"></tbody></table></div></div>
+  </div>
+</section>
+
+<div class="foot">© Explosive Trades · Kavi Sharma · www.explosivetrades.com · Educational tool, no profit guarantee. Apni firm ke rules hamesha confirm karein.</div>
+</div>
+
+<div class="modal" id="mImport"><div class="card">
+  <h2>Import backup</h2>
+  <div class="f"><label>Backup paste karein</label><textarea id="impTxt" rows="6"></textarea></div>
+  <div class="f"><label>Ya file chunein</label><input type="file" id="impFile" accept=".json,.txt"></div>
+  <div class="row"><button class="btn" id="impGo">Import</button><button class="btn ghost" data-close>Cancel</button></div>
+</div></div>
+<div class="modal" id="mConfirm"><div class="card">
+  <h2 id="cfTitle">Pakka?</h2><p class="hint" id="cfMsg" style="font-size:13px;margin-bottom:12px"></p>
+  <div class="f" id="cfPwBox" style="display:none"><label>🔒 Delete password daalein</label><input type="password" id="cfPw" inputmode="numeric" autocomplete="off"><div class="hint red" id="cfPwErr"></div></div>
+  <div class="row"><button class="btn red" id="cfYes">Haan</button><button class="btn ghost" data-close>Nahi</button></div>
+</div></div>
+<div class="modal" id="mImg"><div class="card">
+  <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0" id="imgTitle">Screenshot</h2><div class="row"><button class="btn ghost sm" id="imgPrev">◀</button><span class="hint" id="imgCount" style="margin:0"></span><button class="btn ghost sm" id="imgNext">▶</button><button class="btn sm" data-close>✕ Close</button></div></div>
+  <img id="imgBig" alt="">
+</div></div>
+<div class="modal" id="mRep"><div class="card" style="max-width:520px">
+  <h2>📤 Share report</h2><div id="repMsg" style="font-size:13px;line-height:1.7"></div>
+  <div class="row" style="margin-top:12px"><button class="btn" data-close>Theek hai</button></div>
+</div></div>
+<div class="modal" id="mPw"><div class="card">
+  <h2>🔒 Delete password</h2><p class="hint" style="font-size:13px;margin-bottom:10px">Password set karne ke baad trade delete, journal reset ya account delete karne par yeh maanga jayega. Khaali chhodein toh password hat jayega.</p>
+  <div class="f" id="pwOldBox"><label>Purana password</label><input type="password" id="pwOld"></div>
+  <div class="f"><label>Naya password</label><input type="password" id="pwNew"></div><div class="hint red" id="pwErr"></div>
+  <div class="row" style="margin-top:8px"><button class="btn" id="pwSave">Save</button><button class="btn ghost" data-close>Cancel</button></div>
+</div></div>
+<div class="modal" id="mCopy"><div class="card">
+  <h2>Copy karein</h2><textarea id="copyTxt" rows="8" readonly></textarea>
+  <div class="row" style="margin-top:8px"><button class="btn" id="copyGo">Copy</button><button class="btn ghost" data-close>Close</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const KEY='et_pub_calc_v1',OLD='et_pub_calc_v0';
+const DEF={trader:'',acc:200000,ml:20000,rp:10,sl:50,rr:1,pair:'XAUUSD',dlp:3,dl:6000,tg:20000,pv:100,wr:60,acct:'Account'};
+const FIELDS=['trader','acct','acc','ml','rp','sl','rr','dlp','tg','wr','pair','pv'];
+function fix(st){if(st.dlp===undefined||st.dlp===null){st.dlp=st.acc>0&&st.dl>0?+(st.dl/st.acc*100).toFixed(2):DEF.dlp;}st.dl=st.acc*st.dlp/100;return st;}
+const newAcc=i=>({set:{...DEF,acct:'Account '+i},trades:[]});
+let DB={cur:0,accts:[newAcc(1),newAcc(2),newAcc(3),newAcc(4)]};
+let S=DB.accts[0],editId=null;
+
+function load(){try{const r=localStorage.getItem(KEY);
+  if(r){const p=JSON.parse(r);if(p.accts&&p.accts.length){DB=p;DB.accts.forEach(a=>{a.set=fix({...DEF,...a.set});a.trades=a.trades||[];});}}
+  else{const o=localStorage.getItem(OLD);if(o){const p=JSON.parse(o);DB.accts[0]={set:fix({...DEF,...p.set,dlp:undefined,acct:(p.set&&p.set.acct)||'Account 1'}),trades:p.trades||[]};}}
+}catch(e){}if(DB.cur>=DB.accts.length)DB.cur=0;S=DB.accts[DB.cur];}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}if(typeof queueFolderSave==='function')queueFolderSave();}
+function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',1800);}
+const money=v=>(v<0?'-$':'$')+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:2});
+const fmt=v=>(+v).toLocaleString('en-US',{maximumFractionDigits:2});
+const todayStr=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const floor2=x=>Math.max(0,Math.floor(x*100+1e-9)/100);
+const num=(id,d=0)=>{const v=parseFloat($(id).value);return isNaN(v)?d:v;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const list=t=>t.split(',').map(x=>parseFloat(x)).filter(x=>x>0);
+
+/* ---- accounts ---- */
+function renderAccBar(){
+  $('accbar').innerHTML='<span class="hint" style="margin:0 4px 0 0">Account:</span>'+DB.accts.map((a,i)=>
+    `<button class="acc ${i===DB.cur?'on':''}" onclick="switchAcc(${i})">${esc(a.set.acct)}<span class="ml">${money(a.set.ml)}</span></button>`).join('')+
+    `<button class="acc" onclick="addAcc()">＋ Naya</button>`+(DB.accts.length>1?`<button class="acc" onclick="delAcc()" title="Is account ko hatayein">🗑</button>`:'');
+}
+function switchAcc(i){readSet();DB.cur=i;S=DB.accts[i];editId=null;save();fillSet();fillTradeDefaults();renderAll();toast(S.set.acct+' khula');}
+function addAcc(){readSet();DB.accts.push(newAcc(DB.accts.length+1));switchAcc(DB.accts.length-1);}
+function delAcc(){confirmBox('"'+S.set.acct+'" delete karein?','Is account ki settings aur saari trades hat jayengi.',()=>{DB.accts.splice(DB.cur,1);DB.cur=0;S=DB.accts[0];save();fillSet();fillTradeDefaults();renderAll();},true);}
+
+/* ---- core ---- */
+function today(){const td=todayStr();const p=S.trades.filter(t=>t.date===td&&t.st!=='R').reduce((a,t)=>a+t.pnl,0);
+  const open=S.trades.filter(t=>t.st==='R').reduce((a,t)=>a+Math.max(0,(t.slc||0)*t.lot*S.set.pv),0);
+  const s=S.set;return{pnl:p,open,rem:s.dl>0?Math.max(0,s.dl+Math.min(p,0)-open):Infinity};}
+function size(ml,o,dayRem){
+  const s=o||S.set;let base=ml*s.rp/100,risk=base,why='Max loss ka '+s.rp+'%';
+  if(dayRem!==undefined&&dayRem<risk){risk=dayRem;why='Aaj ka bacha daily loss limit';}
+  if(s.tg>0&&s.tg/s.rr<risk){risk=s.tg/s.rr;why='Target tak sirf itna chahiye';}
+  risk=Math.max(0,risk);const perLot=s.sl*s.pv;const lot=perLot>0?floor2(risk/perLot):0;
+  return{base,risk,lot,actual:lot*perLot,why};
+}
+function readSet(){FIELDS.forEach(k=>{const el=$(k);S.set[k]=el.type==='number'?(parseFloat(el.value)||0):el.value;});fix(S.set);if(!S.set.acct)S.set.acct='Account '+(DB.cur+1);save();}
+function fillSet(){fix(S.set);FIELDS.forEach(k=>$(k).value=S.set[k]);$('dlpHint').textContent='= '+money(S.set.dl)+' per day';}
+
+/* all-win trade count with lot rounding */
+function allWin(ml,goal,rp,sl,rr,pv){let m=ml,g=goal,n=0;
+  while(g>0.005&&n<1000){let risk=m*rp/100;if(g/rr<risk)risk=g/rr;let lot=floor2(risk/(sl*pv));if(lot<0.01){if(g>0)lot=0.01;}
+    const win=lot*sl*pv*rr;if(win<=0)return null;m+=win;g-=win;n++;}return n<1000?n:null;}
+function expTrades(ml,goal,rp,rr,p){const r=rp/100,g=p*Math.log(1+r*rr)+(1-p)*Math.log(1-r);if(g<=0)return null;return Math.ceil(Math.log((ml+goal)/ml)/g);}
+function mc(ml,goal,rp,sl,rr,pv,p,runs=1000,maxT=400){let pass=0;const ts=[];
+  for(let k=0;k<runs;k++){let m=ml,g=goal,n=0;
+    while(n<maxT){let risk=m*rp/100;if(g/rr<risk)risk=g/rr;const lot=floor2(risk/(sl*pv));if(lot<0.01)break;n++;
+      if(Math.random()<p){const w=lot*sl*pv*rr;m+=w;g-=w;if(g<=0.005){pass++;ts.push(n);break;}}else{const ls=lot*sl*pv;m-=ls;g+=ls;}}}
+  ts.sort((a,b)=>a-b);return{pass:pass/runs,med:ts.length?ts[Math.floor(ts.length/2)]:null};}
+const beWR=(rp,rr)=>{const r=rp/100;return -Math.log(1-r)/(Math.log(1+r*rr)-Math.log(1-r));};
+/* higher RR -> lower win rate: keep same edge-ish assumption p_rr = p1 * 2/(1+rr) scaled */
+const wrAt=(p1,rr)=>Math.min(0.95,p1*2/(1+rr));
+
+function buildPlan(s){const rows=[];let mw=s.ml,tgw=s.tg,cum=0;
+  for(let i=1;i<=(s.tg>0?200:10);i++){const zw=size(mw,{...s,tg:s.tg>0?tgw:0});let lot=zw.lot;
+    if(lot<0.01){if(s.tg>0&&tgw>0)lot=0.01;else break;}
+    const risk=lot*s.sl*s.pv,win=risk*s.rr,before=mw;mw+=win;cum+=win;if(s.tg>0)tgw=Math.max(0,tgw-win);const done=s.tg>0&&tgw<=0.005;
+    rows.push({before,risk,lot,win,after:mw,cum,tgLeft:tgw,done});if(done)break;}
+  return rows;}
+function tickPlan(i,v){if(!S.plan)return;S.plan.done[i]=v;save();renderCalc();if(v)toast('Trade '+(i+1)+' win ✅'+(S.plan.rows[i+1]?' · Agla lot '+S.plan.rows[i+1].lot.toFixed(2):' · Target clear 🎯'));}
+function resetPlan(){const go=()=>{readSet();S.plan=null;save();renderCalc();toast('Naya plan ban gaya');};
+  if(S.plan&&S.plan.done.some(x=>x))confirmBox('Naya plan banayein?','Purane ticks hat jayenge aur plan abhi ke max loss ('+money(S.set.ml)+') se dobara banega.',go);else go();}
+function renderCalc(){
+  const s=S.set,td=today(),z=size(s.ml,s,td.rem);
+  $('accTitle').textContent=s.acct;
+  $('oPair').textContent=s.pair;$('oLot').textContent=z.lot.toFixed(2);
+  $('oRisk').textContent=money(z.actual);$('oTp').textContent=money(z.actual*s.rr)+' ('+fmt(s.sl*s.rr)+' pts)';
+  const raw=s.sl>0&&s.pv>0?z.risk/s.sl/s.pv:0;
+  $('oSteps').innerHTML=`① Risk = ${money(s.ml)} × ${s.rp}% = <b>${money(z.base)}</b>`+
+    (Math.abs(z.risk-z.base)>0.01?`<br>⚠️ ${z.why} ki wajah se risk = <b>${money(z.risk)}</b>`:'')+
+    `<br>② ${money(z.risk)} ÷ ${s.sl} points = <b>${fmt(z.risk/(s.sl||1))}</b>`+
+    `<br>③ ${fmt(z.risk/(s.sl||1))} ÷ ${s.pv} = <b>${raw.toFixed(4)}</b> → <b>${z.lot.toFixed(2)} lot</b> (round down)`+
+    `<br>④ Asli risk = ${z.lot.toFixed(2)} × ${s.sl} × ${s.pv} = <b>${money(z.actual)}</b>`;
+
+  // daily
+  if(s.dl>0){
+    $('dayBox').style.display='';$('dLim').textContent=money(s.dl);$('dPnl').textContent=money(td.pnl);$('dPnl').className='v '+(td.pnl>=0?'green':'red');$('dRem').textContent=money(td.rem);
+    let m=s.ml,rem=td.rem,n=0,used=0,rows='';
+    while(n<20){const zz=size(m,{...s,tg:0});if(zz.lot<0.01||zz.actual>rem+0.001)break;n++;rem-=zz.actual;used+=zz.actual;m-=zz.actual;rows+=`${n}) ${zz.lot.toFixed(2)} lot · risk ${money(zz.actual)}<br>`;}
+    const extra=floor2(rem/(s.sl*s.pv));
+    let h=`<div class="alert ${n>0?'ok':'bad'}">Aaj aap <b style="font-size:18px">${n}</b> full-risk trade${n===1?'':'s'} le sakte hain. Agar sab SL hit hon toh bhi daily limit safe rahegi (total ${money(used)}).</div>`;
+    if(td.open>0)h=`<div class="alert warn">🟠 Running trades ka SL risk <b>${money(td.open)}</b> aaj ke limit se minus kiya gaya hai.</div>`+h;
+    if(n>0)h+=`<div class="hint" style="margin-top:6px;line-height:1.8">${rows}</div>`;
+    if(extra>=0.01)h+=`<div class="alert warn">Iske baad sirf ek chhota trade possible: max <b>${extra.toFixed(2)} lot</b> (${money(extra*s.sl*s.pv)} risk).</div>`;
+    if(n===0&&extra<0.01)h+=`<div class="alert bad">⛔ Aaj ka daily loss limit khatam. Aaj aur trade nahi.</div>`;
+    $('dOut').innerHTML=h;
+  }else{$('dayBox').style.display='';$('dLim').textContent='Off';$('dPnl').textContent=money(td.pnl);$('dRem').textContent='-';
+    $('dOut').innerHTML='<div class="hint">"Max loss per day allowed (%)" daalein, phir yahan dikhega ki aaj kitne trades le sakte hain.</div>';}
+
+  // target
+  if(s.tg>0&&s.ml>0){
+    const p=Math.min(0.99,Math.max(0.01,s.wr/100)),aw=allWin(s.ml,s.tg,s.rp,s.sl,s.rr,s.pv),ex=expTrades(s.ml,s.tg,s.rp,s.rr,p),be=beWR(s.rp,s.rr),m=mc(s.ml,s.tg,s.rp,s.sl,s.rr,s.pv,p,2000,500);
+    const ok=p>be;
+    $('tgOut').innerHTML=`<div class="grid g4">
+      <div class="stat"><div class="k">Target kamana hai</div><div class="v green">${money(s.tg)}</div></div>
+      <div class="stat"><div class="k">Sab trades win hon toh</div><div class="v gold">${aw??'-'} trades</div></div>
+      <div class="stat"><div class="k">${s.wr}% win rate par (typical)</div><div class="v ${ok?'':'red'}">${m.med&&ok?m.med+' trades':(ex?ex+' trades':'∞')}</div></div>
+      <div class="stat"><div class="k">Target pass chance*</div><div class="v ${m.pass>=.6?'green':m.pass>=.35?'orange':'red'}">${(m.pass*100).toFixed(0)}%</div></div></div>
+      ${ex&&m.med?`<div class="alert ok">${s.wr}% win rate par aadhe cases mein target <b>${m.med} trades</b> ke andar aa jata hai (lagbhag ${Math.round(m.med*p)} wins + ${Math.round(m.med*(1-p))} losses). Safe planning ke liye <b>${ex} trades</b> tak ka time maan kar chalein.</div>`:''}
+      <div class="alert ${ok?'ok':'bad'}">RR 1:${s.rr} aur ${s.rp}% risk par break-even win rate <b>${(be*100).toFixed(1)}%</b> hai. Aapka win rate ${s.wr}% hai${ok?', yaani system positive hai.':', jo isse kam hai. Is setting par account dheere-dheere ghatega. RR badhaayein ya win rate sudhaarein.'}</div>
+      <div class="hint" style="margin-top:6px">* 2000 random simulations. Fail = 500 trades mein target na aaye ya lot 0.01 se neeche aa jaye. Yeh estimate hai, guarantee nahi. RR/SL compare karne ke liye <b>Target Planner</b> tab dekhein.</div>`;
+  }else $('tgOut').innerHTML='<div class="hint">"Profit target" daalein (jaise 20000), phir yahan dikhega ki kitne trades lagenge.</div>';
+
+  // alerts
+  const al=[];
+  if(s.ml<=0)al.push(['bad','❌ Max loss allowed 0 hai. Trade nahi.']);
+  else if(z.lot<0.01)al.push(['bad','Lot 0.01 se kam aa raha hai. SL chhota karein ya trade skip karein.']);
+  if(s.dl>0&&z.actual*2>s.dl)al.push(['warn','⚠️ Is risk par 2 loss = '+money(z.actual*2)+', jo daily limit '+money(s.dl)+' se zyada hai.']);
+  if(s.rp>10)al.push(['warn','⚠️ '+s.rp+'% risk aggressive hai. 3 loss mein max loss ka '+((1-Math.pow(1-s.rp/100,3))*100).toFixed(0)+'% chala jayega.']);
+  $('oAlerts').innerHTML=al.map(a=>`<div class="alert ${a[0]}">${a[1]}</div>`).join('');
+
+  // ladders
+  let w='',l='';
+  const sig=[s.ml,s.rp,s.sl,s.rr,s.tg,s.pv].join('|');
+  if(!S.plan||(!(S.plan.done||[]).some(x=>x)&&S.plan.sig!==sig)){S.plan={sig,start:todayStr(),startMl:s.ml,startTg:s.tg,rr:s.rr,rows:buildPlan(s),done:[]};}
+  const P=S.plan,nd=P.done.filter(x=>x).length,nextI=P.rows.findIndex((r,i)=>!P.done[i]);
+  P.rows.forEach((r,i)=>{const dn=!!P.done[i],nx=i===nextI;
+    w+=`<tr class="${nx?'cur':''}" style="${dn?'opacity:.55':''}"><td><label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;color:var(--text)"><input type="checkbox" ${dn?'checked':''} onchange="tickPlan(${i},this.checked)" style="width:20px;height:20px;accent-color:#6cc58a">${dn?'<b class="green">Win ✅</b>':nx?'<b class="gold">👉 Agla</b>':''}</label></td><td><b>${i+1}</b></td><td>${money(r.before)}</td><td class="red">${money(r.risk)}</td><td class="gold"><b style="font-size:16px">${r.lot.toFixed(2)}</b></td><td class="green">+${money(r.win)}</td><td>${money(r.after)}</td><td class="green">${money(r.cum)}</td><td>${r.done?'<b class="green">🎯 TARGET CLEAR</b>':(P.startTg>0?money(r.tgLeft):'-')}</td></tr>`;});
+  const allDone=P.rows.length&&nd===P.rows.length;
+  $('planBar').innerHTML=`<span><b class="${allDone?'green':'gold'}" style="font-size:16px">${allDone?'🎯 Plan poora — target clear!':nd+' / '+P.rows.length+' trades win'}</b> <span class="hint">· Plan shuru: ${P.start}, max loss ${money(P.startMl)}, RR 1:${P.rr}</span></span>
+    <span class="row"><button class="btn ghost sm" onclick="resetPlan()">🔄 Naya plan (abhi ke max loss se)</button></span>`;
+  if(P.startTg<=0)$('winNote').textContent='Profit target daalein, tab table target clear hone tak banegi (abhi 10 trades dikh rahe hain).';
+  else $('winNote').innerHTML='Har trade win hone par us row ka ✅ tick karein — agla trade aur uska lot highlight ho jayega. Tick sirf plan track karta hai; paisa journal mein trade save karne se update hota hai. <b>Beech mein loss aaye toh "Naya plan" dabayein</b>, kyunki loss ke baad lot badal jata hai.';
+  let mlv=s.ml,cl=0,day=1,dRem=s.dl>0?td.rem:Infinity,ms={},marks=[[.5,'50%'],[.75,'75%']],dayCount={},rowsL=[],lossPath=[{ml:s.ml,lost:0}];
+  for(let i=1;i<=300;i++){const zl=size(mlv,{...s,tg:0});if(zl.lot<0.01)break;
+    if(s.dl>0&&zl.actual>dRem+0.001){day++;dRem=s.dl;}
+    const before=mlv;mlv-=zl.actual;cl+=zl.actual;if(s.dl>0)dRem-=zl.actual;dayCount[day]=(dayCount[day]||0)+1;lossPath.push({ml:mlv,lost:cl});
+    const used=s.ml>0?cl/s.ml:0;let hit='';marks.forEach(m=>{if(!ms[m[1]]&&used>=m[0]){ms[m[1]]=i;hit=m[1];}});
+    rowsL.push(`<tr${hit?' class="cur"':''}><td><b>${i}</b></td><td>${s.dl>0?'Din '+day:'-'}</td><td>${money(before)}</td><td class="red">${money(zl.actual)}</td><td class="gold"><b style="font-size:16px">${zl.lot.toFixed(2)}</b></td><td>${money(mlv)}</td><td class="red">-${money(cl)}</td><td>${(used*100).toFixed(0)}%${hit?' <b class="orange">← '+hit+' gaya</b>':''}</td></tr>`);
+    if(used>=0.75)break;}
+  const k75=ms['75%']||rowsL.length,allowL=Math.max(0,k75-1),perDay=s.dl>0?(dayCount[1]||0):null;
+  l=rowsL.join('')+(rowsL.length?`<tr><td colspan="8" style="background:rgba(224,90,79,.15)"><b class="red" style="font-size:15px">⛔ ${k75} lagatar loss par 75% max loss khatam — Chance of pass: NO ❌</b><br><span class="hint">Bacha max loss sirf ${money(mlv)}. Lot itna chhota ho jata hai ki target ke liye bahut lambi winning streak chahiye, isliye ise <b>pass chance NO</b> maan kar chalein. Trading rokein, strategy review karein.</span></td></tr>`:'');
+  const box=(k,v,c='')=>`<div class="stat"><div class="k">${k}</div><div class="v ${c}">${v}</div></div>`;
+  $('lossSum').innerHTML=box('Max loss kar sakte hain',allowL+' trades','red')+box('50% max loss gaya',ms['50%']?ms['50%']+' loss baad':'-','orange')+box('75% = pass chance NO',k75+' loss par','red')+box(s.dl>0?'Aaj (Din 1) max loss trades':'Daily limit',s.dl>0?perDay+' trades':'Off','gold');
+  $('lossMsg').innerHTML=rowsL.length?`<div class="alert warn">Lagatar <b>${allowL} loss</b> tak account bacha rehta hai. <b>${k75}th loss</b> par 75% max loss chala jata hai, aur wahan se pass hona practically band. ${ms['50%']?`Aadha max loss <b>${ms['50%']} loss</b> par hi chala jata hai. `:''}Rule: <b>3 lagatar loss = us din trading band, 5 lagatar loss = strategy review</b>.</div>`:'';
+  // ---- top summary ----
+  const winsNeed=P.startTg>0?P.rows.length:null;
+  let mix='';
+  if(s.tg>0){const Ls=[...new Set([0,1,2,3,5,8,allowL].filter(x=>x<=allowL))].sort((a,b)=>a-b);
+    mix=Ls.map(L=>{const lp=lossPath[L]||lossPath[lossPath.length-1],wn=allWin(lp.ml,s.tg+lp.lost,s.rp,s.sl,s.rr,s.pv);
+      return `<tr${L===0?' class="cur"':''}><td><b class="red">${L}</b> loss</td><td><b class="green" style="font-size:16px">${wn??'-'}</b> win chahiye</td><td>${wn!=null?(L+wn)+' trades total':'-'}</td></tr>`;}).join('');}
+  $('sumBox').innerHTML=`<h2>🎯 Target ka hisaab — ${s.rr?'RR 1:'+s.rr:''}, risk ${s.rp}% of max loss</h2>
+    <div class="grid g3">
+      ${box('Target ke liye kitne WIN chahiye',winsNeed!=null?winsNeed+' win':'Target daalein','green')}
+      ${box('Max kitne LOSS kar sakte hain',allowL+' loss','red')}
+      ${box(k75+' loss par','Pass chance NO ❌','red')}</div>
+    ${s.tg>0?`<div class="tblwrap" style="margin-top:10px"><table><thead><tr><th>Agar pehle itne loss aaye</th><th>Phir target ke liye</th><th>Total trades</th></tr></thead><tbody>${mix}</tbody></table></div>
+    <div class="hint" style="margin-top:6px">Har loss ke baad lot chhota hota hai aur target door ho jata hai, isliye zyada win chahiye. "${allowL} loss" ke aage 75% max loss chala jata hai.</div>`:''}`;
+  $('winL').innerHTML=w||'<tr><td colspan="8" class="hint">-</td></tr>';$('lossL').innerHTML=l||'<tr><td colspan="8" class="hint">-</td></tr>';
+  $('results').classList.remove('stale');$('dlpHint').textContent='= '+money(s.dl)+' per day';
+}
+function doCalc(){readSet();renderAll();toast('Calculate ho gaya');$('results').scrollIntoView({behavior:'smooth',block:'start'});}
+$('calcBtn').onclick=doCalc;
+FIELDS.forEach(k=>{$(k).addEventListener('input',()=>$('results').classList.add('stale'));$(k).addEventListener('keydown',e=>{if(e.key==='Enter')doCalc();});});
+
+/* ---- planner ---- */
+function fillPlan(){const s=S.set;$('pTg').value=s.tg||20000;$('pMl').value=s.ml;$('pRp').value=s.rp;
+  const a=analysis();$('pWr').value=(a.w+a.l>=20)?Math.round(a.wr*100):s.wr;}
+function renderPlan(){
+  const s=S.set,tg=num('pTg',0),ml=num('pMl',0),rp=num('pRp',10),p1=num('pWr',60)/100,rrs=list($('pRrs').value),sls=list($('pSls').value);
+  if(tg<=0||ml<=0){$('rrT').innerHTML='<tr><td colspan="7" class="hint">Target aur max loss daalein.</td></tr>';return;}
+  $('rrT').innerHTML=rrs.map(rr=>{const p=wrAt(p1,rr),be=beWR(rp,rr),aw=allWin(ml,tg,rp,s.sl,rr,s.pv),ex=expTrades(ml,tg,rp,rr,p),m=mc(ml,tg,rp,s.sl,rr,s.pv,p);
+    return `<tr class="${rr===s.rr?'cur':''}"><td><b>1 : ${rr}</b></td><td>${(be*100).toFixed(1)}%</td><td class="${p>=be?'green':'red'}">${(p*100).toFixed(0)}%</td><td class="gold"><b>${aw??'-'}</b></td><td>${ex??'∞'}</td><td class="${m.pass>=.6?'green':m.pass>=.35?'orange':'red'}"><b>${(m.pass*100).toFixed(0)}%</b></td><td>${m.med??'-'}</td></tr>`;}).join('');
+  const rr=s.rr,p=wrAt(p1,rr);$('slRr').textContent='1 : '+rr+' · win rate '+(p*100).toFixed(0)+'%';
+  $('slT').innerHTML=sls.map(sl=>{const lot=floor2(ml*rp/100/(sl*s.pv)),aw=allWin(ml,tg,rp,sl,rr,s.pv),ex=expTrades(ml,tg,rp,rr,p),m=mc(ml,tg,rp,sl,rr,s.pv,p);
+    return `<tr class="${sl===s.sl?'cur':''}"><td><b>${sl}</b></td><td class="gold"><b>${lot.toFixed(2)}</b></td><td>${money(lot*sl*s.pv)}</td><td>${aw??'-'}</td><td>${ex??'∞'}</td><td>${(m.pass*100).toFixed(0)}%</td></tr>`;}).join('');
+  $('slNote').innerHTML=`<div class="alert warn">Dhyan dein: SL badalne se sirf <b>lot</b> badalta hai, $ risk wahi rehta hai. Isliye trades ki ginti lagbhag same rehti hai. Asli fark SL ka <b>win rate</b> par padta hai: bada SL zyada trades bachata hai, chhota SL jaldi hit hota hai. Har SL ka apna win rate journal se nikaal kar upar daalein, tabhi sahi comparison milega.</div>
+  <div class="hint" style="margin-top:6px">Higher RR par win rate assumption: WR(RR) = WR(1:1) × 2 ÷ (1+RR). Yeh sirf andaaza hai. Apne backtest ka asli win rate har RR ke liye check karein.</div>`;
+}
+$('planBtn').onclick=()=>{renderPlan();toast('Plan ready');};
+
+/* ---- journal ---- */
+const PU=pair=>{const p=String(pair||'').toUpperCase();if(/XAU|XAG|GOLD|BTC|US30|NAS|SPX/.test(p))return [1,2];if(/JPY/.test(p))return [0.01,3];if(/^[A-Z]{6}$/.test(p))return [0.0001,5];return [1,2];};
+const sgn=()=>$('tDir').value==='Buy'?1:-1;
+function migT(t){if(t.st)return t;t.slc=t.sl;t.tp=t.res==='W'?t.pts:(t.sl||0)*(S.set.rr||1);t.st=t.res==='W'?'TP':t.res==='L'?'SL':'M';if(t.st==='M')t.exit=t.pts;return t;}
+function rrOf(pts,sl){if(!(sl>0))return null;return pts/sl;}
+function rrTxt(r){if(r===null||isNaN(r))return '-';if(r>0)return '1 : '+(+r.toFixed(2));if(r<0)return '−'+(+Math.abs(r).toFixed(2))+'R loss';return '0 (BE)';}
+function syncPrice(from){const e=num('tEntry',0),[u,d]=PU($('tPair').value),g=sgn();
+  if(e>0){
+    if(from==='slp'){const v=num('tSlp',NaN);if(!isNaN(v))$('tSlc').value=+((g*(e-v))/u).toFixed(2);}
+    else if($('tSlc').value!=='')$('tSlp').value=(e-g*num('tSlc',0)*u).toFixed(d);
+    if(from==='tpp'){const v=num('tTpp',NaN);if(!isNaN(v))$('tTp').value=+((g*(v-e))/u).toFixed(2);}
+    else if($('tTp').value!=='')$('tTpp').value=(e+g*num('tTp',0)*u).toFixed(d);
+  }else{$('tSlp').value='';$('tTpp').value='';}
+  calcTrade();}
+function calcTrade(keepPnl){const st=$('tSt').value,slc=num('tSlc',0),tp=num('tTp',0),lot=num('tLot',0),pv=S.set.pv;
+  $('tTpHit').checked=st==='TP';$('tExit').disabled=st!=='M';$('tExit').style.opacity=st==='M'?1:.4;
+  const pts=st==='TP'?tp:st==='SL'?-slc:st==='M'?num('tExit',0):0;$('tPts').value=+pts.toFixed(2);
+  if(!keepPnl)$('tPnl').value=(pts*lot*pv).toFixed(2);showLive();}
+function showLive(){const st=$('tSt').value,sl0=num('tSl',0),slc=num('tSlc',0),tp=num('tTp',0),lot=num('tLot',0),pv=S.set.pv;
+  const box=(k,v,c='',h='')=>`<div class="stat"><div class="k">${k}</div><div class="v ${c}">${v}</div>${h?`<div class="hint">${h}</div>`:''}</div>`;
+  const tpG=tp*lot*pv,slR=-slc*lot*pv,rrNow=slc>0?(tp/slc):null,trailed=Math.abs(slc-sl0)>1e-9;
+  const stTxt={R:'<span class="orange">🟠 RUNNING</span>',TP:'<span class="green">✅ TP HIT</span>',SL:'<span class="red">❌ SL HIT</span>',M:'✋ CLOSED'}[st];
+  $('tLive').innerHTML=`<div class="grid g4">
+    ${box('Abhi ka RR (TP ÷ abhi ka SL)',rrNow!==null?'1 : '+(+rrNow.toFixed(2)):(slc<=0&&tp>0?'Risk-free ✅':'-'),rrNow!==null||slc<=0?'gold':'',`${tp} pts TP ÷ ${slc} pts SL`)}
+    ${box('TP hit hua toh',(tpG>=0?'+':'')+money(tpG),'green',`${tp} pts × ${lot} lot`)}
+    ${box('SL hit hua toh',(slR>=0?'+':'')+money(slR),slR>=0?'green':'red',slc<0?'SL profit mein hai — profit lock':slc===0?'Breakeven':`${slc} pts × ${lot} lot`)}
+    ${box('Status',stTxt,'',trailed?`SL trail: ${sl0} → ${slc} pts · shuru RR 1:${sl0>0?+(tp/sl0).toFixed(2):'-'}, shuru risk ${money(sl0*lot*pv)}`:`Shuru risk ${money(sl0*lot*pv)}`)}</div>`;}
+function fillTradeDefaults(){const s=S.set,z=size(s.ml,s,today().rem);$('tDate').value=todayStr();$('tPair').value=s.pair;$('tDir').value='Buy';
+  $('tSl').value=s.sl;$('tSlc').value=s.sl;$('tTp').value=+(s.sl*s.rr).toFixed(2);$('tLot').value=z.lot.toFixed(2);$('tSt').value='R';$('tType').value='Normal';
+  $('tEntry').value='';$('tExit').value='';$('tNote').value='';$('tSlp').value='';$('tTpp').value='';formImgs=[];$('tYt').value='';ytCheck();renderThumbs();syncPrice();}
+$('tSl').addEventListener('input',()=>{if(!editId)$('tSlc').value=$('tSl').value;syncPrice();});
+['tEntry','tDir','tPair','tSlc','tTp'].forEach(id=>{$(id).addEventListener('input',()=>syncPrice());$(id).addEventListener('change',()=>syncPrice());});
+$('tSlp').addEventListener('input',()=>syncPrice('slp'));$('tTpp').addEventListener('input',()=>syncPrice('tpp'));
+['tLot','tExit'].forEach(id=>$(id).addEventListener('input',()=>calcTrade()));
+$('tSt').addEventListener('change',()=>calcTrade());
+$('tTpHit').addEventListener('change',()=>{$('tSt').value=$('tTpHit').checked?'TP':'R';calcTrade();});
+$('tPnl').addEventListener('input',showLive);
+function applyTrade(t,old){
+  let diff=t.pnl-(old?old.pnl:0);
+  if(t.st==='R'){t.pnl=0;t.pts=0;diff=-(old?old.pnl:0);}
+  if(!old||old.st==='R'){t.mlBefore=S.set.ml;}else t.mlBefore=old.mlBefore;
+  S.set.ml=+(S.set.ml+diff).toFixed(2);if(S.set.tg>0||diff<0)S.set.tg=Math.max(0,+(S.set.tg-diff).toFixed(2));
+  t.mlAfter=t.st==='R'?null:+(t.mlBefore+t.pnl).toFixed(2);
+  t.res=t.st==='TP'?'W':t.st==='SL'?(t.pnl>=0?(t.pnl>0?'W':'B'):'L'):(t.pnl>0?'W':t.pnl<0?'L':'B');}
+$('tSave').onclick=()=>{readSet();
+  const t={date:$('tDate').value||todayStr(),pair:$('tPair').value||S.set.pair,dir:$('tDir').value,type:$('tType').value,entry:num('tEntry',0),
+    sl:num('tSl',0),slc:num('tSlc',0),tp:num('tTp',0),lot:num('tLot',0),st:$('tSt').value,exit:num('tExit',0),pts:num('tPts',0),pnl:num('tPnl',0),note:$('tNote').value,imgs:[...formImgs],yt:$('tYt').value.trim()};
+  if(t.lot<=0){toast('Lot daalein');return;}
+  if(editId){const old=migT(S.trades.find(x=>x.id===editId));t.id=editId;applyTrade(t,old);S.trades=S.trades.map(x=>x.id===editId?t:x);
+    editId=null;$('fTitle').textContent='Trade add karein';$('tCancel').style.display='none';}
+  else{t.id=Date.now();applyTrade(t,null);S.trades.push(t);}
+  save();fillSet();renderAll();fillTradeDefaults();toast(t.st==='R'?'Running trade save · TP hit hone par ✅ dabayein':'Saved · Max loss ab '+money(S.set.ml));};
+function closeTrade(id,st){const old=migT(S.trades.find(x=>x.id===id));if(!old)return;const t={...old,st};
+  t.pts=st==='TP'?t.tp:-t.slc;t.pnl=+(t.pts*t.lot*S.set.pv).toFixed(2);applyTrade(t,old);S.trades=S.trades.map(x=>x.id===id?t:x);
+  save();fillSet();renderAll();fillTradeDefaults();toast((st==='TP'?'✅ TP hit · ':'❌ SL hit · ')+money(t.pnl));}
+$('tCancel').onclick=()=>{editId=null;$('fTitle').textContent='Trade add karein';$('tCancel').style.display='none';fillTradeDefaults();};
+function editTrade(id){const t=migT(S.trades.find(x=>x.id===id));if(!t)return;editId=id;
+  $('tDate').value=t.date;$('tPair').value=t.pair;$('tDir').value=t.dir;$('tType').value=t.type||'Normal';$('tEntry').value=t.entry||'';$('tLot').value=t.lot;
+  $('tSl').value=t.sl;$('tSlc').value=t.slc;$('tTp').value=t.tp;$('tSt').value=t.st;$('tExit').value=t.st==='M'?t.pts:'';$('tNote').value=t.note||'';formImgs=[...(t.imgs||[])];$('tYt').value=t.yt||'';ytCheck();renderThumbs();
+  syncPrice();$('tPnl').value=t.st==='R'?(0).toFixed(2):t.pnl;showLive();
+  $('fTitle').textContent='Trade edit karein — SL trail / status update';$('tCancel').style.display='inline-block';$('journalArea').scrollIntoView({behavior:'smooth',block:'start'});}
+function delTrade(id){confirmBox('Trade delete karein?','Is trade ka P&L "Max loss allowed" aur target se wapas adjust ho jayega.',()=>{
+  const t=S.trades.find(x=>x.id===id);if(t&&t.st!=='R'){S.set.ml=+(S.set.ml-t.pnl).toFixed(2);if(S.set.tg>0||t.pnl>0)S.set.tg=Math.max(0,+(S.set.tg+t.pnl).toFixed(2));}
+  if(t&&t.imgs)t.imgs.forEach(k=>imgDel(k));
+  S.trades=S.trades.filter(x=>x.id!==id);save();fillSet();renderAll();},true);}
+function sorted(a){return [...(a||S).trades].map(migT).sort((x,y)=>x.date===y.date?x.id-y.id:(x.date<y.date?-1:1));}
+function closed(a){return sorted(a).filter(t=>t.st!=='R');}
+function renderLog(){$('logAcc').textContent=S.set.acct;const rows=sorted().reverse(),n=rows.length;$('logEmpty').style.display=n?'none':'block';
+  $('logBody').innerHTML=rows.map((t,i)=>{const [u,d]=PU(t.pair),g=t.dir==='Buy'?1:-1,e=+t.entry||0,pv=S.set.pv;
+    const slP=e?(e-g*t.slc*u).toFixed(d):'',tpP=e?(e+g*t.tp*u).toFixed(d):'';
+    const pill={R:'<span class="pill" style="background:rgba(232,132,58,.2);color:var(--orange)">RUNNING</span>',TP:'<span class="pill w">TP HIT</span>',
+      SL:t.pnl>0?'<span class="pill w">SL (PROFIT)</span>':t.pnl===0?'<span class="pill b">SL @ BE</span>':'<span class="pill l">SL HIT</span>',M:'<span class="pill b">CLOSED</span>'}[t.st];
+    const rr=t.st==='R'?(t.slc>0?'<span class="gold">Abhi 1 : '+(+(t.tp/t.slc).toFixed(2))+'</span>':'<span class="green">Risk-free</span>'):rrTxt(rrOf(+t.pts,+t.sl));
+    const pl=t.st==='R'?`<span class="hint" style="margin:0">TP: <b class="green">+${money(t.tp*t.lot*pv)}</b><br>SL: <b class="${t.slc>0?'red':'green'}">${t.slc>0?'-':'+'}${money(Math.abs(t.slc*t.lot*pv))}</b></span>`:`<b class="${t.pnl>=0?'green':'red'}">${money(t.pnl)}</b>`;
+    const act=(t.st==='R'?`<button class="btn sm" style="background:var(--green)" onclick="closeTrade(${t.id},'TP')">✅ TP hit</button> <button class="btn red sm" onclick="closeTrade(${t.id},'SL')">❌ SL hit</button> `:'')+`<button class="btn ghost sm" onclick="editTrade(${t.id})">${t.st==='R'?'Trail SL / Edit':'Edit'}</button> <button class="btn ghost sm" onclick="delTrade(${t.id})">✕</button>`;
+    return `<tr><td>${n-i}</td><td>${t.date}</td><td>${esc(t.pair)}</td><td>${t.dir}</td><td>${e||'-'}</td><td>${(+t.lot).toFixed(2)}</td>
+    <td>${t.sl}${Math.abs(t.slc-t.sl)>1e-9?' → <b class="orange">'+t.slc+'</b>':''} pts${slP?'<br><span class="hint red" style="margin:0">'+slP+'</span>':''}</td>
+    <td>${t.tp} pts${tpP?'<br><span class="hint green" style="margin:0">'+tpP+'</span>':''}</td><td>${pill}</td><td><b>${rr}</b></td><td>${pl}</td>
+    <td class="gold">${t.mlAfter!=null?money(t.mlAfter):'-'}</td><td>${(t.imgs&&t.imgs.length)?`<button class="btn ghost sm" onclick="viewImgs(${t.id})">📷 ${t.imgs.length}</button> `:''}${t.yt?`<a class="btn ghost sm" style="text-decoration:none;color:var(--red);border-color:var(--red)" href="${esc(t.yt)}" target="_blank" rel="noopener">▶ Video</a>`:''}${!(t.imgs&&t.imgs.length)&&!t.yt?'<span class="hint">-</span>':''}</td><td style="white-space:normal;min-width:110px">${esc(t.note||'')}</td><td>${act}</td></tr>`;}).join('');}
+
+/* ---- analysis ---- */
+function analysis(acc){const tr=closed(acc),w=tr.filter(t=>t.pnl>0),l=tr.filter(t=>t.pnl<0),b=tr.filter(t=>t.pnl===0),dec=w.length+l.length,wr=dec?w.length/dec:0;
+  const gw=w.reduce((a,t)=>a+t.pnl,0),gl=-l.reduce((a,t)=>a+t.pnl,0),aw=w.length?gw/w.length:0,alv=l.length?gl/l.length:0;
+  let cum=0,peak=0,mdd=0,rw=0,rl=0,maxL=0;tr.forEach(t=>{cum+=t.pnl;peak=Math.max(peak,cum);mdd=Math.max(mdd,peak-cum);if(t.pnl>0){rw++;rl=0;}else if(t.pnl<0){rl++;rw=0;}maxL=Math.max(maxL,rl);});
+  return{n:tr.length,w:w.length,l:l.length,b:b.length,wr,gw,gl,aw,alv,net:gw-gl,pf:gl?gw/gl:(gw?Infinity:0),exp:tr.length?(gw-gl)/tr.length:0,mdd,maxL,cur:rw?rw+' wins':rl?rl+' losses':'-',curW:rw>0,avgRR:alv?aw/alv:0,avgWinR:(()=>{const x=w.filter(t=>t.sl>0);return x.length?x.reduce((a,t)=>a+t.pts/t.sl,0)/x.length:0;})()};}
+function renderAna(){const a=analysis(),s=S.set,be=beWR(s.rp,s.rr);$('anaAcc').textContent=s.acct;
+  const box=(k,v,c='')=>`<div class="stat"><div class="k">${k}</div><div class="v ${c}">${v}</div></div>`;
+  $('anaStats').innerHTML=[box('Total trades',a.n),box('Win rate',(a.wr*100).toFixed(1)+'%',a.wr>=be?'green':'red'),box('Net P&L',money(a.net),a.net>=0?'green':'red'),box('Profit factor',a.pf===Infinity?'∞':a.pf.toFixed(2),'gold'),
+    box('Wins / Losses / BE',a.w+' / '+a.l+' / '+a.b),box('Avg win',money(a.aw),'green'),box('Avg loss',money(-a.alv),'red'),box('Avg win RR (points se)','1 : '+a.avgWinR.toFixed(2),'gold'),
+    box('Expectancy / trade',money(a.exp),a.exp>=0?'green':'red'),box('Max drawdown',money(a.mdd),'red'),box('Max lagatar loss',a.maxL,'orange'),box('Current streak',a.cur,a.curW?'green':'red')].join('');
+  const h=[`<div class="alert ${a.wr>=be?'ok':'warn'}">Break-even win rate (${s.rp}% risk, 1:${s.rr}): <b>${(be*100).toFixed(1)}%</b> · Aapka: <b>${(a.wr*100).toFixed(1)}%</b></div>`];
+  if(a.w+a.l<30)h.push(`<div class="alert warn">Abhi ${a.w+a.l} decided trades. Reliable win rate ke liye 30–50 trades chahiye.</div>`);
+  if(a.avgRR&&a.avgRR<s.rr*0.85)h.push(`<div class="alert warn">Actual RR (1:${a.avgRR.toFixed(2)}) planned 1:${s.rr} se kam hai.</div>`);
+  $('anaHealth').innerHTML=h.join('');
+  $('anaAll').innerHTML=DB.accts.map((ac,i)=>{const x=analysis(ac),z=size(ac.set.ml,ac.set);return `<tr class="${i===DB.cur?'cur':''}"><td><b>${esc(ac.set.acct)}</b></td><td>${money(ac.set.ml)}</td><td>${ac.set.tg>0?money(ac.set.tg):'-'}</td><td>${x.n}</td><td>${x.w+x.l?(x.wr*100).toFixed(0)+'%':'-'}</td><td class="${x.net>=0?'green':'red'}">${money(x.net)}</td><td class="gold">${z.lot.toFixed(2)}</td></tr>`;}).join('');
+  drawEq();}
+function drawEq(){const c=$('eq'),dpr=window.devicePixelRatio||1,W=c.clientWidth,H=c.clientHeight;if(!W)return;c.width=W*dpr;c.height=H*dpr;const x=c.getContext('2d');x.scale(dpr,dpr);
+  const cs=getComputedStyle(document.body),col=n=>cs.getPropertyValue(n).trim();let cum=0;const pts=[0,...closed().map(t=>cum+=t.pnl)];
+  let lo=Math.min(...pts),hi=Math.max(...pts);if(hi===lo){hi+=100;lo-=100;}const pd=(hi-lo)*.08;lo-=pd;hi+=pd;
+  const P={l:62,r:10,t:10,b:20},X=i=>P.l+(pts.length<2?0:i/(pts.length-1))*(W-P.l-P.r),Y=v=>P.t+(hi-v)/(hi-lo)*(H-P.t-P.b);
+  x.font='11px Poppins';x.strokeStyle=col('--line');x.fillStyle=col('--muted');
+  for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4,y=Y(v);x.beginPath();x.moveTo(P.l,y);x.lineTo(W-P.r,y);x.stroke();x.fillText(money(Math.round(v)),4,y+4);}
+  x.setLineDash([4,4]);x.strokeStyle=col('--muted');x.beginPath();x.moveTo(P.l,Y(0));x.lineTo(W-P.r,Y(0));x.stroke();x.setLineDash([]);
+  x.strokeStyle=col('--gold');x.lineWidth=2.5;x.beginPath();pts.forEach((v,i)=>i?x.lineTo(X(i),Y(v)):x.moveTo(X(i),Y(v)));x.stroke();
+  pts.forEach((v,i)=>{x.fillStyle=i&&v<pts[i-1]?col('--red'):col('--green');x.beginPath();x.arc(X(i),Y(v),3.5,0,7);x.fill();});}
+
+/* ---- io / modals ---- */
+const getPw=()=>DB.pw||'';let cfPwNeed=false;
+let cfCb=null;function confirmBox(t,m,cb,pw){cfNo=null;pw=pw&&!!getPw();cfPwNeed=!!pw;$('cfPwBox').style.display=pw?'block':'none';$('cfPw').value='';$('cfPwErr').textContent='';setTimeout(()=>{if(pw)$('cfPw').focus();},50);$('cfTitle').textContent=t;$('cfMsg').textContent=m;cfCb=cb;$('mConfirm').classList.add('on');}
+$('cfYes').onclick=()=>{if(cfPwNeed&&$('cfPw').value!==getPw()){$('cfPwErr').textContent='❌ Galat password. Delete nahi hua.';$('cfPw').value='';$('cfPw').focus();return;}$('mConfirm').classList.remove('on');cfNo=null;cfPwNeed=false;cfCb&&cfCb();};
+$('cfPw').addEventListener('keydown',e=>{if(e.key==='Enter')$('cfYes').click();});
+let cfNo=null;document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>{b.closest('.modal').classList.remove('on');if(b.closest('#mConfirm')&&cfNo){const f=cfNo;cfNo=null;f();}});
+function showCopy(t){$('copyTxt').value=t;$('mCopy').classList.add('on');}
+$('copyGo').onclick=async()=>{try{await navigator.clipboard.writeText($('copyTxt').value);toast('Copied!');}catch(e){$('copyTxt').select();toast('Ctrl/Cmd+C dabayein');}};
+$('copyJson').onclick=()=>{readSet();showCopy(JSON.stringify(DB));};
+$('copyCsv').onclick=()=>showCopy(csvFor(S));
+$('openImport').onclick=()=>$('mImport').classList.add('on');
+$('impFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>$('impTxt').value=r.result;r.readAsText(f);};
+$('impGo').onclick=()=>{try{const p=JSON.parse($('impTxt').value);
+  if(p.accts){DB=p;DB.accts.forEach(a=>{a.set=fix({...DEF,...a.set});a.trades=a.trades||[];});DB.cur=0;}
+  else if(p.trades){DB.accts[DB.cur]={set:fix({...DEF,...p.set,dlp:undefined}),trades:p.trades};}else throw 0;
+  S=DB.accts[DB.cur];save();fillSet();fillTradeDefaults();renderAll();$('mImport').classList.remove('on');toast('Import ho gaya');}catch(e){toast('Galat backup');}};
+$('resetAll').onclick=()=>confirmBox('"'+S.set.acct+'" ka journal reset karein?','Is account ki saari trades delete ho jayengi (settings rahengi).',()=>{S.trades=[];save();renderAll();},true);
+
+/* ---- nav ---- */
+document.querySelectorAll('.tab[data-v]').forEach(b=>b.onclick=()=>{readSet();document.querySelectorAll('.tab[data-v]').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));$('v-'+b.dataset.v).classList.add('on');
+  if(b.dataset.v==='plan'){fillPlan();renderPlan();}renderAll();});
+$('themeBtn').onclick=()=>{document.body.classList.toggle('light');const l=document.body.classList.contains('light');$('themeBtn').textContent=l?'🌙':'☀️';try{localStorage.setItem(KEY+'_th',l?'l':'d');}catch(e){}renderAll();};
+$('useLot').onclick=()=>{doCalc();fillTradeDefaults();$('journalArea').scrollIntoView({behavior:'smooth',block:'start'});};
+window.addEventListener('resize',()=>{if($('v-ana').classList.contains('on'))drawEq();});
+
+
+
+/* ---- screenshots + youtube ---- */
+let formImgs=[];const imgCache=new Map();
+function idbI(){return new Promise((res,rej)=>{const r=indexedDB.open('et_pub_imgs',1);r.onupgradeneeded=()=>r.result.createObjectStore('i');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+async function imgPut(k,v){imgCache.set(k,v);try{const d=await idbI();await new Promise(r=>{const tx=d.transaction('i','readwrite');tx.objectStore('i').put(v,k);tx.oncomplete=r;tx.onerror=r;});}catch(e){}}
+async function imgDel(k){imgCache.delete(k);try{const d=await idbI();d.transaction('i','readwrite').objectStore('i').delete(k);}catch(e){}}
+async function imgGet(k){if(imgCache.has(k))return imgCache.get(k);let v=null;
+  try{const d=await idbI();v=await new Promise(r=>{const q=d.transaction('i').objectStore('i').get(k);q.onsuccess=()=>r(q.result||null);q.onerror=()=>r(null);});}catch(e){}
+  if(!v&&dirHandle){try{if((await dirHandle.queryPermission({mode:'readwrite'}))==='granted'){const sd=await dirHandle.getDirectoryHandle('Screenshots');const f=await (await sd.getFileHandle(k+'.jpg')).getFile();
+    v=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f);});if(v)await imgPut(k,v);}}catch(e){}}
+  if(v)imgCache.set(k,v);return v;}
+function compressImg(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const M=1600,sc=Math.min(1,M/Math.max(im.width,im.height));
+  const c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);const x=c.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);
+  res(c.toDataURL('image/jpeg',0.82));};im.onerror=rej;im.src=fr.result;};fr.onerror=rej;fr.readAsDataURL(file);});}
+async function addImgFiles(files){let n=0;for(const f of files){if(!f||!/^image\//.test(f.type))continue;try{const d=await compressImg(f);const k='img_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);await imgPut(k,d);formImgs.push(k);n++;}catch(e){}}
+  if(n){renderThumbs();toast(n+' screenshot add hua · trade save karna na bhoolein');}}
+async function renderThumbs(){const box=$('ssThumbs');const keys=[...formImgs];box.innerHTML=keys.map((k,i)=>`<div class="th" onclick="viewList(formImgs,${i},'Is trade ke screenshots')"><img data-k="${k}" alt=""><button onclick="event.stopPropagation();rmThumb(${i})" title="Hatayein">✕</button></div>`).join('');
+  for(const im of box.querySelectorAll('img')){const v=await imgGet(im.dataset.k);if(v)im.src=v;}}
+function rmThumb(i){formImgs.splice(i,1);renderThumbs();}
+function ytCheck(){const v=$('tYt').value.trim();$('ytHint').innerHTML=!v?'Video upload ke baad link yahan daalein (unlisted bhi chalega)':/youtu\.?be/.test(v)?'<span class="green">✓ YouTube link</span>':'<span class="orange">Yeh YouTube link nahi lag raha</span>';}
+$('tYt').addEventListener('input',ytCheck);
+$('ssZone').onclick=()=>$('ssFile').click();
+$('ssFile').onchange=e=>{addImgFiles([...e.target.files]);e.target.value='';};
+['dragover','dragenter'].forEach(ev=>$('ssZone').addEventListener(ev,e=>{e.preventDefault();$('ssZone').classList.add('drag');}));
+['dragleave','drop'].forEach(ev=>$('ssZone').addEventListener(ev,e=>{e.preventDefault();$('ssZone').classList.remove('drag');}));
+$('ssZone').addEventListener('drop',e=>addImgFiles([...(e.dataTransfer.files||[])]));
+document.addEventListener('paste',e=>{const ja=$('journalArea');if(!ja||!ja.contains(document.activeElement))return;
+  const fs=[...(e.clipboardData&&e.clipboardData.items||[])].filter(i=>i.type.startsWith('image/')).map(i=>i.getAsFile());if(fs.length){e.preventDefault();addImgFiles(fs);}});
+let viewKeys=[],viewI=0;
+async function showView(){if(!viewKeys.length)return;$('imgCount').textContent=(viewI+1)+' / '+viewKeys.length;$('imgBig').src='';const v=await imgGet(viewKeys[viewI]);$('imgBig').src=v||'';if(!v)$('imgCount').textContent+=' (image nahi mili)';}
+function viewList(keys,i,title){viewKeys=[...keys];viewI=i||0;$('imgTitle').textContent=title||'Screenshot';$('mImg').classList.add('on');showView();}
+function viewImgs(id){const t=S.trades.find(x=>x.id===id);if(t&&t.imgs&&t.imgs.length)viewList(t.imgs,0,'Trade '+t.date+' · '+t.pair+' '+t.dir);}
+$('imgPrev').onclick=()=>{viewI=(viewI-1+viewKeys.length)%viewKeys.length;showView();};
+$('imgNext').onclick=()=>{viewI=(viewI+1)%viewKeys.length;showView();};
+$('mImg').addEventListener('click',e=>{if(e.target.id==='mImg')$('mImg').classList.remove('on');});
+document.addEventListener('keydown',e=>{if(!$('mImg').classList.contains('on'))return;if(e.key==='ArrowRight')$('imgNext').click();if(e.key==='ArrowLeft')$('imgPrev').click();if(e.key==='Escape')$('mImg').classList.remove('on');});
+function dataURLtoBlob(d){const [h,b]=d.split(',');const m=(h.match(/:(.*?);/)||[])[1]||'image/jpeg';const bin=atob(b);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new Blob([u],{type:m});}
+const writtenImgs=new Set();
+async function writeImgsToFolder(){if(!dirHandle)return;const keys=[];DB.accts.forEach(a=>a.trades.forEach(t=>(t.imgs||[]).forEach(k=>keys.push(k))));if(!keys.length)return;
+  const sd=await dirHandle.getDirectoryHandle('Screenshots',{create:true});
+  for(const k of keys){if(writtenImgs.has(k))continue;try{await sd.getFileHandle(k+'.jpg');writtenImgs.add(k);continue;}catch(e){}
+    const v=await imgGet(k);if(!v)continue;const fh=await sd.getFileHandle(k+'.jpg',{create:true});const w=await fh.createWritable();await w.write(dataURLtoBlob(v));await w.close();writtenImgs.add(k);}}
+
+/* ---- share report ---- */
+async function buildReport(acc){
+  const s=acc.set,tr=sorted(acc),a=analysis(acc),cl=tr.filter(t=>t.st!=='R'),pv=s.pv;
+  const imgs={};for(const t of tr)for(const k of (t.imgs||[])){const v=await imgGet(k);if(v)imgs[k]=v;}
+  const net=a.net,tgTot=s.tg>0?net+s.tg:0,prog=tgTot>0?Math.max(0,Math.min(100,net/tgTot*100)):null,passed=s.tg<=0.005&&net>0&&tr.length>0;
+  const first=tr.length?tr[0].date:'-',last=tr.length?tr[tr.length-1].date:'-';
+  let cum=0;const pts=[0,...cl.map(t=>cum+=t.pnl)];let lo=Math.min(...pts),hi=Math.max(...pts);if(hi===lo){hi+=100;lo-=100;}
+  const W=900,H=240,X=i=>40+(pts.length<2?0:i/(pts.length-1))*(W-60),Y=v=>15+(hi-v)/(hi-lo)*(H-40);
+  const path=pts.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+  const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto"><line x1="40" x2="${W-20}" y1="${Y(0)}" y2="${Y(0)}" stroke="#3a3023" stroke-dasharray="5 5"/><path d="${path}" fill="none" stroke="#d9a93a" stroke-width="3"/>${pts.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="4" fill="${i&&v<pts[i-1]?'#e05a4f':'#6cc58a'}"/>`).join('')}<text x="4" y="${Y(hi)+4}" fill="#b3a68c" font-size="12">${money(Math.round(hi))}</text><text x="4" y="${Y(lo)+4}" fill="#b3a68c" font-size="12">${money(Math.round(lo))}</text></svg>`;
+  const stat=(k,v,c='')=>`<div class="st"><div class="k">${k}</div><div class="v ${c}">${v}</div></div>`;
+  const pill=t=>({R:'<span class="pill o">RUNNING</span>',TP:'<span class="pill g">TP HIT</span>',SL:t.pnl>0?'<span class="pill g">SL (PROFIT)</span>':t.pnl===0?'<span class="pill m">BREAKEVEN</span>':'<span class="pill r">SL HIT</span>',M:'<span class="pill m">CLOSED</span>'}[t.st]);
+  const cards=tr.map((t,i)=>{const [u,d]=PU(t.pair),g=t.dir==='Buy'?1:-1,e=+t.entry||0;const slP=e?(e-g*t.slc*u).toFixed(d):'-',tpP=e?(e+g*t.tp*u).toFixed(d):'-';
+    const rr=t.st==='R'?(t.slc>0?'1 : '+(+(t.tp/t.slc).toFixed(2)):'Risk-free'):rrTxt(rrOf(+t.pts,+t.sl));
+    const ims=(t.imgs||[]).filter(k=>imgs[k]);
+    return `<div class="trade"><div class="th"><div><b class="n">#${i+1}</b> <b>${esc(t.pair)} ${t.dir.toUpperCase()}</b> <span class="mut">${t.date}</span></div><div>${pill(t)} <b class="${t.st==='R'?'':t.pnl>=0?'g':'r'}" style="font-size:20px;margin-left:8px">${t.st==='R'?'Running':money(t.pnl)}</b></div></div>
+      <div class="grid">${stat('Entry',e||'-')}${stat('Lot',(+t.lot).toFixed(2))}${stat('SL',t.sl+(Math.abs(t.slc-t.sl)>1e-9?' → '+t.slc:'')+' pts<br><small class="r">'+slP+'</small>')}${stat('TP',t.tp+' pts<br><small class="g">'+tpP+'</small>')}${stat('RR',rr,'gold')}</div>
+      ${t.note?`<div class="note">📝 ${esc(t.note)}</div>`:''}
+      ${t.yt?`<a class="yt" href="${esc(t.yt)}" target="_blank" rel="noopener">▶ Self-analysis video dekhein</a>`:''}
+      ${ims.length?`<div class="shots">${ims.map(k=>`<img src="${imgs[k]}" onclick="zoom(this.src)" alt="Trade screenshot">`).join('')}</div>`:''}</div>`;}).join('');
+  const be=beWR(s.rp,s.rr);
+  return `<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${esc(s.acct)} — Challenge Report · Explosive Trades</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}body{background:#1a1510;color:#f3ead8;font:14px/1.6 Poppins,sans-serif;padding-bottom:40px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #3a3023;background:#1a1510;position:sticky;top:0;z-index:2}
+.brand{font:28px 'Bebas Neue';color:#d9a93a;letter-spacing:2px}.mut{color:#b3a68c}.wrap{max-width:1100px;margin:0 auto;padding:20px}
+h1{font:52px/1 'Bebas Neue';letter-spacing:1px}h2{font:28px 'Bebas Neue';color:#d9a93a;letter-spacing:1px;margin:28px 0 12px}
+.card{background:#231d15;border:1px solid #3a3023;border-radius:14px;padding:18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.st{background:#2b2419;border:1px solid #3a3023;border-radius:10px;padding:10px 12px}.st .k{font-size:11px;color:#b3a68c;text-transform:uppercase;letter-spacing:.5px}.st .v{font:26px 'Bebas Neue';letter-spacing:1px}
+.g{color:#6cc58a}.r{color:#e05a4f}.gold{color:#d9a93a}.o{color:#e8843a}
+.bar{height:14px;background:#2b2419;border:1px solid #3a3023;border-radius:10px;overflow:hidden;margin-top:8px}.bar div{height:100%;background:linear-gradient(90deg,#e8843a,#d9a93a,#6cc58a)}
+.badge{display:inline-block;padding:4px 14px;border-radius:20px;font-weight:600;margin-top:10px}.badge.p{background:rgba(108,197,138,.18);color:#6cc58a;border:1px solid #6cc58a}.badge.i{background:rgba(217,169,58,.15);color:#d9a93a;border:1px solid #d9a93a}
+.trade{background:#231d15;border:1px solid #3a3023;border-radius:14px;padding:16px;margin-bottom:14px}.trade .th{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:16px}
+.n{color:#d9a93a;font:22px 'Bebas Neue'}.pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600}.pill.g{background:rgba(108,197,138,.18);color:#6cc58a}.pill.r{background:rgba(224,90,79,.18);color:#e05a4f}.pill.o{background:rgba(232,132,58,.2);color:#e8843a}.pill.m{background:rgba(179,166,140,.18);color:#b3a68c}
+.note{margin-top:10px;background:#2b2419;border-left:3px solid #d9a93a;padding:8px 12px;border-radius:6px}
+.yt{display:inline-block;margin-top:10px;background:#e05a4f;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px;font-weight:600}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:12px}.shots img{width:100%;border-radius:8px;border:1px solid #3a3023;cursor:zoom-in}
+#zm{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9;cursor:zoom-out;padding:12px}#zm img{max-width:100%;max-height:100%;border-radius:8px}
+.foot{text-align:center;color:#b3a68c;font-size:12px;margin-top:30px;line-height:1.8}small{font-size:12px}</style></head><body>
+<div class="top"><div class="brand">EXPLOSIVE TRADES</div><div class="mut">Challenge Performance Report</div></div>
+<div class="wrap">
+<div class="card"><div class="mut">${s.trader?'Trader: <b>'+esc(s.trader)+'</b> · ':''}Report date ${todayStr()}</div><h1>${esc(s.acct)}</h1><div class="mut">Trading period: ${first} → ${last} · Pair: ${esc(s.pair)}</div>
+${passed?'<span class="badge p">🎯 TARGET ACHIEVED</span>':'<span class="badge i">⏳ Challenge in progress</span>'}
+${prog!==null?`<div style="margin-top:12px"><b>Target progress: ${prog.toFixed(1)}%</b> <span class="mut">(${money(net)} / ${money(tgTot)})</span><div class="bar"><div style="width:${prog}%"></div></div></div>`:''}</div>
+<h2>Performance summary</h2>
+<div class="grid">${stat('Net P&L',money(net),net>=0?'g':'r')}${stat('Total trades',a.n+(tr.length>a.n?' <small class="o">+'+(tr.length-a.n)+' running</small>':''))}${stat('Win rate',(a.wr*100).toFixed(1)+'%',a.wr>=be?'g':'r')}${stat('Wins / Losses / BE',a.w+' / '+a.l+' / '+a.b)}
+${stat('Profit factor',a.pf===Infinity?'∞':a.pf.toFixed(2),'gold')}${stat('Avg win',money(a.aw),'g')}${stat('Avg loss',money(-a.alv),'r')}${stat('Max drawdown',money(a.mdd),'r')}
+${stat('Risk per trade',s.rp+'% of max loss')}${stat('Planned RR','1 : '+s.rr,'gold')}${stat('Avg win RR','1 : '+a.avgWinR.toFixed(2),'gold')}${stat('Max lagatar loss',a.maxL,'o')}</div>
+<h2>Equity curve</h2><div class="card">${svg}</div>
+<h2>Saare trades (${tr.length})</h2>${cards||'<div class="card mut">Abhi koi trade nahi.</div>'}
+<div class="foot">Yeh report read-only hai — ise sirf dekha ja sakta hai, badla nahi ja sakta.<br>Disclaimer: Yeh educational aur transparency ke liye shared trading record hai. Past performance future results ki guarantee nahi hai. Trading mein risk hai.<br>Report banayi gayi free <b>ET Risk & Lot Calculator</b> se · Explosive Trades by Kavi Sharma · explosivetrades.github.io/free</div>
+</div><div id="zm" onclick="this.style.display='none'"><img id="zmi" alt=""></div>
+<script>function zoom(s){document.getElementById('zmi').src=s;document.getElementById('zm').style.display='flex';}document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('zm').style.display='none';});<\/script>
+</body></html>`;}
+async function makeReport(){readSet();toast('Report ban rahi hai...');const html=await buildReport(S);const name=safeName(S.set.acct)+' - Share Report.html';
+  const nImg=S.trades.reduce((a,t)=>a+((t.imgs||[]).length),0),mb=(html.length/1048576).toFixed(1);
+  let where='';
+  try{if(dirHandle&&(await dirHandle.queryPermission({mode:'readwrite'}))==='granted'){const rd=await dirHandle.getDirectoryHandle('Reports',{create:true});await writeFile(rd,name,html);where=`<b>Data › Reports › ${esc(name)}</b>`;}}catch(e){}
+  if(!where){try{const b=new Blob([html],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();where=`<b>Downloads › ${esc(name)}</b>`;}catch(e){where='';}}
+  $('repMsg').innerHTML=where?`✅ <b>${esc(S.set.acct)}</b> ki read-only report ban gayi (${S.trades.length} trades, ${nImg} screenshots, ${mb} MB).<br>File: ${where}<br><br><b>Kaise share karein:</b><br>Yeh ek single HTML file hai — ise WhatsApp, Email ya Google Drive se kisi ko bhi bhej sakte hain. Woh browser mein kholkar aapke saare trades, screenshots aur video links dekh sakte hain, par kuch badal nahi sakte.<br>Har challenge ki report alag file hogi. Trades badhne par dobara report banayein.`
+    :'❌ Report save nahi hui. Data folder connect karein (upar 📁 button) aur dobara try karein.';
+  $('mRep').classList.add('on');}
+$('repBtn').onclick=makeReport;
+$('pwBtn').onclick=()=>{$('pwOldBox').style.display=getPw()?'block':'none';$('pwOld').value='';$('pwNew').value='';$('pwErr').textContent='';$('mPw').classList.add('on');};
+$('pwSave').onclick=()=>{if(getPw()&&$('pwOld').value!==getPw()){$('pwErr').textContent='❌ Purana password galat hai.';return;}
+  const n=$('pwNew').value;if(n)DB.pw=n;else delete DB.pw;save();$('mPw').classList.remove('on');toast(n?'Delete password set ho gaya':'Delete password hata diya');};
+
+/* ---- laptop folder auto-save (Chrome / Edge) ---- */
+let dirHandle=null,fsTimer=null;
+const FS_FILE='ET-Risk-Data.json';
+function idb(){return new Promise((res,rej)=>{const r=indexedDB.open('et_pub_fs',1);r.onupgradeneeded=()=>r.result.createObjectStore('h');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+async function idbSet(v){try{const d=await idb();d.transaction('h','readwrite').objectStore('h').put(v,'dir');}catch(e){}}
+async function idbGet(){try{const d=await idb();return await new Promise(r=>{const q=d.transaction('h').objectStore('h').get('dir');q.onsuccess=()=>r(q.result);q.onerror=()=>r(null);});}catch(e){return null;}}
+function fsSet(t,c){$('fsStatus').innerHTML=t;$('fsStatus').className='hint '+(c||'');}
+function normDB(p){if(p.accts){p.accts.forEach(a=>{a.set=fix({...DEF,...a.set});a.trades=a.trades||[];});if(!(p.cur<p.accts.length))p.cur=0;return p;}return null;}
+const safeName=n=>String(n).replace(/[\\/:*?"<>|]/g,'-').trim()||'Account';
+function csvFor(a){return 'Date,Pair,Dir,Type,Entry,Lot,SL_start_pts,SL_now_pts,TP_pts,Status,Points,RR,PnL,MaxLossAfter,Note\n'+sorted(a).map(t=>[t.date,t.pair,t.dir,t.type,t.entry,t.lot,t.sl,t.slc,t.tp,{R:'Running',TP:'TP hit',SL:'SL hit',M:'Manual close'}[t.st],t.pts,(t.st!=='R'&&t.sl>0?(t.pts/t.sl).toFixed(2):''),t.pnl,t.mlAfter??'','"'+(t.note||'').replace(/"/g,"'")+'"'].join(',')).join('\n');}
+async function writeFile(dir,name,txt){const fh=await dir.getFileHandle(name,{create:true});const w=await fh.createWritable();await w.write(txt);await w.close();}
+async function writeFolder(){
+  if(!dirHandle)return;
+  try{
+    if((await dirHandle.queryPermission({mode:'readwrite'}))!=='granted'){fsSet('⚠️ Folder permission chahiye — button dabayein','orange');$('fsBtn').textContent='🔓 Folder dobara allow karein';return;}
+    DB.savedAt=new Date().toISOString();
+    await writeFile(dirHandle,FS_FILE,JSON.stringify(DB,null,1));
+    const csv=await dirHandle.getDirectoryHandle('Trades CSV',{create:true});
+    for(const a of DB.accts)await writeFile(csv,safeName(a.set.acct)+' - trades.csv',csvFor(a));
+    const bk=await dirHandle.getDirectoryHandle('Daily Backups',{create:true});
+    await writeFile(bk,'ET-Risk-Data-'+todayStr()+'.json',JSON.stringify(DB));
+    await writeImgsToFolder();
+    fsSet('💾 Saved: <b>'+esc(dirHandle.name)+'</b> · '+new Date().toLocaleTimeString(),'green');
+  }catch(e){fsSet('❌ Folder mein save nahi hua: '+esc(e.message||e),'red');}
+}
+function queueFolderSave(){if(!dirHandle)return;clearTimeout(fsTimer);fsTimer=setTimeout(writeFolder,600);}
+async function loadFromFolder(){
+  try{const fh=await dirHandle.getFileHandle(FS_FILE);const p=normDB(JSON.parse(await (await fh.getFile()).text()));
+    if(p){DB=p;S=DB.accts[DB.cur];try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}fillSet();fillTradeDefaults();renderAll();return true;}}catch(e){}
+  return false;}
+async function connectFolder(){
+  if(!window.showDirectoryPicker){fsSet('❌ Yeh browser folder save support nahi karta. File ko Google Chrome mein kholein.','red');return;}
+  try{
+    if(dirHandle&&(await dirHandle.queryPermission({mode:'readwrite'}))!=='granted'){
+      if((await dirHandle.requestPermission({mode:'readwrite'}))==='granted'){const ok=await loadFromFolder();if(!ok)await writeFolder();else fsSet('💾 Connected: <b>'+esc(dirHandle.name)+'</b> · data load ho gaya','green');$('fsBtn').textContent='📁 Folder badlein';}return;}
+    readSet();
+    dirHandle=await window.showDirectoryPicker({id:'etpubcalc',mode:'readwrite'});
+    await idbSet(dirHandle);
+    let exists=false;try{await dirHandle.getFileHandle(FS_FILE);exists=true;}catch(e){}
+    if(exists){confirmBox('Folder mein pehle se data hai','Haan = folder ka data kholein. Nahi = is page ka abhi wala data folder mein save karein (purani file ka backup "Daily Backups" mein rahega).',async()=>{await loadFromFolder();fsSet('💾 Connected: <b>'+esc(dirHandle.name)+'</b> · data load ho gaya','green');});
+      cfNo=async()=>{await writeFolder();};}
+    else await writeFolder();
+    $('fsBtn').textContent='📁 Folder badlein';
+  }catch(e){if(e&&e.name!=='AbortError')fsSet('❌ '+esc(e.message||e),'red');}
+}
+async function initFolder(){
+  if(window.self!==window.top){$('fsBtn').style.display='none';$('dlBtn').style.display='none';fsSet('💾 Laptop folder save: Documents › ET Risk Calculator wali file Chrome mein kholein','orange');return;}
+  if(!window.showDirectoryPicker){fsSet('💾 Laptop folder save ke liye file ko Google Chrome mein kholein','orange');return;}
+  const h=await idbGet();if(!h)return;dirHandle=h;
+  try{if((await h.queryPermission({mode:'readwrite'}))==='granted'){await loadFromFolder();fsSet('💾 Connected: <b>'+esc(h.name)+'</b>','green');$('fsBtn').textContent='📁 Folder badlein';}
+    else{fsSet('⚠️ <b>'+esc(h.name)+'</b> folder — 1 click mein allow karein','orange');$('fsBtn').textContent='🔓 Folder dobara allow karein';}}catch(e){}
+}
+$('fsBtn').onclick=connectFolder;
+$('dlBtn').onclick=()=>{readSet();try{const b=new Blob([JSON.stringify(DB,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ET-Risk-Data-'+todayStr()+'.json';document.body.appendChild(a);a.click();a.remove();}catch(e){showCopy(JSON.stringify(DB));}};
+function renderAll(){renderAccBar();renderCalc();renderLog();if($('v-ana').classList.contains('on'))renderAna();}
+try{if(localStorage.getItem(KEY+'_help')==='0')$('helpCard').style.display='none';}catch(e){}
+$('helpHide').onclick=()=>{$('helpCard').style.display='none';try{localStorage.setItem(KEY+'_help','0');}catch(e){}};
+load();try{if(localStorage.getItem(KEY+'_th')==='l'){document.body.classList.add('light');$('themeBtn').textContent='🌙';}}catch(e){}
+fillSet();fillTradeDefaults();renderAll();initFolder();
+</script>
+</body>
+</html>
